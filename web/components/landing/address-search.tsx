@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Search } from "lucide-react";
-import { isStress } from "@/lib/sample";
 import { ADDRESS_EXAMPLE } from "@/lib/geocode";
 import { Button } from "@/components/ui/button";
 import { useSample } from "@/components/forecast/sample-store";
@@ -13,7 +12,7 @@ export function AddressSearch() {
   const { data } = useSample();
   const [query, setQuery] = useState("");
   const go = (params: Record<string, string>) =>
-    router.push(`/route?${new URLSearchParams({ ...(isStress() ? { data: "stress" } : {}), ...(params.q ? {} : params) })}${params.q ? `#q=${encodeURIComponent(params.q)}` : ""}`);
+    router.push(`/route?${new URLSearchParams({ ...(params.q ? {} : params) })}${params.q ? `#q=${encodeURIComponent(params.q)}` : ""}`);
 
   function trySample() {
     const site = data?.sites.find((s) => s.kind === "residential" && s.hours.some((h) => h.lost));
@@ -21,7 +20,7 @@ export function AddressSearch() {
   }
 
   return (
-    <div className="enter mx-auto mt-10 max-w-xl [--d:270ms]">
+    <div className="enter mx-auto mt-12 max-w-xl text-center [--d:270ms] sm:mt-14">
       <form onSubmit={(e) => { e.preventDefault(); if (query.trim()) go({ q: query.trim() }); }} role="search">
         <label htmlFor="addr" className="sr-only">Check an address</label>
         <div className="flex flex-col gap-2 rounded-[1.75rem] border border-ink/10 bg-white p-2 shadow-float transition focus-within:border-blue focus-within:ring-4 focus-within:ring-blue/15 sm:flex-row sm:items-center sm:rounded-full">
@@ -43,15 +42,17 @@ export function AddressSearch() {
           </Button>
         </div>
       </form>
-      <p className="mt-2 text-center font-ui text-xs text-muted">Use a street address with the town name, {ADDRESS_EXAMPLE}. Place names like &ldquo;City Hall&rdquo; often do not match.</p>
-      <p className="mt-5 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-ui text-xs text-muted">
-        <span className="rounded-full bg-yellow px-3 py-1 font-mono font-medium text-ink">Sample replay, not a live forecast</span>
-        <button type="button" onClick={trySample} className="min-h-11 underline underline-offset-4 hover:text-blue">
-          Try a sample location
-        </button>
+      <p className="mx-auto mt-4 max-w-md text-center font-ui text-xs leading-relaxed text-muted">
+        Use a street address with the town name, {ADDRESS_EXAMPLE}. Place names like &ldquo;City Hall&rdquo; often do not match.
       </p>
-      <p className="mx-auto mt-1 max-w-md font-ui text-xs leading-relaxed text-muted">
-        No user data is stored. Addresses go to OpenStreetMap&rsquo;s Nominatim to find the location, and routes come from the public Valhalla router.
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-1 font-ui text-sm text-ink/75">
+        <button type="button" onClick={trySample} className="min-h-11 underline underline-offset-4 hover:text-blue">Try a sample location</button>
+        <button type="button" onClick={() => go({ q: "1029 N Howe St, Southport NC" })} className="min-h-11 underline underline-offset-4 hover:text-blue">Try an example address</button>
+        <a href="#breaks" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-blue">What breaks first?</a>
+      </div>
+      <p className="mt-6 inline-block rounded-full bg-yellow px-3.5 py-1.5 font-mono text-xs font-medium text-ink">Sample replay, not a live forecast</p>
+      <p className="mx-auto mt-6 max-w-md font-ui text-xs leading-relaxed text-muted">
+        No user data is stored (cookie-free page-view counts only). Addresses go to OpenStreetMap&rsquo;s Nominatim to find the location, and routes come from the public Valhalla router.
       </p>
     </div>
   );

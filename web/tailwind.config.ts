@@ -1,13 +1,13 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         paper: "#F9F9F7",
         ink: "#111111",
-        muted: "#737373",
+        muted: "#666666",
         divider: "#E3E5E8",
         alert: "#CC0000",
         blue: "#2D5DA1",

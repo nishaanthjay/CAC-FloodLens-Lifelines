@@ -1,9 +1,7 @@
 // SAMPLE / PREVIEW data from the FloodLens pipeline (lifeline/export/sample, copied by `npm run sample:sync`).
 // Real values come from the Florence 2018 hindcast replay; values marked synthetic are placeholders.
 
-/** `?data=stress` loads the exaggerated stress-test copy of the sample (made by lifeline/export/sample/make_stress.py). */
-export const isStress = () => typeof window !== "undefined" && new URLSearchParams(window.location.search).get("data") === "stress";
-export const dataRoot = () => (isStress() ? "/data/sample/stress/" : "/data/sample/");
+export const dataRoot = () => "/data/sample/";
 
 export type Flag<T> = { value: T; synthetic: boolean };
 export type Kind = "dialysis" | "nursing_home" | "residential" | "address";

@@ -1,23 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
-import { isStress } from "@/lib/sample";
+import { useState } from "react";
 import { Droplets, Menu, X } from "lucide-react";
 
 const links = [
   ["Florence replay", "/#florence"],
   ["Route analysis", "/route"],
-  ["About", "/#how"],
+  ["How it works", "/#how"],
+  ["About and limits", "/about"],
 ];
 
 export function Masthead() {
   const [open, setOpen] = useState(false);
-  const [stress, setStress] = useState(false);
-  useEffect(() => setStress(isStress()), []);
 
   return (
-    <header className="glass sticky top-0 z-40 border-b border-ink/10">
-      <p role="note" className={`px-4 py-1.5 text-center font-ui text-xs sm:text-sm ${stress ? "bg-ink text-white" : "bg-yellow text-ink"}`}>
-        <strong className="font-semibold">{stress ? "STRESS TEST: exaggerated values, not real." : "Sample data, not for emergency use."}</strong>
+    <header className="glass sticky top-0 z-40 border-b border-ink/10 print:static">
+      <p role="note" className="bg-yellow px-4 py-1.5 text-center font-ui text-xs text-ink sm:text-sm">
+        <strong className="font-semibold">Sample data, not for emergency use.</strong>
         <span className="opacity-70"> Florence 2018 replay preview · not validated · call 911 in an emergency</span>
       </p>
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6">

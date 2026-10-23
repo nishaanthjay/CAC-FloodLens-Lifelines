@@ -13,9 +13,9 @@ const CROSSING_KEY = [
 
 function Legend() {
   return (
-    <div className="grid gap-4 sm:justify-items-end">
+    <div className="grid gap-8 sm:grid-cols-2 sm:gap-12">
       <div>
-        <p className="label mb-2.5 text-muted">
+        <p className="label mb-3.5 text-muted">
           Illustrative band of losing access <span className="ml-1 rounded-full bg-[#EFE3FF] px-2 py-0.5 normal-case tracking-normal text-[#5A2D91]">placeholder</span>
         </p>
         <ul className="flex flex-wrap gap-x-5 gap-y-3 font-ui text-xs text-ink/80" aria-label="Isolation likelihood legend">
@@ -28,10 +28,10 @@ function Legend() {
         </ul>
       </div>
       <div>
-        <p className="label mb-2.5 text-muted">
+        <p className="label mb-3.5 text-muted">
           Crossings <span className="ml-1 rounded-full bg-soft-blue px-2 py-0.5 normal-case tracking-normal text-blue">replay</span>
         </p>
-        <ul className="flex flex-wrap gap-x-5 gap-y-3 font-ui text-xs text-ink/80">
+        <ul className="grid gap-y-3 font-ui text-xs text-ink/80">
           {CROSSING_KEY.map(([label, fill]) => (
             <li key={label} className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full border border-ink/40" style={{ background: fill }} aria-hidden />
@@ -51,6 +51,16 @@ export function ForecastMap() {
   const pin = useRef<ML>(null);
   const [ready, setReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+  const [near, setNear] = useState(false);
+
+  // The map library and tiles load only once the map is about to scroll into view.
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); io.disconnect(); } }, { rootMargin: "600px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const hours = data?.meta.event.hours ?? 18;
   const start = data?.meta.event.replay_start_utc;
 
@@ -70,7 +80,7 @@ export function ForecastMap() {
 
   // Build the map once the sample data is in.
   useEffect(() => {
-    if (!data || !box.current || map.current) return;
+    if (!data || !near || !box.current || map.current) return;
     let gone = false;
     Promise.all([loadMaplibre(), getJSON<{ features: { properties: { kind: string } }[] }>("network.geojson")])
       .then(([ml, net]) => {
@@ -113,7 +123,7 @@ export function ForecastMap() {
       })
       .catch((e: Error) => setMapError(e.message));
     return () => { gone = true; map.current?.remove(); map.current = null; setReady(false); };
-  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [data, near]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Hour changes recolour crossings and places.
   useEffect(() => {
@@ -143,7 +153,7 @@ export function ForecastMap() {
         </div>
         <div
           ref={box}
-          data-lenis-prevent
+         
           role="region"
           aria-label="Map of sample crossings and places in the Cape Fear region"
           className="block aspect-[4/5] w-full sm:aspect-[16/9]"
@@ -155,8 +165,8 @@ export function ForecastMap() {
         )}
         <HourSlider hour={hour} hours={hours} start={start} onChange={setHour} />
       </div>
-      <div className="reveal mt-5 flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
-        <figcaption className="max-w-md font-ui text-xs leading-relaxed text-muted">
+      <div className="reveal mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-start lg:gap-16">
+        <figcaption className="max-w-md shrink-0 font-ui text-xs leading-relaxed text-muted lg:w-[26rem]">
           Replay of the NWM v3.0 retrospective for Hurricane Florence, starting {start ? hourTime(start, 0) : "…"}. A crossing closes in this
           scenario while its stream runs above the 10-year flow. River flow only: no storm surge, tide or street flooding. Large circles are sample
           places; risk colours on them are placeholders until the forecast model is ready.

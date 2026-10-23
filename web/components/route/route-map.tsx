@@ -109,7 +109,7 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, on
 
   return (
     <div className="absolute inset-0">
-      <div ref={box} data-lenis-prevent className="h-full w-full" role="region" aria-label="Route map" />
+      <div ref={box} className="h-full w-full" role="region" aria-label="Route map" />
       {error && <p className="absolute inset-0 grid place-items-center p-8 text-center font-ui text-sm text-muted">The map could not load ({error}).</p>}
     </div>
   );

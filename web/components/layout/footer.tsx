@@ -2,7 +2,7 @@ import { Droplets } from "lucide-react";
 
 const cols = [
   ["Explore", [["Florence replay", "/#florence"], ["Route analysis", "/route"], ["What breaks first", "/#breaks"]]],
-  ["About", [["How it works", "/#how"]]],
+  ["About", [["How it works", "/#how"], ["About and limits", "/about"], ["Data status", "/status"]]],
 ] as const;
 
 export function Footer() {
@@ -33,7 +33,7 @@ export function Footer() {
         ))}
         <div>
           <h3 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">Privacy</h3>
-          <p className="mt-3 font-ui text-sm leading-relaxed text-ink/75">No user data is stored. Address searches are sent to OpenStreetMap Nominatim to find a location.</p>
+          <p className="mt-3 font-ui text-sm leading-relaxed text-ink/75">No user data is stored. Address searches go to OpenStreetMap Nominatim; cookie-free page-view counts are collected.</p>
         </div>
       </div>
       <p className="mt-10 border-t border-ink/10 pt-5 font-ui text-xs leading-relaxed text-muted">

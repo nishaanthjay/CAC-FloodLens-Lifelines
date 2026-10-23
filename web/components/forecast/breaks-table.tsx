@@ -17,17 +17,17 @@ export function BreaksTable() {
   const start = data?.meta.event.replay_start_utc;
 
   return (
-    <section id="breaks" className="mx-auto max-w-screen-xl px-4 pb-20 sm:px-6 lg:pb-28">
+    <section id="breaks" className="mx-auto max-w-screen-xl px-4 pb-24 sm:px-6 lg:pb-36">
       <div className="reveal mx-auto max-w-2xl text-center">
         <h2 className="font-display text-4xl font-bold leading-tight tracking-[-0.03em] sm:text-6xl">
           What breaks first?
         </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-ink/70">
+        <p className="mt-5 font-body text-lg leading-relaxed text-ink/70">
           Crossings in the order their streams first ran above the 10-year flow during the Florence replay, with what closing each one would do.
         </p>
       </div>
 
-      <div className="reveal mx-auto mt-12 max-w-4xl overflow-hidden rounded-3xl bg-white shadow-float sm:mt-14">
+      <div className="reveal mx-auto mt-12 max-w-4xl overflow-hidden rounded-3xl bg-white shadow-float sm:mt-16">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 px-5 py-4 sm:px-6">
           <h3 className="font-ui text-sm font-semibold">
             Crossing watch <span className="font-mono font-normal text-muted">· status at {start ? hourTime(start, hour) : "…"}</span>

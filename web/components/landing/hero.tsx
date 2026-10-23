@@ -39,25 +39,25 @@ export function Hero() {
     <section className="relative overflow-hidden bg-gradient-to-b from-soft-blue via-paper to-paper">
       <Backdrop />
       <div className="pointer-events-none absolute left-1/2 top-0 h-[34rem] w-[60rem] -translate-x-1/2 rounded-full bg-blue/10 blur-3xl drift" aria-hidden />
-      <div className="relative mx-auto max-w-screen-xl px-4 pb-20 pt-16 text-center sm:px-6 sm:pb-28 sm:pt-24">
+      <div className="relative mx-auto max-w-screen-xl px-4 pb-24 pt-20 text-center sm:px-6 sm:pb-32 sm:pt-28">
         <p className="enter mx-auto inline-flex items-center gap-2 rounded-full border border-blue/20 bg-white/70 px-3.5 py-2 font-ui text-sm font-medium text-blue">
           <MapPin size={15} strokeWidth={1.8} aria-hidden />
           Cape Fear, North Carolina
         </p>
-        <h1 className="enter mx-auto mt-7 [--d:90ms] max-w-4xl font-display text-[clamp(2.75rem,8vw,6rem)] font-black leading-[1.02] tracking-[-0.04em] text-balance">
+        <h1 className="enter mx-auto mt-9 [--d:90ms] max-w-4xl font-display text-[clamp(2.75rem,8vw,6rem)] font-black leading-[1.02] tracking-[-0.04em] text-balance">
           Can you still <Highlight>get to help?</Highlight>
         </h1>
-        <p className="enter mx-auto mt-6 max-w-xl [--d:180ms] font-body text-lg leading-relaxed text-ink/70 sm:text-xl">
+        <p className="enter mx-auto mt-8 max-w-xl [--d:180ms] font-body text-lg leading-relaxed text-ink/70 sm:text-xl">
           FloodLens Lifelines shows scenarios for how flooding may interrupt road access to hospitals and fire stations.
         </p>
 
         <AddressSearch />
 
-        <dl className="enter mx-auto mt-12 grid max-w-4xl grid-cols-1 divide-y divide-ink/10 border-y border-ink/10 text-left [--d:360ms] sm:mt-14 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <dl className="enter mx-auto mt-16 grid max-w-4xl grid-cols-1 divide-y divide-ink/10 border-y border-ink/10 text-left [--d:360ms] sm:mt-20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {facts.map(({ value, label }) => (
-            <div key={value} className="px-1 py-4 sm:px-6 sm:py-5 sm:text-center">
+            <div key={value} className="px-1 py-5 sm:px-8 sm:py-7 sm:text-center">
               <dt className="font-display text-xl font-bold leading-tight">{value}</dt>
-              <dd className="mt-1 font-ui text-xs leading-snug text-muted">{label}</dd>
+              <dd className="mt-1.5 font-ui text-xs leading-snug text-muted">{label}</dd>
             </div>
           ))}
         </dl>

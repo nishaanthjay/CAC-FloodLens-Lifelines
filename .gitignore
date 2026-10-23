@@ -1,4 +1,4 @@
-﻿data/raw/
+data/raw/
 data/derived/ml_full_table/
 data/derived/*.parquet
 __pycache__/
@@ -19,3 +19,7 @@ data/phase2/fema_nfhl.parquet
 *.tif
 *.pbf
 archive/
+
+# hourly TIMS snapshots (local archiver output; large, re-fetchable going forward)
+data/closures_live/20*/
+data/closures_live/logs/

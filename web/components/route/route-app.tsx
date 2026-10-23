@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, Check, Flame, Hospital, LoaderCircle, MapPin, Search } from "lucide-react";
+import { ArrowLeft, Check, Flame, Hospital, Link2, LoaderCircle, MapPin, Printer, Search } from "lucide-react";
 import { ADDRESS_EXAMPLE, geocode } from "@/lib/geocode";
 import { blockView, getJSON, nearestBlock, type LocationView, type Lookup, type Meta } from "@/lib/sample";
 import { crossingsOnRoute, rankRoutes, routeAtHour, type LngLat, type RouteCrossings, type RouteOption } from "@/lib/route";
@@ -38,6 +38,7 @@ export function RouteApp() {
   const [routes, setRoutes] = useState<Record<string, RouteOption[] | Pending | string>>({});
   const [detours, setDetours] = useState<Record<string, RouteOption | Pending | string>>({});
   const [hour, setHour] = useState(0);
+  const [copied, setCopied] = useState(false);
   const [focusId, setFocusId] = useState<string | null>(null);
   const [block, setBlock] = useState<LocationView | null>(null);
   const asked = useRef(new Set<string>()); // route / detour requests already made for this origin
@@ -169,11 +170,17 @@ export function RouteApp() {
     .sort((a, b) => (a.timeS ?? Infinity) - (b.timeS ?? Infinity) || a.straightKm - b.straightKm);
   const mapServices = useMemo(() => services.filter((s) => filter === "all" || s.kind === filter || selected.includes(s.id)), [services, filter, selected]);
   const toggle = (id: string) => setSelected((sel) => (sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]));
+  // Link back to this starting point only (coordinates of the geocoded place, never the typed text).
+  async function share() {
+    if (!origin) return;
+    const u = `${window.location.origin}/route?${new URLSearchParams({ lat: origin.lat.toFixed(5), lon: origin.lon.toFixed(5), label: origin.label })}`;
+    try { await navigator.clipboard.writeText(u); setCopied(true); setTimeout(() => setCopied(false), 2500); } catch { setMsg(`Copy this link: ${u}`); }
+  }
   const hours = base?.meta.event.hours ?? 18, start = base?.meta.event.replay_start_utc ?? "";
 
   return (
-    <main id="content" className="flex flex-1 flex-col lg:min-h-0 lg:flex-row">
-      <div className="relative order-1 h-[58vh] min-h-[360px] bg-soft-blue lg:order-2 lg:h-auto lg:flex-1">
+    <main id="content" className="flex flex-1 flex-col lg:min-h-0 lg:flex-row print:block">
+      <div className="relative order-1 h-[58vh] print:hidden min-h-[360px] bg-soft-blue lg:order-2 lg:h-auto lg:flex-1">
         <RouteMap origin={origin} services={mapServices} selected={selected} ranked={ranked} focusId={focus} hour={hour} onService={toggle} onRoute={setFocusId} />
         {origin && <HourSlider hour={hour} hours={hours} start={start} onChange={setHour} />}
         {loading && (
@@ -183,11 +190,12 @@ export function RouteApp() {
         )}
       </div>
 
-      <aside data-lenis-prevent className="order-2 w-full border-ink/10 bg-paper px-4 pb-16 pt-5 sm:px-6 lg:order-1 lg:w-[440px] lg:shrink-0 lg:overflow-y-auto lg:border-r">
+      <aside className="order-2 w-full border-ink/10 bg-paper px-4 pb-16 pt-5 sm:px-6 lg:order-1 lg:w-[440px] lg:shrink-0 lg:overflow-y-auto lg:border-r print:w-full print:overflow-visible">
         <a href="/" className="inline-flex min-h-11 items-center gap-1.5 font-ui text-sm text-muted hover:text-blue">
           <ArrowLeft size={15} aria-hidden /> Florence replay
         </a>
         <h1 className="font-display text-3xl font-bold tracking-[-0.03em]">Route analysis</h1>
+        <p className="hidden font-ui text-xs font-semibold text-alert print:block">Florence 2018 replay scenario. Not a forecast. Not for emergency use. Call 911 in an emergency. lifelines-flax.vercel.app</p>
         <p className="mt-1 font-ui text-sm text-muted">Routes from an address to emergency hospitals and fire stations, checked against the Florence 2018 replay.</p>
 
         <form className="mt-5" role="search" onSubmit={(e) => { e.preventDefault(); search(query); }}>
@@ -207,6 +215,16 @@ export function RouteApp() {
         {origin && (
           <p className="mt-1 flex items-start gap-2 font-ui text-sm"><MapPin size={16} className="mt-0.5 shrink-0 text-blue" aria-hidden />
             <span className="min-w-0 break-words"><b className="font-semibold">Starting at</b> {origin.label}</span></p>
+        )}
+        {origin && (
+          <div className="mt-2 flex gap-2 print:hidden">
+            <button type="button" onClick={share} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 bg-white px-4 font-ui text-xs font-semibold hover:border-blue">
+              <Link2 size={14} aria-hidden /> {copied ? "Link copied" : "Copy link"}
+            </button>
+            <button type="button" onClick={() => window.print()} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 bg-white px-4 font-ui text-xs font-semibold hover:border-blue">
+              <Printer size={14} aria-hidden /> Print or save as PDF
+            </button>
+          </div>
         )}
 
         {services.length > 0 && (
