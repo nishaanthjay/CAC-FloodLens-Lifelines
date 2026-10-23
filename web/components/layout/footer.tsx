@@ -23,7 +23,7 @@ export function Footer() {
         </div>
         {cols.map(([title, links]) => (
           <div key={title}>
-            <h3 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">{title}</h3>
+            <h2 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">{title}</h2>
             <ul className="mt-2 font-ui text-sm">
               {links.map(([text, href]) => (
                 <li key={text}><a href={href} className="inline-flex min-h-11 items-center text-ink/75 underline-offset-4 hover:text-blue hover:underline">{text}</a></li>
@@ -32,7 +32,7 @@ export function Footer() {
           </div>
         ))}
         <div>
-          <h3 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">Privacy</h3>
+          <h2 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">Privacy</h2>
           <p className="mt-3 font-ui text-sm leading-relaxed text-ink/75">No user data is stored. Address searches go to OpenStreetMap Nominatim; cookie-free page-view counts are collected.</p>
         </div>
       </div>

@@ -4,9 +4,9 @@ import { AddressSearch } from "@/components/landing/address-search";
 import { coastMain, hospitals, islands, ocean, riversMajor, roadsMajor, roadsMinor } from "@/lib/cape-fear";
 
 const facts = [
-  { value: "18 hours", label: "Replay window, hour by hour" },
+  { value: "Now + 18 hours", label: "Nowcast, then forecast preview. The Florence replay is kept separate" },
   { value: "3 counties", label: "New Hanover, Brunswick, Pender" },
-  { value: "2 destinations", label: "Hospitals and fire stations" },
+  { value: "9 kinds of help", label: "Emergency rooms, fire, EMS, police, dialysis, urgent care, nursing homes, pharmacies" },
 ];
 
 /** Faint real map of the region behind the hero; the centre is masked clear for the headline. */
@@ -48,7 +48,7 @@ export function Hero() {
           Can you still <Highlight>get to help?</Highlight>
         </h1>
         <p className="enter mx-auto mt-8 max-w-xl [--d:180ms] font-body text-lg leading-relaxed text-ink/70 sm:text-xl">
-          FloodLens Lifelines shows scenarios for how flooding may interrupt road access to hospitals and fire stations.
+          FloodLens Lifelines shows how flooding may interrupt road access to emergency rooms, fire stations, dialysis centres and other lifelines: what is observed now, then the forecast.
         </p>
 
         <AddressSearch />

@@ -3,8 +3,9 @@ import { useState } from "react";
 import { Droplets, Menu, X } from "lucide-react";
 
 const links = [
-  ["Florence replay", "/#florence"],
+  ["Emergency finder", "/emergency"],
   ["Route analysis", "/route"],
+  ["Florence replay", "/#florence"],
   ["How it works", "/#how"],
   ["About and limits", "/about"],
 ];
@@ -16,7 +17,7 @@ export function Masthead() {
     <header className="glass sticky top-0 z-40 border-b border-ink/10 print:static">
       <p role="note" className="bg-yellow px-4 py-1.5 text-center font-ui text-xs text-ink sm:text-sm">
         <strong className="font-semibold">Sample data, not for emergency use.</strong>
-        <span className="opacity-70"> Florence 2018 replay preview · not validated · call 911 in an emergency</span>
+        <span className="opacity-70"> Unvalidated river-flow forecast preview · Florence 2018 replay kept separate · call 911 in an emergency</span>
       </p>
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
         <div className="flex min-h-[56px] items-center justify-between gap-6">

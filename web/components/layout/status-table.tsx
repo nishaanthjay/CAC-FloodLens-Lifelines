@@ -21,7 +21,7 @@ function Row({ file, label, limit, now }: { file: string; label: string; limit: 
       <td className="py-3 pr-4 font-ui text-sm">{error ? "unavailable" : data ? hoursText(age) : ""}</td>
       <td className="py-3">
         {(data || error) && (
-          <span className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${stale ? "border-alert bg-softred text-alert" : "border-ink/20 bg-soft-blue text-ink"}`}>
+          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold ${stale ? "border-alert bg-softred text-alert" : "border-ink/20 bg-soft-blue text-ink"}`}>
             {stale ? `Stale (over ${limit} h)` : "Fresh"}
           </span>
         )}

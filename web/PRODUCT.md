@@ -24,9 +24,12 @@ The pilot region is Cape Fear, North Carolina, including New Hanover, Brunswick,
 
 ## Capabilities and Constraints
 
-- The interface includes an address lookup field, an 18-hour forecast slider, an illustrative road-and-river map, a resilience summary, a ranked crossing view, and a Florence replay navigation entry.
+- The interface includes an address lookup (route analysis: Now, then the forecast hours), a separate Florence replay mode, a quick emergency finder (/emergency), a resilience summary, and a ranked crossing view.
+- Route analysis checks every crossing that has a flow threshold (1,583 of 2,920). The rest are flagged unassessed, never treated as open. 1,333 of the assessed crossings are OpenStreetMap road-stream intersections that may not be bridges; users can leave them out.
+- Services: ED hospitals and fire stations (pipeline lists) plus dialysis, nursing homes, urgent care, police, pharmacies (federal / HHS lists, topped up with OpenStreetMap) and EMS (OpenStreetMap only). All incomplete; none confirmed open. No shelter list.
+- Routes are flagged when they are long (over the guide time for the kind of service), a long detour, include crossings with no data or unassessed, or when the routing service is slow or times out.
 - Forecast language must remain probabilistic. Risk communication uses probabilities, labels, patterns, ranges, and timestamps, and must not imply that a road is safe or all clear.
-- The current implementation contains placeholder summary values and an illustrative sample map. No connected geocoder, live map tiles, or forecast API is evident in the current code.
+- The replay still contains placeholder values (marked). The live view (Now + forecast) shows no probabilities: only model flow compared with each stream's recurrence flows. Geocoding is Nominatim, routing is the public Valhalla server, tiles are OpenFreeMap.
 - Data modes are separate and labeled: REPLAY (Hurricane Florence hindcast), NOWCAST (observed gauge and coastal water levels, with a stale flag after 3 hours), FORECAST (NWM short-range, unvalidated, river flow only, not a closure probability), and OUTLOOK-PERSISTENCE (placeholder). A replay is never presented as a forecast.
 - Closure scenarios use river flow only. Observed coastal water levels are shown separately; wave run-up, rain/drainage flooding, and river-surge interaction are not included.
 - No user data is stored.

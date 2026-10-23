@@ -91,19 +91,22 @@ for sid_, kind, name, g in SITES:
                           baseline_drive_min_to_nearest_ed_hospital=real(R(base.loc[g, "baseline_tt_min"], 1)), baseline_route_redundancy=real(bred), timeline=tl))
 
 # ---------- crossings ----------
-X = pd.read_csv("data/export/crossings_export.csv", dtype={"nwm_feature_id": "Int64"})
-X = X[(X.src != "osm_secondary") & (X.hazard_threshold_ok.astype(str) == "True") & (X.graph_snapped.astype(str) == "True") & X.nwm_feature_id.notna()]
-assert len(X) == 250, len(X)   # the `seed` set the replay closes
+X0 = pd.read_csv("data/export/crossings_export.csv", dtype={"nwm_feature_id": "Int64"})
+X = X0[(X0.src != "osm_secondary") & (X0.hazard_threshold_ok.astype(str) == "True") & (X0.graph_snapped.astype(str) == "True") & X0.nwm_feature_id.notna()]
+assert len(X) == 250, len(X)   # the `seed` set the engine closes (block-level isolation numbers exist for these only)
 C = pd.read_csv("data/export/consequence_ranking.csv").set_index("id")
 flall = pd.read_parquet("data/phase1b/flows_hindcast.parquet").sort_index() * CFS; fl = flall.loc[hours[:NH]]
-ev_first = {c.id: next((t for t, v in zip(flall.index, flall[str(c.nwm_feature_id)].values) if v > c.q10_cfs), None) for c in X.itertuples()}   # whole Florence hindcast
-ratio = {c.id: fl[str(c.nwm_feature_id)].values / c.q10_cfs for c in X.itertuples()}
+# Route page: EVERY crossing with a flow threshold and a hindcast reach is assessed from its own flow (route status needs no engine run).
+A = X0[(X0.hazard_threshold_ok.astype(str) == "True") & X0.nwm_feature_id.notna() & X0.nwm_feature_id.astype(str).isin(flall.columns)]
+SEED_IDS = set(X.id); assert SEED_IDS <= set(A.id), "seed crossings must all be assessable"
+ev_first = {c.id: next((t for t, v in zip(flall.index, flall[str(c.nwm_feature_id)].values) if v > c.q10_cfs), None) for c in A.itertuples()}   # whole Florence hindcast
+ratio = {c.id: fl[str(c.nwm_feature_id)].values / c.q10_cfs for c in A.itertuples()}
 first = {i: next((t for t, v in enumerate(r) if v > 1), None) for i, r in ratio.items()}
 LV = [("RL50", "q50_cfs"), ("RL25", "q25_cfs"), ("RL10", "q10_cfs"), ("RL5", "q5_cfs"), ("RL2", "q2_cfs")]
 def xname(road, stream, cid):
     return " over ".join(v for v in (road if isinstance(road, str) else None, string.capwords(stream) if isinstance(stream, str) else None) if v) or cid
-SEED = {}   # all 250 scenario crossings; crossings.json and route_crossings.json share these values
-for c in X.itertuples():
+SEED = {}   # every assessable crossing (A); crossings.json (28 + critical) and route_crossings.json share these values
+for c in A.itertuples():
     q = fl[str(c.nwm_feature_id)].values; rq = ratio[c.id]
     SEED[c.id] = dict(name=xname(c.road, c.stream, c.id), rq=rq, level=[next((lv for lv, col in LV if q[t] > getattr(c, col)), "RL0") for t in range(NH)],
                       p=np.clip(1 / (1 + np.exp(-3 * np.log(np.maximum(rq, 1e-6)))) + RNG.normal(0, 0.03, NH), 0.01, 0.97).round(2))   # placeholder
@@ -186,15 +189,19 @@ LOOKUP["crossings"] = {c: [xname(XALL.road[c], XALL.stream[c], c), R(XALL.lat[c]
 # ---------- route analysis: every crossing + essential services (website /route page) ----------
 LVI = ["RL0", "RL2", "RL5", "RL10", "RL25", "RL50"]
 ROUTE_X = dict(sample=True, stamp=STAMP, hours=NH, levels=LVI,
-    note="assessed = the 250 crossings the replay can close (seed set); a route through one is blocked in the scenario while its level is RL10 or higher. Other crossings are listed so a route can say it crosses streams the model did not assess.",
+    note=f"assessed = the {len(SEED)} crossings with a flow threshold and a hindcast reach (250 structure-seeded + {len(SEED) - 250} OSM road-stream intersections, less certain as bridges); a route through one is blocked in the scenario while its level is RL10 or higher. The rest are listed so a route can say it crosses streams the model could not assess (no matched NWM reach or no usable threshold).",
     fields={"level": dict(synthetic=False, definition="per-hour index into levels (real replay)"), "ratio_q10": dict(synthetic=False, definition="flow / 10-year flow per hour (real replay)"),
-            "p_pct": dict(synthetic=True, definition="PLACEHOLDER flood chance per hour, percent (same values as crossings.json)")},
+            "p_pct": dict(synthetic=True, definition="PLACEHOLDER flood chance per hour, percent (same values as crossings.json)"),
+            "q": dict(synthetic=False, definition="recurrence flows (cfs) at 2, 5, 10, 25, 50 years for the crossing's NWM reach; the live forecast is compared with these"),
+            "basis": dict(synthetic=False, definition="structure = NCDOT/NBI bridge or culvert; osm = OpenStreetMap road-stream intersection (may not be a bridge)")},
     assessed=[dict(id=i, name=v["name"], lat=R(XALL.lat[i], 5), lon=R(XALL.lon[i], 5), county=str(XALL.county[i]).title(), fema_zone=XALL.fema_zone[i],
                    tidal=str(XALL.tidal_flag[i]) == "True", first_above_RL10_utc=None if pd.isna(ev_first[i]) else pd.Timestamp(ev_first[i]).strftime("%Y-%m-%dT%H:%MZ"),
-                   people_affected=int(C.people_affected.get(i, 0) if pd.notna(C.people_affected.get(i)) else 0),
+                   people_affected=int(C.people_affected.get(i, 0) if pd.notna(C.people_affected.get(i)) else 0), seed=i in SEED_IDS,
+                   reach=int(XALL.nwm_feature_id[i]), q=[R(XALL[c][i], 1) for c in ("q2_cfs", "q5_cfs", "q10_cfs", "q25_cfs", "q50_cfs")],   # q: recurrence flows (cfs) the live forecast is compared with
+                   basis="structure" if XALL.src[i] != "osm_secondary" else "osm",
                    level="".join(str(LVI.index(l)) for l in v["level"]), ratio_q10=[R(r, 2) for r in v["rq"]], p_pct=[int(round(x * 100)) for x in v["p"]])
               for i, v in SEED.items()],
-    not_assessed=[[i, R(r.lat, 5), R(r.lon, 5), "osm_secondary" if r.src == "osm_secondary" else (r.hazard_ok_reason if str(r.hazard_threshold_ok) != "True" else "not snapped")]
+    not_assessed=[[i, R(r.lat, 5), R(r.lon, 5), (r.hazard_ok_reason if str(r.hazard_threshold_ok) != "True" else "no hindcast reach")]
                   for i, r in XALL.iterrows() if i not in SEED])
 Hs = pd.read_parquet("data/phase1b/hospitals_snapped.parquet"); Hs = Hs[Hs.ed & ~Hs.is_behavioral_or_nonacute]   # the engine's ED hospital set
 Fs = pd.read_parquet("data/phase1b/firestations_snapped.parquet")
@@ -232,7 +239,8 @@ meta = dict(
     known_gaps=["The Florence replay and the closure scenarios use river flow only: no storm surge, tide, wave run-up, rain/drainage flooding or river-surge interaction. Observed coastal water levels (coastal.json, NOWCAST) are shown separately and are not combined with crossings; their outlook is a persistence placeholder, not surge guidance.",
                 "Four modes are kept apart: REPLAY (this Florence hindcast), NOWCAST (nowcast.json, coastal.json: observed now), FORECAST (forecast_latest.json: NWM short-range, unvalidated, river flow only, not a closure probability), OUTLOOK-PERSISTENCE (placeholder). A replay is never a forecast.",
                 "New Hanover (Wilmington) shows little or no loss of access here. That reflects the crossing inventory and graph, not Florence: Wilmington was documented as cut off, and test E3 failed to reproduce it.",
-                "Dialysis and nursing-home entries are placeholder facilities at real Census block centroids; no facility inventory of those types is in the pipeline.",
+                "The \"places to watch\" dialysis and nursing-home entries are still placeholder facilities at real Census block centroids. The route page and emergency finder use a separate, real but incomplete services list (services.json: OpenStreetMap volunteer data for everything except ED hospitals and fire stations).",
+                "Block-level isolation numbers (address cross-check, places to watch) come from the engine run on the 250 structure-seeded crossings only. Route status uses every crossing that has a flow threshold; crossings without a matched NWM reach or usable threshold are flagged as unassessed, never treated as open.",
                 "The Florence hindcast saturates: most seed crossings exceed their 10-year flow at the peak."],
     data_sources=["NOAA National Water Model v3.0 retrospective (hourly channel flow)", "NOAA OWP recurrence flows (static_nwm_flowlines)",
                   "NCDOT structure locations and NBI 2025 (crossing inventory)", "OpenStreetMap Geofabrik NC/SC extract (road graph, default speeds)",
@@ -241,7 +249,7 @@ meta = dict(
                      "data/phase1b/graph_segments.parquet", "data/phase0/counties.geojson", "data/export/crossings_export.csv",
                      "data/export/consequence_ranking.csv", "data/export/blocks_export.csv"],
     fields={k: dict(synthetic=s, unit=u, definition=d) for k, (s, u, d) in FIELDS.items()},
-    files=["meta.json", "addresses.json", "blocks_lookup.json", "route_crossings.json", "facilities.json", "crossings.json", "facilities_watchlist.json", "network.geojson", "nowcast.json", "coastal.json", "forecast_latest.json", "README.md", "preview.html", "build_sample.py"])
+    files=["meta.json", "addresses.json", "blocks_lookup.json", "route_crossings.json", "facilities.json", "crossings.json", "facilities_watchlist.json", "network.geojson", "nowcast.json", "coastal.json", "forecast_latest.json", "services.json", "README.md", "preview.html", "build_sample.py"])
 
 def dump(name, obj):
     with open(OUT + name, "w", encoding="utf-8") as f: json.dump(obj, f, separators=(",", ":"), allow_nan=False, ensure_ascii=False)
@@ -270,7 +278,8 @@ for a in addresses:   # sample sites must agree with the lookup row of their blo
     rp = next(r for r in lookup_rows if r[0] == a["geoid20"])[8]
     assert [h["isolation_probability"]["value"] for h in a["timeline"]] == ([v / 100 for v in rp["p_pct"][:NH]] if rp else [P_FLOOR] * NH), a["id"]
 assert os.path.getsize(OUT + "blocks_lookup.json") < 3_000_000, "blocks_lookup.json over 3 MB"
-assert len(ROUTE_X["assessed"]) == 250 and len(ROUTE_X["assessed"]) + len(ROUTE_X["not_assessed"]) == len(XALL)
+assert all(a["basis"] in ("structure", "osm") and len(a["q"]) == 5 and a["reach"] for a in ROUTE_X["assessed"]), "assessed crossings need basis, q and reach"
+assert len(ROUTE_X["assessed"]) == len(A) and len(ROUTE_X["assessed"]) + len(ROUTE_X["not_assessed"]) == len(XALL)
 for c in crossings:   # crossings.json must agree with route_crossings.json
     r = next(a for a in ROUTE_X["assessed"] if a["id"] == c["id"])
     assert [round(h["flood_probability"]["value"] * 100) for h in c["hourly"]] == r["p_pct"] and [LVI[int(k)] for k in r["level"]] == [h["level_reached"]["value"] for h in c["hourly"]], c["id"]
@@ -278,6 +287,7 @@ assert len(FACILITIES["hospitals"]) == 11, len(FACILITIES["hospitals"])
 for f in os.listdir(OUT):
     if f.endswith((".json", ".geojson", ".md", ".html")):
         t = open(OUT + f, encoding="utf-8").read().lower()
+        if f == "services.json": t = " ".join(json.loads(t)["caveats"])   # facility names are proper nouns ("Public Safety Department"); only our own wording is checked
         for w in ("safe", "no risk"): assert w not in t, f"forbidden string '{w}' in {f}"
 assert os.path.getsize(OUT + "network.geojson") < 2_000_000, "network.geojson over 2 MB"
 assert len(addresses) == 10 and all(len(a["timeline"]) == NH for a in addresses) and all(len(c["hourly"]) == NH for c in crossings)

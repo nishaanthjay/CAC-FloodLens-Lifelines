@@ -5,7 +5,7 @@ import { RouteApp } from "@/components/route/route-app";
 
 export const metadata: Metadata = {
   title: "Route analysis",
-  description: "Routes from a Cape Fear address to emergency hospitals and fire stations, checked against the Florence 2018 replay. Sample data.",
+  description: "Routes from a Cape Fear address to emergency rooms, fire, EMS, police, dialysis and other services, checked against the latest river-flow forecast (Now and forecast) or kept apart in the Florence 2018 replay. Sample data, not validated.",
 };
 
 export default function RoutePage() {

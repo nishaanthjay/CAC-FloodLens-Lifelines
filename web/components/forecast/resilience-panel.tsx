@@ -110,7 +110,7 @@ export function ResiliencePanel() {
         </dl>
         {loc && (
           <a
-            href={`/route?${new URLSearchParams({ lat: String(loc.lat), lon: String(loc.lon), label: loc.name })}`}
+            href={`/route?${new URLSearchParams({ lat: String(loc.lat), lon: String(loc.lon), label: loc.name, mode: "replay" })}`}
             target="_blank"
             rel="noopener"
             className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-blue px-5 font-ui text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#244d86] hover:shadow-lift"
