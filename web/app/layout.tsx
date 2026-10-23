@@ -11,7 +11,7 @@ const body = Lora({ subsets: ["latin"], variable: "--font-body" });
 const ui = Inter({ subsets: ["latin"], variable: "--font-ui" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lifelines-flax.vercel.app";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lifelines-nc.vercel.app";
 const DESC = "If the roads flood, can your neighborhood still reach a hospital or fire station? Flood scenarios for Cape Fear, NC. Not a forecast, not for emergency use.";
 
 export const metadata: Metadata = {
