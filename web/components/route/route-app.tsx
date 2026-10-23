@@ -260,7 +260,7 @@ export function RouteApp() {
         </a>
         <h1 className="mt-2 font-display text-3xl font-bold tracking-[-0.03em]">Route analysis</h1>
         <p className="hidden font-ui text-xs font-semibold text-alert print:block">
-          {live ? "Now and forecast preview (unvalidated NWM river flow)." : "Florence 2018 replay scenario. Not a forecast."} Not for emergency use. Call 911 in an emergency. lifelines-flax.vercel.app
+          {live ? "Now and forecast preview (unvalidated NWM river flow)." : "Florence 2018 replay scenario. Not a forecast."} Not for emergency use. Call 911 in an emergency. lifelines-nc.vercel.app
         </p>
         <p className="mt-2 font-ui text-sm leading-relaxed text-muted">
           Routes from an address to emergency rooms, fire, EMS, police, dialysis, urgent care, nursing homes and pharmacies, checked against {live ? "the latest river-flow forecast" : "the Florence 2018 replay"}.

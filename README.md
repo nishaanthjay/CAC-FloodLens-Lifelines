@@ -4,7 +4,7 @@
 
 Most flood tools answer *"is this road underwater?"* FloodLens Lifelines answers the question that decides whether people live: **"if the water rises, can this neighbourhood still reach a hospital or fire station, and when does that change?"**
 
-Pilot region: **Cape Fear, North Carolina** (New Hanover, Brunswick and Pender counties, plus a 40 km road-network buffer). Live app: https://lifelines-flax.vercel.app. Source: https://github.com/nishaanthjay/CAC-FloodLens-Lifelines
+Pilot region: **Cape Fear, North Carolina** (New Hanover, Brunswick and Pender counties, plus a 40 km road-network buffer). Live app: https://lifelines-nc.vercel.app. Source: https://github.com/nishaanthjay/CAC-FloodLens-Lifelines
 
 Built by Nishaanth Jay for the Congressional App Challenge. ML teammate: Shreyas Thota.
 
