@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { RISK, crossingStatus, getJSON, hourTime } from "@/lib/sample";
+import { crossingStatus, getJSON, hourTime } from "@/lib/sample";
 import { BOUNDS, STYLE, esc, loadMaplibre, type ML } from "@/lib/maplibre";
 import { useSample } from "@/components/forecast/sample-store";
 import { HourSlider } from "@/components/ui/hour-slider";
@@ -15,16 +15,10 @@ function Legend() {
   return (
     <div className="grid gap-8 sm:grid-cols-2 sm:gap-12">
       <div>
-        <p className="label mb-3.5 text-muted">
-          Illustrative band of losing access <span className="ml-1 rounded-full bg-[#EFE3FF] px-2 py-0.5 normal-case tracking-normal text-[#5A2D91]">placeholder</span>
-        </p>
-        <ul className="flex flex-wrap gap-x-5 gap-y-3 font-ui text-xs text-ink/80" aria-label="Isolation likelihood legend">
-          {RISK.map(({ label, cls }) => (
-            <li key={label} className="flex items-center gap-2">
-              <span className={`h-3.5 w-5 rounded-sm border border-ink/15 ${cls}`} aria-hidden />
-              {label}
-            </li>
-          ))}
+        <p className="label mb-3.5 text-muted">Neighbourhoods <span className="ml-1 rounded-full bg-soft-blue px-2 py-0.5 normal-case tracking-normal text-blue">replay</span></p>
+        <ul className="grid gap-y-3 font-ui text-xs text-ink/80">
+          <li className="flex items-center gap-2"><span className="h-3.5 w-3.5 rounded-full border border-ink/40 bg-[#7A0000]" aria-hidden />No route to an emergency hospital this hour</li>
+          <li className="flex items-center gap-2"><span className="h-3.5 w-3.5 rounded-full border border-ink/40 bg-white" aria-hidden />A route exists · not an all-clear</li>
         </ul>
       </div>
       <div>
@@ -74,7 +68,7 @@ export function ForecastMap() {
   });
   const sitesFC = () => ({
     type: "FeatureCollection",
-    features: data!.sites.map((s) => ({ type: "Feature", properties: { id: s.id, name: s.name, p: s.hours[hour].p, res: s.kind === "residential" },
+    features: data!.sites.map((s) => ({ type: "Feature", properties: { id: s.id, name: s.name, lost: s.hours[hour].lost ? 1 : 0, res: s.kind === "residential" },
       geometry: { type: "Point", coordinates: [s.lon, s.lat] } })),
   });
 
@@ -102,9 +96,9 @@ export function ForecastMap() {
           m.addSource("sites", { type: "geojson", data: sitesFC(), promoteId: "id" });
           m.addLayer({ id: "sites", type: "circle", source: "sites", paint: {
             "circle-radius": ["case", ["boolean", ["feature-state", "sel"], false], 14, ["get", "res"], 8, 10],
-            "circle-color": ["step", ["get", "p"], RISK[0].fill, 0.15, RISK[1].fill, 0.35, RISK[2].fill, 0.55, RISK[3].fill, 0.75, RISK[4].fill],
+            "circle-color": ["case", ["==", ["get", "lost"], 1], "#7A0000", "#FFFFFF"],
             "circle-stroke-color": ["case", ["boolean", ["feature-state", "sel"], false], "#2D5DA1", "#111111"],
-            "circle-stroke-width": ["case", ["boolean", ["feature-state", "sel"], false], 4, [">=", ["get", "p"], 0.55], 3, 1.5] } });
+            "circle-stroke-width": ["case", ["boolean", ["feature-state", "sel"], false], 4, 2] } });
           const tip = new ml.Popup({ closeButton: false, closeOnClick: false, offset: 10 });
           m.on("mousemove", "crossings", (e: ML) => {
             const f = e.features[0].properties;
@@ -114,7 +108,7 @@ export function ForecastMap() {
           m.on("mousemove", "sites", (e: ML) => {
             const f = e.features[0].properties;
             m.getCanvas().style.cursor = "pointer";
-            tip.setLngLat(e.lngLat).setHTML(`<b>${esc(f.name)}</b><br>Illustrative band: ${RISK.find((r) => f.p < r.max)!.label} · placeholder`).addTo(m);
+            tip.setLngLat(e.lngLat).setHTML(`<b>${esc(f.name)}</b><br>${f.lost ? "No route to an emergency hospital this hour" : "A route exists this hour"} · replay`).addTo(m);
           });
           for (const id of ["crossings", "sites"]) m.on("mouseleave", id, () => { m.getCanvas().style.cursor = ""; tip.remove(); });
           m.on("click", "sites", (e: ML) => select(data.sites.find((s) => s.id === e.features[0].properties.id) ?? null));
@@ -149,7 +143,7 @@ export function ForecastMap() {
       <div className="reveal-zoom relative overflow-hidden rounded-3xl bg-soft-blue shadow-float">
         <div className="glass pointer-events-none absolute left-4 top-4 z-[2] inline-flex items-center gap-2 rounded-full px-3 py-2 font-ui text-xs font-semibold shadow-panel">
           <span className="h-2 w-2 rounded-full bg-alert" aria-hidden />
-          Florence 2018 replay · sample data
+          Florence 2018 replay
         </div>
         <div
           ref={box}
@@ -168,8 +162,8 @@ export function ForecastMap() {
       <div className="reveal mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-start lg:gap-16">
         <figcaption className="max-w-md shrink-0 font-ui text-xs leading-relaxed text-muted lg:w-[26rem]">
           Replay of the NWM v3.0 retrospective for Hurricane Florence, starting {start ? hourTime(start, 0) : "…"}. A crossing closes in this
-          scenario while its stream runs above the 10-year flow. River flow only: no storm surge, tide or street flooding. Large circles are sample
-          places; risk colours on them are placeholders until the forecast model is ready.
+          scenario while its stream runs above the 10-year flow. River flow only: no storm surge, tide or street flooding. Large circles are
+          Census-block centres: dark means the replay found no route to an emergency hospital that hour.
         </figcaption>
         <Legend />
       </div>

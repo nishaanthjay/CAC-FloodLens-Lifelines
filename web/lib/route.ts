@@ -92,7 +92,7 @@ export function closedNear(X: RouteCrossings, h: number, from: LngLat, to: LngLa
 }
 
 /** Status of a route in step h: blocked if any assessed crossing is at or above RL10. Unknown = assessed crossing with no value this step (reported, never counted as open).
- * pFail is the PLACEHOLDER chance any crossing floods (replay only). */
+ * pFail is kept for the replay data but is no longer used for status or ranking. */
 export function routeAtHour(on: OnRoute[], h: number): HourStatus {
   const blocked: OnRoute[] = [], watch: OnRoute[] = [], unknown: OnRoute[] = [];
   let q = 1;
@@ -104,7 +104,7 @@ export function routeAtHour(on: OnRoute[], h: number): HourStatus {
     q *= 1 - Math.min(100, Math.max(0, o.x.p_pct[h] ?? 0)) / 100;
   }
   const pFail = 1 - q;
-  return { blocked, watch, unknown, pFail, state: blocked.length ? 2 : watch.length || pFail >= AT_RISK_P ? 1 : 0 };
+  return { blocked, watch, unknown, pFail, state: blocked.length ? 2 : watch.length ? 1 : 0 };
 }
 
 export type RouteOption = {
@@ -113,12 +113,12 @@ export type RouteOption = {
   timeS: number; km: number; shape: LngLat[]; on: OnRoute[];
 };
 
-/** Best first: fewest closed crossings (open routes first), then lower placeholder chance (5-point steps), then faster. */
+/** Best first: fewest closed crossings (open routes first), then faster. */
 export function rankRoutes(opts: RouteOption[], h: number) {
   return opts
     .map((o) => ({ o, s: routeAtHour(o.on, h) }))
     .sort((a, b) => a.s.blocked.length - b.s.blocked.length
-      || Math.round(a.s.pFail * 20) - Math.round(b.s.pFail * 20) || a.o.timeS - b.o.timeS);
+      || a.o.timeS - b.o.timeS);
 }
 
 /** Steps (of the window) in which the route is blocked. */

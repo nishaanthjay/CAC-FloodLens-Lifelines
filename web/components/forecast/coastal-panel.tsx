@@ -5,10 +5,10 @@ import { ModeHeader } from "@/components/forecast/mode-header";
 
 const W = 360, Ht = 200, PAD = { l: 34, r: 8, t: 10, b: 20 };
 
-/** Observed vs predicted tide for one station. Lines differ by dash and weight, not colour alone. The outlook is dashed and labelled as a placeholder. */
+/** Observed vs predicted tide for one station. Lines differ by dash and weight, not colour alone. */
 function Chart({ s }: { s: Station }) {
   const rows = s.hourly, n = rows.length;
-  const vals = rows.flatMap((r) => [r.tide_pred_m_navd88, r.observed_m_navd88, r.outlook_total_m_navd88]).filter((v): v is number => typeof v === "number");
+  const vals = rows.flatMap((r) => [r.tide_pred_m_navd88, r.observed_m_navd88]).filter((v): v is number => typeof v === "number");
   const lo = Math.floor(Math.min(...vals) * 2) / 2, hi = Math.ceil(Math.max(...vals) * 2) / 2;
   const x = (i: number) => PAD.l + (i / (n - 1)) * (W - PAD.l - PAD.r), y = (v: number) => PAD.t + (1 - (v - lo) / (hi - lo)) * (Ht - PAD.t - PAD.b);
   const line = (pick: (r: (typeof rows)[number]) => number | null | undefined) =>
@@ -17,12 +17,11 @@ function Chart({ s }: { s: Station }) {
   const ticks = [lo, (lo + hi) / 2, hi];
   return (
     <svg viewBox={`0 0 ${W} ${Ht}`} className="mt-3 block w-full max-w-xl" role="img"
-      aria-label={`${s.name} water level, metres above NAVD88, ${n} hourly points. Heavy solid line: observed. Thin line: predicted tide.${iNow >= 0 ? " Dashed line: placeholder outlook, not surge guidance." : " Predictions only."}`}>
+      aria-label={`${s.name} water level, metres above NAVD88, ${n} hourly points. Heavy solid line: observed. Thin line: predicted tide.${iNow >= 0 ? "" : " Predictions only."}`}>
       {ticks.map((t) => <g key={t}><line x1={PAD.l} x2={W - PAD.r} y1={y(t)} y2={y(t)} stroke="#E3E5E8" /><text x={PAD.l - 6} y={y(t) + 4} textAnchor="end" fontSize="11" fill="#555">{t.toFixed(1)}</text></g>)}
       {iNow >= 0 && <g><line x1={x(iNow)} x2={x(iNow)} y1={PAD.t} y2={Ht - PAD.b} stroke="#111" strokeDasharray="2 3" /></g>}
       <polyline points={line((r) => r.tide_pred_m_navd88)} fill="none" stroke="#2D5DA1" strokeWidth="1.5" />
       <polyline points={line((r) => r.observed_m_navd88)} fill="none" stroke="#111" strokeWidth="3" />
-      <polyline points={line((r) => r.outlook_total_m_navd88)} fill="none" stroke="#7A5200" strokeWidth="2" strokeDasharray="6 5" />
       <text x={PAD.l} y={Ht - 5} fontSize="11" fill="#555">{rows[0].t.slice(5, 10)} UTC</text>
     </svg>
   );
@@ -33,7 +32,6 @@ const Legend = ({ obs }: { obs: boolean }) => (
     <li>Metres above NAVD88</li>
     {obs && <li><b>Heavy line</b>: observed</li>}
     <li><span className="text-blue">Thin line</span>: predicted tide</li>
-    {obs && <li><span className="font-semibold text-[#7A5200]">Dashed line</span>: outlook, placeholder, not surge guidance</li>}
     {obs && <li>Dotted vertical: latest observation</li>}
   </ul>
 );

@@ -17,7 +17,7 @@ export function Florence() {
           </h2>
           <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 font-ui text-xs font-semibold text-yellow">
             <History size={14} aria-hidden />
-            Replay · sample preview
+            Florence 2018 replay
           </p>
           <p className="mt-5 max-w-md font-body text-lg leading-relaxed text-white/75">
             In 2018, Hurricane Florence turned Wilmington into an island. The replay below steps through 18 hours of the storm. It uses river flow only, so it misses the surge and street flooding that cut Wilmington off.
