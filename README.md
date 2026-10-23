@@ -93,6 +93,7 @@ Census blocks + CMS hospitals + fire stations --> routing graph
 | `data/inventory/` | Dataset inventory (every source: URL, vintage, licence, status, SHA-256). |
 | `.github/workflows/` | Hourly jobs that refresh the live layers. |
 | `config/` | Reach and gauge lists. |
+| Archive repo | Hourly NOAA National Water Model forecast cycles are archived by a separate, open repository: [nishaanthjay/lifelines-nvm-archive](https://github.com/nishaanthjay/lifelines-nvm-archive) (data on its `nwm-archive` branch). The site's `/status` page reads its manifest. |
 
 ## Data sources
 

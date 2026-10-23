@@ -4,7 +4,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://tiles.openfreemap.org",
   "font-src 'self' data: https://tiles.openfreemap.org",
-  "connect-src 'self' https://tiles.openfreemap.org https://nominatim.openstreetmap.org https://valhalla1.openstreetmap.de",
+  "connect-src 'self' https://tiles.openfreemap.org https://nominatim.openstreetmap.org https://valhalla1.openstreetmap.de https://raw.githubusercontent.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
