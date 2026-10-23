@@ -1,8 +1,8 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { getJSON, siteView, type Crossing, type LocationView, type Meta, type Watch } from "@/lib/sample";
+import { getJSON, siteView, type Crossing, type LocationView, type Meta } from "@/lib/sample";
 
-type Data = { meta: Meta; sites: LocationView[]; crossings: Crossing[]; watch: Watch[] };
+type Data = { meta: Meta; sites: LocationView[]; crossings: Crossing[] };
 type Ctx = {
   data: Data | null;
   error: string | null;
@@ -25,8 +25,8 @@ export function SampleProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     Promise.all([getJSON<Meta>("meta.json"), getJSON<{ addresses: Parameters<typeof siteView>[0][] }>("addresses.json"),
-      getJSON<{ crossings: Crossing[] }>("crossings.json"), getJSON<{ watchlist: Watch[] }>("facilities_watchlist.json")])
-      .then(([meta, a, c, w]) => setData({ meta, sites: a.addresses.map(siteView), crossings: c.crossings, watch: w.watchlist }))
+      getJSON<{ crossings: Crossing[] }>("crossings.json")])
+      .then(([meta, a, c]) => setData({ meta, sites: a.addresses.filter((x) => x.kind === "residential").map(siteView), crossings: c.crossings }))
       .catch((e: Error) => setError(e.message));
   }, []);
 

@@ -1,7 +1,7 @@
 "use client";
 import { AlertTriangle, CircleSlash, Clock, Route as RouteIcon } from "lucide-react";
 import { CLOSED, blockedHours, routeAtHour, routeFlags, type HourStatus, type RouteOption } from "@/lib/route";
-import { band, utc, type LocationView } from "@/lib/sample";
+import { utc, type LocationView } from "@/lib/sample";
 import { Tag } from "@/components/ui/tags";
 
 type Ranked = { o: RouteOption; s: HourStatus }[];
@@ -10,7 +10,7 @@ type Copy = { label: string; cls: string; note: string };
 const CLS = ["border-blue/30 bg-soft-blue text-blue", "border-alert/40 bg-softred text-alert", "border-[#7A0000] bg-[#7A0000] text-white"];
 const REPLAY: Copy[] = [
   { label: "Open in replay", cls: CLS[0], note: "Open in this replay hour is not an all-clear: the replay sees river flow only, and streams the model did not assess are not counted." },
-  { label: "At risk", cls: CLS[1], note: "Crosses streams above their 2-year flow, or the illustrative band for a crossing flooding is Elevated or higher (a placeholder, not a probability)." },
+  { label: "At risk", cls: CLS[1], note: "Crosses at least one stream above its 2-year flow in this replay hour." },
   { label: "Blocked in replay", cls: CLS[2], note: "Crosses at least one crossing whose stream is above its 10-year flow, which closes it in this scenario." },
 ];
 const LIVE: Copy[] = [
@@ -60,7 +60,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
               ? `Every route found to the selected ${group.title.toLowerCase()} crosses a crossing that is ${live ? "flagged in the forecast" : "closed in this replay hour"}${noRoute.length ? ", and no detour around them was found" : ""}. Shown: the option with the fewest. Call 911 in an emergency.`
               : live
                 ? `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: no crossing flagged in this step, and ${mins(o.timeS)} in normal traffic. Not an all-clear.`
-                : `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: open in the replay this hour, illustrative flood band ${band(s.pFail)} (a placeholder, not a probability), and ${mins(o.timeS)} in normal traffic.`}
+                : `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: open in the replay this hour, and ${mins(o.timeS)} in normal traffic. Not an all-clear.`}
           </p>
         )}
       </div>
@@ -80,7 +80,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
           ["Drive time (normal roads)", mins(o.timeS), null],
           ["Compared with fastest", extra > 30 ? `+${mins(extra)}` : "Fastest", null],
           ["Distance", `${o.km.toFixed(1)} km`, null],
-          live ? ["Crossings assessed on it", `${assessed.length} of ${o.on.length}`, false] : ["Illustrative flood band for a crossing on it", band(s.pFail), true],
+          ["Crossings assessed on it", `${assessed.length} of ${o.on.length}`, false],
           [live ? "Steps flagged in the forecast" : "Hours blocked in replay", `${bh.length} of ${hours}`, false],
           [live ? "First flagged" : "First blocked", bh.length ? timeText(bh[0]) : live ? "Not in this forecast" : "Not in this window", false],
         ] as [string, string, boolean | null][]).map(([k, v, syn], i) => (
@@ -97,16 +97,16 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
           {Array.from({ length: hours }, (_, h) => {
             const st = routeAtHour(o.on, h);
             return (
-              <span key={h} title={`${timeText(h)}: ${COPY[st.state].label}${live ? "" : `, illustrative band ${band(st.pFail)}`}`}
+              <span key={h} title={`${timeText(h)}: ${COPY[st.state].label}`}
                 className={`flex-1 rounded-t-sm ${["bg-blue/70", "bg-alert", "bg-[#7A0000] hatch"][st.state]} ${h === hour ? "outline outline-2 outline-offset-1 outline-ink" : ""}`}
-                style={{ height: live ? ["30%", "62%", "100%"][st.state] : `${Math.max(10, st.pFail * 100)}%` }} />
+                style={{ height: ["30%", "62%", "100%"][st.state] }} />
             );
           })}
         </div>
         <p className="mt-2 font-ui text-xs text-muted">
           {live
             ? <>Colour and height: status in that step <Tag synthetic={false} label="forecast" /> · first bar is now, then each forecast hour. Height is not a probability.</>
-            : <>Colour: replay status <Tag synthetic={false} /> · height: illustrative flood band <Tag synthetic /></>}
+            : <>Colour and height: replay status in that hour <Tag synthetic={false} />. Height is not a probability.</>}
         </p>
       </div>
 
@@ -130,7 +130,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
                     </p>
                     <p className="mt-0.5 font-ui text-xs leading-relaxed text-muted">
                       Flow {r == null ? "unknown" : `${r}× the 10-year flow`} <Tag synthetic={false} label={tag} />
-                      {live ? null : <> · illustrative flood band {band(c.x!.p_pct[hour] / 100)} <Tag synthetic /> · first above 10-yr {c.x!.first_above_RL10_utc ? utc(c.x!.first_above_RL10_utc) : "not in replay"}</>}
+                      {live ? null : <> · first above 10-yr {c.x!.first_above_RL10_utc ? utc(c.x!.first_above_RL10_utc) : "not in replay"}</>}
                       {" "}· FEMA {c.x!.fema_zone}
                       {c.x!.tidal ? " · tidal: surge may matter more than river flow" : ""}
                       {c.x!.basis === "osm" ? " · mapped from OpenStreetMap (a road-stream intersection that may not be a bridge)" : ""}
@@ -165,7 +165,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
                       <span className="min-w-0">
                         <span className="block truncate font-ui text-sm font-medium">{names[r.serviceId]}</span>
                         <span className="block truncate font-ui text-xs text-muted">
-                          {KIND[r.kind]} · {mins(r.timeS)}{live ? "" : ` · ${band(st.pFail)} band`}{r.on.some((c) => !c.x) ? ` · ${r.on.filter((c) => !c.x).length} unassessed` : ""}
+                          {KIND[r.kind]} · {mins(r.timeS)}{r.on.some((c) => !c.x) ? ` · ${r.on.filter((c) => !c.x).length} unassessed` : ""}
                           {fl.some((f) => f.code === "slow") ? " · long trip" : ""}{fl.some((f) => f.code === "detour") ? " · long detour" : ""}
                         </span>
                       </span>
@@ -183,7 +183,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
         <p className="mt-2 font-ui text-xs leading-relaxed text-muted">
           {live
             ? "Ranking: fewest flagged crossings first (clear routes lead), then the shorter drive."
-            : "Ranking: fewest closed crossings first (open routes lead), then the lower illustrative band value (in 5-point steps), then the shorter drive."}
+            : "Ranking: fewest closed crossings first (open routes lead), then the shorter drive."}
         </p>
       </div>
 
@@ -206,8 +206,8 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
       <p className="flex gap-2 font-ui text-xs leading-relaxed text-muted">
         <AlertTriangle size={14} className="mt-0.5 shrink-0" aria-hidden />
         {live
-          ? "Routes from OpenStreetMap via Valhalla, normal traffic. Crossing status comes from the NOAA National Water Model short-range forecast (unvalidated, river flow only: no surge, tide or street flooding) compared with each stream's recurrence flows. Crossings are matched to a route within 30 m. Sample data, not validated, not for emergency use."
-          : "Routes from OpenStreetMap via Valhalla, normal traffic. Closures come from the Florence 2018 replay (river flow only: no surge, tide or street flooding). Crossings are matched to a route within 30 m. Sample data, not validated, not for emergency use."}
+          ? "Routes from OpenStreetMap via Valhalla, normal traffic. Crossing status comes from the NOAA National Water Model short-range forecast (unvalidated, river flow only: no surge, tide or street flooding) compared with each stream's recurrence flows. Crossings are matched to a route within 30 m. Not validated, not for emergency use."
+          : "Routes from OpenStreetMap via Valhalla, normal traffic. Closures come from the Florence 2018 replay (river flow only: no surge, tide or street flooding). Crossings are matched to a route within 30 m. Not validated, not for emergency use."}
       </p>
     </section>
   );

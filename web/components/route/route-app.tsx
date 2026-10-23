@@ -278,7 +278,7 @@ export function RouteApp() {
           </div>
         </form>
         <p className="mt-2 font-ui text-xs text-muted">Use a street address with the town name, {ADDRESS_EXAMPLE}. Nothing you type is stored.</p>
-        <p aria-live="polite" className="mt-2 min-h-5 font-ui text-sm text-alert">{loadErr ? `Sample data failed to load (${loadErr}).` : msg}</p>
+        <p aria-live="polite" className="mt-2 min-h-5 font-ui text-sm text-alert">{loadErr ? `Data failed to load (${loadErr}).` : msg}</p>
         {net.slow && (
           <p role="status" className="mt-1 rounded-xl border border-[#E6DFA3] bg-yellow px-3 py-2 font-ui text-xs font-semibold">
             The routing service is slow right now ({net.lastMs >= 1000 ? `${Math.round(net.lastMs / 1000)} s` : `${net.lastMs} ms`} for the last answer{net.timeouts ? `, ${net.timeouts} timed out` : ""}).

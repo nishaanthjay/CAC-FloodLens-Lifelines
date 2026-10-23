@@ -6,7 +6,7 @@ import { EmergencyFinder } from "@/components/emergency/emergency-finder";
 
 export const metadata: Metadata = {
   title: "Emergency finder",
-  description: "The nearest emergency rooms, fire, EMS, police, dialysis centres, urgent care, nursing homes and pharmacies around Cape Fear, with call, directions and road check. Sample data, not for emergency use.",
+  description: "The nearest emergency rooms, fire, EMS, police, dialysis centres, urgent care, nursing homes and pharmacies around Cape Fear, with call, directions and road check. Not for emergency use.",
 };
 
 export default function EmergencyPage() {
