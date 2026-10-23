@@ -12,7 +12,6 @@ Per-hour values are wrapped as `{"value": ..., "synthetic": true|false}`, so a c
 ```
 cd export/sample
 python -m http.server 8765
-# open http://localhost:8765/preview.html
 ```
 The page has to be served over HTTP, because opening it as a `file://` URL blocks `fetch`. MapLibre GL 4.7.1 loads from unpkg and the basemap from OpenFreeMap (keyless Positron vector style). Rebuild the data from the repo root with `python export/sample/build_sample.py`. It reads pipeline files read-only, writes only into this folder, and ends with a self-check covering synthetic flags, banned words, the 2 MB network limit and record counts.
 
@@ -38,13 +37,11 @@ The 18 hours are **replay hours**. They are not a forecast issued at the time.
 | `crossings.json` | ~118 KB | 33 crossings × 18 hours, with "What Breaks First?" rank |
 | `facilities_watchlist.json` | ~4 KB | 6 facilities ranked by peak placeholder chance, with alert text |
 | `network.geojson` | ~185 KB | major roads in the 3 counties (motorway to tertiary), merged by class and name; every road segment carrying a sample crossing kept as its own feature (`seg_id`); crossing points |
-| `preview.html` | ~13 KB | single-page MapLibre preview |
 | `build_sample.py` | ~20 KB | builds all of the above |
 
 Website: `npm run sample:sync` in `lifelineswebsite/` copies the JSON/GeoJSON files into `public/data/sample/`.
 
 ## Stress-test copy
-`python export/sample/make_stress.py` writes `stress/` with the same schema and **deliberately exaggerated** values (0% to 100% ramps, every scenario crossing closed from replay hour 6, every block cut off from hour 9, 999.9-minute detours, 9,999,999 people affected, a 117-character facility name). It is not a scenario and not real; it only exists to test how the website copes with extremes. The site loads it with `?data=stress` and switches the banner to "STRESS TEST".
 
 ## Field definitions
 
@@ -102,7 +99,6 @@ Dialysis and nursing-home entries only, ranked by `peak_isolation_probability` (
 | `isolation_tolerance` | sourced per-facility values (facility survey or an agreed planning assumption) | `TOLERANCE_H` |
 | placeholder dialysis / nursing-home sites | a real facility inventory (e.g. CMS dialysis and nursing-home provider files, geocoded), snapped like the hospitals and run through `src/22_engine_p2.py` as origins | `SITES` |
 | replay hours | real forecast issue time and lead hours, once forecast-mode runs exist | `T0`, `hours` |
-| `status.kill_tests_passed: false`, `sample: true` | flip only after the kill tests pass and the owner signs off; then remove the banner | `meta`, `preview.html` |
 
 When a field becomes real, set its `synthetic` flag to `false` and update `FIELDS` in the build script. The self-check fails if a known placeholder field is marked real, so update the list in `flagged()` too.
 
