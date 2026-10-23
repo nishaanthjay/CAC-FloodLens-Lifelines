@@ -66,7 +66,7 @@ export default function About() {
 
         <h2 className="mt-14 font-display text-3xl font-bold">Data and privacy</h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
-          No account and no user data stored. Addresses you type go to OpenStreetMap Nominatim and routes to the public Valhalla router; neither is kept by us. Basic, cookie-free page-view counts are collected to see whether the site is used. Sources: NOAA, USGS, NCDOT, FEMA, US Census, CMS, NC OSFM, OpenStreetMap contributors, OpenFreeMap.
+          No account and no user data stored. Addresses you type go to OpenStreetMap Nominatim and routes to the public Valhalla router; neither is kept by us. Basic, cookie-free page-view counts are collected to see whether the site is used. Sources: NOAA, USGS, NCDOT, FEMA, US Census, CMS, NC OSFM, OpenStreetMap contributors, OpenFreeMap. Hourly NOAA forecast cycles are archived in an open repository: github.com/nishaanthjay/lifelines-nvm-archive.
         </p>
 
         <p className="mt-6 font-ui text-sm"><a className="text-blue underline underline-offset-4" href="/status">Data freshness status</a></p>

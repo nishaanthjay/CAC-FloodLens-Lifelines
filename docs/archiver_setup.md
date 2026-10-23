@@ -1,6 +1,6 @@
 # Live NWM archiver: local hourly setup (Windows)
 
-Local only. No GitHub Actions, no push. (The old `.github/workflows/nwm_live.yml` is untouched and not used.)
+The hourly GitHub Actions archiver now lives in its own repository, https://github.com/nishaanthjay/lifelines-nvm-archive (data on the `nwm-archive` branch); this page describes the older local task. No GitHub Actions, no push. (The old workflow was removed from this repo; see above. Previously: not used.)
 
 ## What runs
 - Task action: `pythonw.exe` (no console window), working directory `src/`, argument `nwm_backfill.py 72`. For every hourly short-range cycle in the last 72 h (up to now minus 2 h) it calls `nwm_fc.archive_cycle(..., sources=aws, gcs, nomads, require_complete=True)`.
