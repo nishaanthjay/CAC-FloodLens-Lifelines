@@ -9,7 +9,7 @@ const facts = [
 
 export function Florence() {
   return (
-    <section id="florence" className="scroll-mt-16 mx-auto max-w-screen-xl px-4 pb-20 sm:px-6 lg:pb-28">
+    <section id="florence" className="scroll-mt-16 mx-auto max-w-screen-xl px-4 pb-24 sm:px-6 lg:pb-28">
       <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-[#0E2440] p-6 text-white sm:p-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:p-14">
         <div className="reveal">
           <h2 className="font-display text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-6xl">

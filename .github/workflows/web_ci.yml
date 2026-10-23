@@ -1,0 +1,19 @@
+# Typecheck, build and route-logic check for the website on every push / PR that touches web/.
+name: web-ci
+on:
+  push: {paths: ["web/**", ".github/workflows/web_ci.yml"]}
+  pull_request: {paths: ["web/**"]}
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults: {run: {working-directory: web}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22, cache: npm, cache-dependency-path: web/package-lock.json}
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - run: npm run check:route
+      - run: npm audit --omit=dev --audit-level=high

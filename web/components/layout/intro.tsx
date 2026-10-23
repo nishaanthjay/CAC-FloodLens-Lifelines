@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import Lenis from "lenis";
 import { Droplets } from "lucide-react";
 import {
   animate,
@@ -24,7 +23,6 @@ import {
   route,
   wilmington,
 } from "@/lib/cape-fear";
-import "./intro.css";
 
 /*
  * Real-map flyover intro (~10s). Performance model (web.dev/articles/animations-guide):
@@ -39,14 +37,6 @@ import "./intro.css";
  * · 3.6 storm + 18h forecast · 4.0 rivers flood · 5.3 camera pushes in · 5.8 route
  * · 6.8 crossing fails · 7.4 title card · 9.2 exit.
  */
-
-/** Runs before first paint so the intro never flashes for visitors who will skip it. */
-export const introScript = `try{if(location.pathname==="/"&&!sessionStorage.getItem("intro")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.setAttribute("data-intro","")}catch(e){}`;
-
-function startSmoothScroll() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  return new Lenis({ autoRaf: true, anchors: { offset: -64 } });
-}
 
 const steps = [
   "Tracing the Cape Fear coast",
@@ -470,7 +460,7 @@ function Scene({ onDone }: { onDone: () => void }) {
   );
 }
 
-/** Cinematic flyover of the real Cape Fear map, then Lenis smooth scrolling. */
+/** Cinematic flyover of the real Cape Fear map. */
 export function Intro() {
   const [playing, setPlaying] = useState(true);
 
@@ -488,12 +478,6 @@ export function Intro() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [finish]);
-
-  useEffect(() => {
-    if (playing) return;
-    const lenis = startSmoothScroll();
-    return () => lenis?.destroy();
-  }, [playing]);
 
   if (!playing) return null;
 
