@@ -34,24 +34,24 @@ const nearZero = (v: number) => (v < 0.01 ? "under 1%" : `${Math.round(v * 100)}
 type Row = { id: string; name: string; max: number; first: string | null; n: number };
 
 /** Shared result block: which sample crossings go above their 10-year flow, and the bars of the highest flows. */
-function Results({ rows, missing, example }: { rows: Row[]; missing: number; example?: boolean }) {
+function Results({ rows, missing, example, noun = "crossings" }: { rows: Row[]; missing: number; example?: boolean; noun?: string }) {
   const flagged = rows.filter((r) => r.n > 0).sort((a, b) => b.max - a.max), top = [...rows].sort((a, b) => b.max - a.max).slice(0, 6);
   const run = example ? "this example" : "this run";
   return (
     <>
       {flagged.length === 0 ? (
         <p role="status" className="rounded-2xl bg-soft-blue p-5 font-body text-base leading-relaxed">
-          Nothing above the 10-year flow in {run}, which is not an all-clear. This view looks at river flow only, for {rows.length} sample crossings.
+          Nothing above the 10-year flow in {run}, which is not an all-clear. This view looks at river flow only, for {rows.length} {noun}.
         </p>
       ) : (
         <div role="status" className="rounded-2xl bg-softred p-5 font-body text-base leading-relaxed">
-          <p className="font-semibold">{flagged.length} of {rows.length} sample crossings are above their 10-year flow in at least one hour of {run} (a scenario, not a probability of closure):</p>
+          <p className="font-semibold">{flagged.length} of {rows.length} {noun} are above their 10-year flow in at least one hour of {run} (a scenario, not a probability of closure):</p>
           <ul className="mt-2 list-disc pl-5">
             {flagged.map((r) => <li key={r.id}>{r.name}: {r.n} h flagged, first at {r.first}, peak {r.max.toFixed(2)}× the 10-year flow</li>)}
           </ul>
         </div>
       )}
-      {missing > 0 && <p className="mt-3 font-ui text-xs text-muted">{missing} crossings had no model output in this cycle and are not shown.</p>}
+      {missing > 0 && <p className="mt-3 font-ui text-xs text-muted">{missing} crossings had no model output in this cycle and are not shown. No output is not the same as open.</p>}
 
       <h3 className="label mt-8 text-muted">Highest modelled flow, as a share of the 10-year flow</h3>
       <ul className="mt-3 space-y-3">
@@ -77,8 +77,8 @@ function LivePreview({ active, now }: { active: boolean; now: number }) {
   const live = ageH(f.cycle_issue_time, now);
   const stale = f.stale || (live !== null && live > 6);
   const rows: Row[] = f.crossings.filter((c) => c.in_model_output).map((c) => {
-    const flagged = c.hourly.filter((h) => h.scenario_state === "scenario: flagged");
-    return { id: c.id, name: c.name, max: Math.max(0, ...c.hourly.map((h) => h.flow_ratio_q10 ?? 0)), first: flagged[0] ? utc(flagged[0].valid_time) : null, n: flagged.length };
+    const hot = [...c.level].flatMap((ch, i) => (ch >= "3" ? [i] : [])); // level digit 3+ = above the 10-year flow; "-" sorts below "3"
+    return { id: c.id, name: c.name, max: Math.max(0, ...c.ratio_q10.map((r) => r ?? 0)), first: hot.length && f.valid_times[hot[0]] ? utc(f.valid_times[hot[0]]!) : null, n: hot.length };
   });
   return (
     <>
@@ -95,7 +95,7 @@ function LivePreview({ active, now }: { active: boolean; now: number }) {
           {f.fallback.used && <><dt className="label text-muted">Fallback</dt><dd>{f.fallback.note} (skipped: {f.fallback.skipped_newer_cycles.map((s) => `${s.cycle}, ${s.reason}`).join("; ")})</dd></>}
         </dl>
       </ModeHeader>
-      <Results rows={rows} missing={f.crossings.length - rows.length} />
+      <Results rows={rows} missing={f.crossings.length - rows.length} noun="assessed crossings" />
     </>
   );
 }

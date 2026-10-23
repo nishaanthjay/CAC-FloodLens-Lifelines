@@ -10,7 +10,7 @@ export function Cta() {
           See what could change before the water rises.
         </h2>
         <p className="relative mx-auto mt-7 max-w-xl font-body text-lg text-white/80">
-          Start with one address and compare routes to every hospital and fire station nearby. No account, and nothing is stored.
+          Start with one address and compare routes to the nearest emergency rooms, fire stations, dialysis centres and more. No account, and nothing is stored.
         </p>
         <a
           href="/route"

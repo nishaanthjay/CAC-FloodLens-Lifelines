@@ -20,8 +20,10 @@ const limits = [
   "We never say a road, block or address is safe. A road that is not flagged is “not flagged in this scenario”, never an all-clear.",
   "Scenarios use river flow only: no storm surge, tide, street flooding, bridge deck height, scour or debris.",
   "Closure labels are positives only, and partly unreviewed.",
-  "In the Florence replay the hazard layer saturates (241 of 250 crossings exceed their 2-year flow at once), so scenario levels barely separate. The model also did not reproduce Wilmington’s documented isolation.",
+  "In the Florence replay the hazard layer saturates (241 of the 250 structure-seeded crossings exceed their 2-year flow at once, and about 1,228 of the 1,583 assessed crossings exceed their 10-year flow at the peak), so scenario levels barely separate. The model also did not reproduce Wilmington’s documented isolation.",
   "Address results are estimates from the nearest Census block, not the exact address.",
+  "1,333 of the 1,583 assessed crossings are OpenStreetMap road-stream intersections that may not be bridges; the route page lets you leave them out. Dialysis, nursing-home, urgent-care, police and pharmacy lists come from federal / HHS files (dated per entry) and OpenStreetMap, EMS stations from OpenStreetMap only: all incomplete, none confirmed open. There is no shelter list.",
+  "The live forecast is the NOAA National Water Model short-range run, unvalidated and river flow only. Observed gauge readings (nowcast) are shown beside it, not merged into route status.",
 ];
 
 export default function About() {
@@ -36,7 +38,7 @@ export default function About() {
 
         <h2 className="mt-14 font-display text-3xl font-bold">What it does</h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
-          Most flood tools answer &ldquo;is this road underwater?&rdquo; FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach a hospital or fire station, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings and a road network of about 246,000 segments with 11 emergency hospitals and 220 fire stations in New Hanover, Brunswick and Pender counties, North Carolina.
+          Most flood tools answer &ldquo;is this road underwater?&rdquo; FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis centre or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings (1,583 with a flow threshold, so assessed; the other 1,337 are flagged as unassessed, never treated as open) and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast; the Florence replay is kept apart.
         </p>
 
         <h2 className="mt-14 font-display text-3xl font-bold">Four modes, never mixed</h2>

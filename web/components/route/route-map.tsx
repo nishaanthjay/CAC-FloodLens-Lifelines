@@ -3,18 +3,19 @@ import { useEffect, useRef, useState } from "react";
 import { BOUNDS, STYLE, esc, loadMaplibre, type ML } from "@/lib/maplibre";
 import { CLOSED, type HourStatus, type RouteOption } from "@/lib/route";
 
-export type MapService = { id: string; kind: "hospital" | "fire"; name: string; lat: number; lon: number };
+export type MapService = { id: string; kind: string; kindLabel: string; fill: string; name: string; lat: number; lon: number };
 type Ranked = { o: RouteOption; s: HourStatus }[];
 
 const STATE_COLOR = ["#2D5DA1", "#CC0000", "#7A0000"]; // open in replay / at risk / blocked
 
-export function RouteMap({ origin, services, selected, ranked, focusId, hour, onService, onRoute }: {
+export function RouteMap({ origin, services, selected, ranked, focusId, hour, live, onService, onRoute }: {
   origin: { lat: number; lon: number } | null;
   services: MapService[];
   selected: string[];
   ranked: Ranked;
   focusId: string | null;
   hour: number;
+  live: boolean;
   onService: (id: string) => void;
   onRoute: (id: string) => void;
 }) {
@@ -51,8 +52,8 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, on
           "circle-stroke-color": ["match", ["get", "cls"], 2, "#FFFFFF", "#111111"] } });
         m.addLayer({ id: "svc", type: "circle", source: "svc", paint: {
           "circle-radius": ["case", ["get", "sel"], 9, 6],
-          "circle-color": ["case", ["==", ["get", "kind"], "hospital"], "#FFFFFF", "#111111"],
-          "circle-stroke-color": ["case", ["get", "sel"], "#2D5DA1", ["==", ["get", "kind"], "hospital"], "#CC0000", "#FFFFFF"],
+          "circle-color": ["get", "fill"],
+          "circle-stroke-color": ["case", ["get", "sel"], "#2D5DA1", "#FFFFFF"],
           "circle-stroke-width": ["case", ["get", "sel"], 4, 2] } });
         m.addLayer({ id: "svc-label", type: "symbol", source: "svc", filter: ["get", "sel"],
           layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-offset": [0, 1.3], "text-anchor": "top", "text-max-width": 12 },
@@ -62,7 +63,7 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, on
           m.on("mousemove", id, (e: ML) => { m.getCanvas().style.cursor = "pointer"; tip.setLngLat(e.lngLat).setHTML(html(e.features[0].properties)).addTo(m); });
           m.on("mouseleave", id, () => { m.getCanvas().style.cursor = ""; tip.remove(); });
         };
-        hover("svc", (p) => `<b>${esc(p.name)}</b><br>${p.kind === "hospital" ? "Emergency hospital" : "Fire station"} · click to ${p.sel === "true" ? "remove" : "route"}`);
+        hover("svc", (p) => `<b>${esc(p.name)}</b><br>${esc(p.kindLabel)} · click to ${p.sel === "true" ? "remove" : "route"}`);
         hover("rx", (p) => `<b>${esc(p.name)}</b><br>${esc(p.status)}`);
         hover("routes", (p) => `<b>${esc(p.label)}</b><br>${esc(p.status)}`);
         m.on("click", "svc", (e: ML) => handlers.current.onService(e.features[0].properties.id));
@@ -78,7 +79,7 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, on
     if (!ready) return;
     const m = map.current, ml = (window as unknown as { maplibregl: ML }).maplibregl;
     m.getSource("svc").setData({ type: "FeatureCollection", features: services.map((s) => ({ type: "Feature",
-      properties: { id: s.id, name: s.name, kind: s.kind, sel: selected.includes(s.id) }, geometry: { type: "Point", coordinates: [s.lon, s.lat] } })) });
+      properties: { id: s.id, name: s.name, kind: s.kind, kindLabel: s.kindLabel, fill: s.fill, sel: selected.includes(s.id) }, geometry: { type: "Point", coordinates: [s.lon, s.lat] } })) });
     pin.current?.remove(); pin.current = null;
     if (!origin) return;
     pin.current = new ml.Marker({ color: "#2D5DA1" }).setLngLat([origin.lon, origin.lat]).addTo(m);
@@ -92,12 +93,12 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, on
     if (!ready) return;
     const m = map.current;
     const seen = new Map<string, { name: string; lat: number; lon: number; cls: number; status: string }>();
-    const label = ["Open in replay (not an all-clear)", "At risk", "Blocked in replay"];
+    const label = live ? ["No crossing flagged (not an all-clear)", "At risk", "Crossing flagged in forecast"] : ["Open in replay (not an all-clear)", "At risk", "Blocked in replay"];
     const features = [...ranked].reverse().map(({ o, s }) => {
       for (const c of o.on) {
-        const lv = c.x ? +c.x.level[hour] : -1;
-        seen.set(c.id, { name: c.x?.name ?? "Stream crossing (not assessed)", lat: c.lat, lon: c.lon, cls: lv < 0 ? -1 : lv >= CLOSED ? 2 : lv > 0 ? 1 : 0,
-          status: lv < 0 ? "Not assessed by the model" : lv >= CLOSED ? "Closed in scenario (above 10-year flow)" : lv > 0 ? "Above 2-year flow" : "Below 2-year flow · not an all-clear" });
+        const lv = c.x ? parseInt(c.x.level[hour] ?? "-", 10) : -1;
+        seen.set(c.id, { name: c.x?.name ?? "Stream crossing (not assessed)", lat: c.lat, lon: c.lon, cls: !(lv >= 0) ? -1 : lv >= CLOSED ? 2 : lv > 0 ? 1 : 0,
+          status: !c.x ? "Not assessed by the model" : Number.isNaN(lv) ? "No flow value for this step (not assumed open)" : lv >= CLOSED ? (live ? "Forecast above 10-year flow (scenario)" : "Closed in scenario (above 10-year flow)") : lv > 0 ? "Above 2-year flow" : "Below 2-year flow · not an all-clear" });
       }
       return { type: "Feature", properties: { id: o.id, label: o.label, state: s.state, status: label[s.state], focus: o.id === focusId }, geometry: { type: "LineString", coordinates: o.shape } };
     });
@@ -105,7 +106,7 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, on
     m.getSource("routes").setData({ type: "FeatureCollection", features });
     m.getSource("rx").setData({ type: "FeatureCollection", features: [...seen].map(([id, c]) => ({ type: "Feature",
       properties: { id, name: c.name, cls: c.cls, status: c.status }, geometry: { type: "Point", coordinates: [c.lon, c.lat] } })) });
-  }, [ready, ranked, focusId, hour]);
+  }, [ready, ranked, focusId, hour, live]);
 
   return (
     <div className="absolute inset-0">

@@ -16,7 +16,7 @@ export function AddressSearch() {
 
   function trySample() {
     const site = data?.sites.find((s) => s.kind === "residential" && s.hours.some((h) => h.lost));
-    if (site) go({ lat: String(site.lat), lon: String(site.lon), label: site.name });
+    if (site) go({ lat: String(site.lat), lon: String(site.lon), label: site.name, mode: "replay" });
   }
 
   return (
@@ -46,11 +46,12 @@ export function AddressSearch() {
         Use a street address with the town name, {ADDRESS_EXAMPLE}. Place names like &ldquo;City Hall&rdquo; often do not match.
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-1 font-ui text-sm text-ink/75">
-        <button type="button" onClick={trySample} className="min-h-11 underline underline-offset-4 hover:text-blue">Try a sample location</button>
+        <button type="button" onClick={trySample} className="min-h-11 underline underline-offset-4 hover:text-blue">Try a Florence replay location</button>
         <button type="button" onClick={() => go({ q: "1029 N Howe St, Southport NC" })} className="min-h-11 underline underline-offset-4 hover:text-blue">Try an example address</button>
+        <a href="/emergency" className="inline-flex min-h-11 items-center font-semibold text-alert underline underline-offset-4 hover:text-ink">Quick emergency finder</a>
         <a href="#breaks" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-blue">What breaks first?</a>
       </div>
-      <p className="mt-6 inline-block rounded-full bg-yellow px-3.5 py-1.5 font-mono text-xs font-medium text-ink">Sample replay, not a live forecast</p>
+      <p className="mt-6 inline-block rounded-full bg-yellow px-3.5 py-1.5 font-mono text-xs font-medium text-ink">Preview: unvalidated forecast, not for emergency use</p>
       <p className="mx-auto mt-6 max-w-md font-ui text-xs leading-relaxed text-muted">
         No user data is stored (cookie-free page-view counts only). Addresses go to OpenStreetMap&rsquo;s Nominatim to find the location, and routes come from the public Valhalla router.
       </p>

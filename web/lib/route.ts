@@ -1,18 +1,19 @@
-// Route risk from the Florence replay. Pure functions (no imports) so scripts/route-check.mjs can run them under Node.
+// Route risk per time step (Florence replay steps, or Now + forecast steps: see live-route.ts). Pure functions (no imports) so scripts/route-check.mjs can run them under Node.
 
 export type LngLat = [number, number];
 
 export type XAssessed = {
   id: string; name: string; lat: number; lon: number; county: string; fema_zone: string; tidal: boolean;
   first_above_RL10_utc: string | null; people_affected: number;
-  level: string; // one digit per hour: index into RouteCrossings.levels (real replay)
-  ratio_q10: (number | null)[]; // real replay
-  p_pct: number[]; // PLACEHOLDER flood chance, percent
+  basis?: "structure" | "osm"; // structure = NCDOT/NBI bridge or culvert; osm = OpenStreetMap road-stream intersection (may not be a bridge)
+  level: string; // one digit per step: index into RouteCrossings.levels; "-" = no value for that step (unknown, never treated as open)
+  ratio_q10: (number | null)[]; // flow / 10-year flow per step
+  p_pct: number[]; // PLACEHOLDER flood chance, percent (replay only; zeros in the live view, which shows no probability)
 };
 export type RouteCrossings = { hours: number; levels: string[]; assessed: XAssessed[]; not_assessed: [string, number, number, string][] };
 
 export type OnRoute = { id: string; km: number; lat: number; lon: number; x: XAssessed | null; reason?: string };
-export type HourStatus = { blocked: OnRoute[]; watch: OnRoute[]; pFail: number; state: 0 | 1 | 2 };
+export type HourStatus = { blocked: OnRoute[]; watch: OnRoute[]; unknown: OnRoute[]; pFail: number; state: 0 | 1 | 2 };
 
 export const CLOSED = 3; // levels[3] = RL10: the scenario closes the crossing at or above this
 export const AT_RISK_P = 0.35;
@@ -30,45 +31,80 @@ export function decodePolyline6(s: string): LngLat[] {
   return out;
 }
 
+// Spatial index: crossings bucketed in 0.005 degree cells (~500 m), built once per RouteCrossings object. A route is matched by walking its
+// segments and testing only the crossings in the cells each segment touches, so cost follows route length, not the ~2,900 crossings.
+const CELL = 0.005;
+type Pt = { id: string; lat: number; lon: number; x: XAssessed | null; reason?: string };
+const cellKey = (i: number, j: number) => i * 100003 + j;
+const GRIDS = new WeakMap<RouteCrossings, Map<number, Pt[]>>();
+function gridOf(X: RouteCrossings) {
+  let g = GRIDS.get(X);
+  if (!g) {
+    const m = new Map<number, Pt[]>();
+    const add = (p: Pt) => { const k = cellKey(Math.floor(p.lon / CELL), Math.floor(p.lat / CELL)); const a = m.get(k); if (a) a.push(p); else m.set(k, [p]); };
+    for (const x of X.assessed) add({ id: x.id, lat: x.lat, lon: x.lon, x });
+    for (const [id, lat, lon, reason] of X.not_assessed) add({ id, lat, lon, x: null, reason });
+    GRIDS.set(X, (g = m));
+  }
+  return g;
+}
+
 /** Crossings within `tolM` metres of the route line, in driving order. */
 export function crossingsOnRoute(shape: LngLat[], X: RouteCrossings, tolM = 30): OnRoute[] {
   if (shape.length < 2) return [];
+  const grid = gridOf(X);
   const lat0 = shape[0][1], kx = 111320 * Math.cos((lat0 * Math.PI) / 180), ky = 110570;
-  const P = shape.map(([lo, la]) => [lo * kx, la * ky]);
-  const cum = [0];
-  for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
-  let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
-  for (const [x, y] of P) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+  const dLon = tolM / kx, dLat = tolM / ky;
+  const best = new Map<Pt, { d: number; along: number }>();
+  let cum = 0;
+  for (let i = 1; i < shape.length; i++) {
+    const ax = shape[i - 1][0] * kx, ay = shape[i - 1][1] * ky, dx = shape[i][0] * kx - ax, dy = shape[i][1] * ky - ay, L2 = dx * dx + dy * dy, L = Math.sqrt(L2);
+    const lo0 = Math.min(shape[i - 1][0], shape[i][0]), lo1 = Math.max(shape[i - 1][0], shape[i][0]);
+    const la0 = Math.min(shape[i - 1][1], shape[i][1]), la1 = Math.max(shape[i - 1][1], shape[i][1]);
+    for (let ci = Math.floor((lo0 - dLon) / CELL); ci <= Math.floor((lo1 + dLon) / CELL); ci++)
+      for (let cj = Math.floor((la0 - dLat) / CELL); cj <= Math.floor((la1 + dLat) / CELL); cj++)
+        for (const p of grid.get(cellKey(ci, cj)) ?? []) {
+          const px = p.lon * kx, py = p.lat * ky;
+          const t = L2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)) : 0;
+          const d = Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+          if (d <= tolM && d < (best.get(p)?.d ?? Infinity)) best.set(p, { d, along: cum + t * L });
+        }
+    cum += L;
+  }
   const hits: OnRoute[] = [];
-  const test = (id: string, lat: number, lon: number, x: XAssessed | null, reason?: string) => {
-    const px = lon * kx, py = lat * ky;
-    if (px < x0 - tolM || px > x1 + tolM || py < y0 - tolM || py > y1 + tolM) return;
-    let best = Infinity, along = 0;
-    for (let i = 1; i < P.length; i++) {
-      const [ax, ay] = P[i - 1], dx = P[i][0] - ax, dy = P[i][1] - ay, L2 = dx * dx + dy * dy;
-      const t = L2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)) : 0;
-      const d = Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
-      if (d < best) { best = d; along = cum[i - 1] + t * Math.sqrt(L2); }
-    }
-    if (best <= tolM) hits.push({ id, km: along / 1000, lat, lon, x, reason });
-  };
-  for (const x of X.assessed) test(x.id, x.lat, x.lon, x);
-  for (const [id, lat, lon, reason] of X.not_assessed) test(id, lat, lon, null, reason);
+  for (const [p, b] of best) hits.push({ id: p.id, km: b.along / 1000, lat: p.lat, lon: p.lon, x: p.x, reason: p.reason });
   return hits.sort((a, b) => a.km - b.km);
 }
 
-/** Replay status of a route in hour h: blocked if any assessed crossing is at or above RL10. pFail is the PLACEHOLDER chance any crossing floods. */
+/** Crossings closed in step h that lie within `corridorM` of the straight line from -> to, nearest first (at most `cap`).
+ * A detour search starts with all of them excluded at once instead of discovering them one failed route at a time. */
+export function closedNear(X: RouteCrossings, h: number, from: LngLat, to: LngLat, corridorM = 4000, cap = 50) {
+  const kx = 111320 * Math.cos((from[1] * Math.PI) / 180), ky = 110570;
+  const ax = from[0] * kx, ay = from[1] * ky, dx = to[0] * kx - ax, dy = to[1] * ky - ay, L2 = dx * dx + dy * dy;
+  const out: { id: string; lon: number; lat: number; d: number }[] = [];
+  for (const x of X.assessed) {
+    if (!(parseInt(x.level[h] ?? "-", 10) >= CLOSED)) continue;
+    const px = x.lon * kx, py = x.lat * ky, t = L2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)) : 0;
+    const d = Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+    if (d <= corridorM) out.push({ id: x.id, lon: x.lon, lat: x.lat, d });
+  }
+  return out.sort((a, b) => a.d - b.d).slice(0, cap);
+}
+
+/** Status of a route in step h: blocked if any assessed crossing is at or above RL10. Unknown = assessed crossing with no value this step (reported, never counted as open).
+ * pFail is the PLACEHOLDER chance any crossing floods (replay only). */
 export function routeAtHour(on: OnRoute[], h: number): HourStatus {
-  const blocked: OnRoute[] = [], watch: OnRoute[] = [];
+  const blocked: OnRoute[] = [], watch: OnRoute[] = [], unknown: OnRoute[] = [];
   let q = 1;
   for (const o of on) {
     if (!o.x) continue;
-    const lv = +o.x.level[h];
+    const lv = parseInt(o.x.level[h] ?? "-", 10);
+    if (Number.isNaN(lv)) { unknown.push(o); continue; }
     if (lv >= CLOSED) blocked.push(o); else if (lv > 0) watch.push(o);
-    q *= 1 - Math.min(100, Math.max(0, o.x.p_pct[h])) / 100;
+    q *= 1 - Math.min(100, Math.max(0, o.x.p_pct[h] ?? 0)) / 100;
   }
   const pFail = 1 - q;
-  return { blocked, watch, pFail, state: blocked.length ? 2 : watch.length || pFail >= AT_RISK_P ? 1 : 0 };
+  return { blocked, watch, unknown, pFail, state: blocked.length ? 2 : watch.length || pFail >= AT_RISK_P ? 1 : 0 };
 }
 
 export type RouteOption = {
@@ -85,6 +121,26 @@ export function rankRoutes(opts: RouteOption[], h: number) {
       || Math.round(a.s.pFail * 20) - Math.round(b.s.pFail * 20) || a.o.timeS - b.o.timeS);
 }
 
-/** Hours (of the replay window) in which the route is blocked. */
+/** Steps (of the window) in which the route is blocked. */
 export const blockedHours = (on: OnRoute[], hours: number) =>
-  Array.from({ length: hours }, (_, h) => h).filter((h) => on.some((o) => o.x && +o.x.level[h] >= CLOSED));
+  Array.from({ length: hours }, (_, h) => h).filter((h) => routeAtHour(on, h).blocked.length > 0);
+
+// ---- Flags: a route can be open and still be a bad answer in an emergency ----
+
+/** Guide times in minutes by service kind. ED access within 30 min is the standard the pipeline already uses for redundancy; fire, EMS and police are quicker. */
+export const LIMIT_MIN: Record<string, number> = { hospital_ed: 30, hospital: 30, urgent_care: 30, pharmacy: 30, dialysis: 45, nursing_home: 45, fire: 15, ems: 15, police: 15 };
+export const DETOUR_EXTRA_S = 600, DETOUR_EXTRA_RATIO = 0.5; // a long detour adds 10+ min AND 50%+ over the fastest normal route
+
+export type Flag = { code: "slow" | "detour" | "unknown" | "unassessed"; level: "warn" | "alert"; text: string };
+
+/** Flags for one route at one step. `fastestS` = fastest normal route to the same service, seconds. */
+export function routeFlags(o: RouteOption, kind: string, fastestS: number | undefined, st: HourStatus): Flag[] {
+  const out: Flag[] = [], min = Math.round(o.timeS / 60), limit = LIMIT_MIN[kind] ?? 30;
+  if (min > limit) out.push({ code: "slow", level: min > limit * 1.5 ? "alert" : "warn", text: `Takes about ${min} min in normal traffic, over the ${limit} min guide for this kind of service. Call 911 in an emergency.` });
+  if (fastestS !== undefined && o.timeS - fastestS >= DETOUR_EXTRA_S && o.timeS - fastestS >= DETOUR_EXTRA_RATIO * fastestS)
+    out.push({ code: "detour", level: "warn", text: `Adds about ${Math.round((o.timeS - fastestS) / 60)} min over the fastest normal route.` });
+  if (st.unknown.length) out.push({ code: "unknown", level: "warn", text: `${st.unknown.length} crossing${st.unknown.length > 1 ? "s" : ""} on this route ha${st.unknown.length > 1 ? "ve" : "s"} no flow value for this step: not assumed open.` });
+  const un = o.on.filter((c) => !c.x).length;
+  if (un) out.push({ code: "unassessed", level: "warn", text: `${un} crossing${un > 1 ? "s" : ""} on this route could not be assessed (no matched stream reach or flow threshold). Unassessed is not the same as open.` });
+  return out;
+}

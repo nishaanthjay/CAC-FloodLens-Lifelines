@@ -13,11 +13,11 @@ export type Gauge = {
 };
 export type Nowcast = { mode: string; stale: boolean; generated_at: string; sources: string[]; caveats: string[]; errors: string[]; gauges: Gauge[]; gauge_rule?: string; n_pilot_area?: number; n_other_basin?: number };
 
-export type FcHour = { lead_hours: number; valid_time: string; flow_cfs: number | null; flow_ratio_q10: number | null; scenario_state: string | null };
 export type Forecast = {
   mode: string; label: string; not_a_closure_probability: boolean; stale: boolean; generated_at: string; source: string; caveats: string[]; nwm_version: string;
   cycle_issue_time: string; cycle_age_hours: number; fallback: { used: boolean; skipped_newer_cycles: { cycle: string; reason: string }[]; note: string };
-  crossings: { id: string; name: string; q10_cfs: number; in_model_output: boolean; hourly: FcHour[] }[];
+  levels: string[]; valid_times: (string | null)[]; // lead 1..18; per crossing: ratio_q10[18] (flow / 10-year flow, null = no model value) and level[18 chars] (index into levels, "-" = no value)
+  crossings: { id: string; name: string; q10_cfs: number | null; in_model_output: boolean; ratio_q10: (number | null)[]; level: string }[];
 };
 
 export type Load<T> = { data: T | null; error: string | null };
