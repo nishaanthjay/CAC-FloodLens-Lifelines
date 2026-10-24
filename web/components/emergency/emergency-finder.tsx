@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Crosshair, ExternalLink, LoaderCircle, MapPin, Navigation, Phone, Route as RouteIcon, Search } from "lucide-react";
 import { ADDRESS_EXAMPLE, geocode } from "@/lib/geocode";
+import { mi, mins } from "@/lib/format";
 import { ageH, hoursText, useLive, type Nowcast } from "@/lib/live";
 import { LIMIT_MIN } from "@/lib/route";
 import { KINDS, directionsHref, loadServices, nearestByKind, telHref, type Kind, type ServicesDoc, type Svc } from "@/lib/services";
@@ -13,7 +14,7 @@ type Origin = { lat: number; lon: number; label: string };
 type Row = { s: Svc; straightKm: number; timeS?: number | null; km?: number };
 const PER_KIND = 3;
 const IN_PILOT = (o: Origin) => o.lat > 33.65 && o.lat < 34.85 && o.lon > -78.75 && o.lon < -77.45;
-const min = (s: number) => `${Math.round(s / 60)} min`;
+const min = mins;
 
 /** One result row: name, kind, drive time, and the three actions that matter in a hurry (call, directions, check the roads). */
 function Item({ r, origin, big }: { r: Row; origin: Origin; big?: boolean }) {
@@ -26,7 +27,7 @@ function Item({ r, origin, big }: { r: Row; origin: Origin; big?: boolean }) {
           <p className="font-ui text-xs text-muted">{s.sub ?? KINDS.find((k) => k.id === s.k)!.one}{s.addr ? ` · ${s.addr}` : ""}</p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="font-mono text-sm font-semibold">{r.timeS != null ? min(r.timeS) : r.timeS === null ? "no route" : `${r.straightKm.toFixed(1)} km`}</p>
+          <p className="font-mono text-sm font-semibold">{r.timeS != null ? min(r.timeS) : r.timeS === null ? "no route" : mi(r.straightKm)}</p>
           <p className="font-ui text-[11px] text-muted">{r.timeS != null ? "drive, normal traffic" : "straight line"}</p>
         </div>
       </div>
@@ -114,7 +115,7 @@ export function EmergencyFinder() {
       </a>
       <h1 className="mt-8 font-display text-4xl font-black leading-tight tracking-[-0.03em]">Emergency finder</h1>
       <p className="mt-2 font-body text-base leading-relaxed text-ink/75">
-        The nearest emergency rooms, fire, EMS, police, dialysis centres, urgent care, nursing homes and pharmacies. Call, get directions, or check the roads on the way.
+        The nearest emergency rooms, fire, EMS, police, dialysis centers, urgent care, nursing homes and pharmacies. Call, get directions, or check the roads on the way.
       </p>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -175,7 +176,7 @@ export function EmergencyFinder() {
             <p className="font-semibold">River conditions now (observed)</p>
             <p className="mt-1">
               {nc.error ? `Gauge file could not be loaded (${nc.error}).` : !nc.data ? "Loading gauge readings…"
-                : `${up} of ${gauges.length} river gauges near the pilot counties are at or above NWS action stage · file generated ${hoursText(ncAge)}${nc.data.stale || (ncAge !== null && ncAge > 3) ? " (stale)" : ""}.`}
+                : `${up} of ${gauges.length} river gauges near the pilot counties are at or above NWS action stage · updated ${hoursText(ncAge)}.`}
               {" "}Drive times here assume normal roads. <a className="font-semibold text-blue underline" href={`/route?${new URLSearchParams({ lat: origin.lat.toFixed(5), lon: origin.lon.toFixed(5), label: origin.label })}`}>Open route analysis</a> to check stream crossings now and over the forecast.
             </p>
           </div>

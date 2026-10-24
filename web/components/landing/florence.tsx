@@ -4,12 +4,11 @@ import { coastMain, florence, islands, ocean, riversMajor, roadsMajor, wilmingto
 const facts = [
   ["Landfall", "Sept 14, 2018 · near Wrightsville Beach"],
   ["Access", "Flooded roads cut Wilmington off for days"],
-  ["Rainfall", "Record totals for a North Carolina tropical cyclone"],
 ];
 
 export function Florence() {
   return (
-    <section id="florence" className="scroll-mt-16 mx-auto max-w-screen-xl px-4 pb-24 sm:px-6 lg:pb-28">
+    <section id="florence" className="scroll-mt-16 mx-auto max-w-screen-xl px-4 pb-12 sm:px-6 lg:pb-16">
       <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-[#0E2440] p-6 text-white sm:p-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:p-14">
         <div className="reveal">
           <h2 className="font-display text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
@@ -20,7 +19,7 @@ export function Florence() {
             Florence 2018 replay
           </p>
           <p className="mt-5 max-w-md font-body text-lg leading-relaxed text-white/75">
-            In 2018, Hurricane Florence turned Wilmington into an island. The replay below steps through 18 hours of the storm. It uses river flow only, so it misses the surge and street flooding that cut Wilmington off.
+            In 2018, Hurricane Florence turned Wilmington into an island. The replay below steps through 18 hours of the storm.
           </p>
           <dl className="mt-8 divide-y divide-white/10 border-y border-white/10">
             {facts.map(([label, value]) => (

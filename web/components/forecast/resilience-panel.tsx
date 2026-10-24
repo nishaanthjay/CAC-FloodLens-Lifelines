@@ -2,12 +2,12 @@
 import { ExternalLink, House, Info, Search } from "lucide-react";
 import { hourTime, type LocationView } from "@/lib/sample";
 import { useSample } from "@/components/forecast/sample-store";
-import { Tag } from "@/components/ui/tags";
 
 /** One bar per replay hour: dark when the replay finds no route to an emergency hospital, light otherwise. */
 function Timeline({ loc, hour }: { loc: LocationView; hour: number }) {
   return (
     <div className="mt-8" aria-label="Replay hours with and without a route to an emergency hospital">
+      <p className="mb-2 font-ui text-xs font-semibold text-ink">Hours with no route</p>
       <div className="flex h-10 items-end gap-[3px]">
         {loc.hours.map((h, i) => (
           <span
@@ -18,7 +18,7 @@ function Timeline({ loc, hour }: { loc: LocationView; hour: number }) {
         ))}
       </div>
       <p className="mt-3 font-ui text-xs leading-relaxed text-muted">
-        Dark: no route to an emergency hospital in that replay hour. Light: a route exists, which is not an all-clear. <Tag synthetic={false} />
+        Dark: no route to an emergency hospital in that replay hour. Light: a route exists.
       </p>
     </div>
   );
@@ -33,7 +33,7 @@ export function ResiliencePanel() {
   const metrics: [string, string][] = !loc || !h || !loc.assessed ? [] : [
     ["Detour", h.lost ? "No route" : h.detour ? `+${h.detour} min` : "1 min or less"],
     ["Critical crossing", h.crit ? crossingName(h.crit) : "None closed on the usual route"],
-    ["Route redundancy", `${h.red} ED hospital${h.red === 1 ? "" : "s"} within 30 min (usually ${loc.baselineRed ?? "-"})`],
+    ["Route redundancy", `${h.red} ER${h.red === 1 ? "" : "s"} within 30 min (usually ${loc.baselineRed ?? "-"})`],
     ["Hours without a route", `${lostHours} of ${loc.hours.length}`],
   ];
 
@@ -43,7 +43,7 @@ export function ResiliencePanel() {
         <div className="min-w-0">
           <h3 id="res" className="font-ui text-sm font-semibold">{loc ? loc.name : "Your route"}</h3>
           <p className="mt-1 font-ui text-sm text-muted">
-            {loc ? `Residential block · ${loc.county} · ${loc.basis}` : "Emergency hospital access"}
+            {loc ? `Census block · ${loc.county} County · ${loc.basis}` : "Emergency hospital access"}
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export function ResiliencePanel() {
             <p className="mt-8 font-display text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl">Pick a place to see its route</p>
             <p className="mt-4 inline-flex items-center gap-2 font-ui text-sm text-muted">
               <Search size={16} aria-hidden />
-              Choose a neighbourhood on the right or on the map, or search an address above for full route analysis.
+              Choose a neighborhood on the right or on the map, or search an address above for full route analysis.
             </p>
           </>
         ) : !loc.assessed ? (
@@ -68,9 +68,6 @@ export function ResiliencePanel() {
             <p className="mt-8 font-display text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl">
               {h!.lost ? "No route to an emergency hospital in this replay hour" : "Not flagged in this replay hour"}
             </p>
-            {!h!.lost && (
-              <p className="mt-4 font-ui text-xs text-muted">Not flagged is not an all-clear: this replay sees river flow only.</p>
-            )}
             <Timeline loc={loc} hour={hour} />
           </>
         )}
@@ -79,7 +76,7 @@ export function ResiliencePanel() {
           <dl className="mt-10 grid grid-cols-1 gap-x-8 border-t border-ink/10 sm:grid-cols-2">
             {metrics.map(([label, value], index) => (
               <div key={label} className={`min-w-0 py-5 ${index < metrics.length - 2 ? "border-b border-ink/10" : ""} ${index === metrics.length - 2 ? "max-sm:border-b sm:border-b-0 border-ink/10" : ""}`}>
-                <dt className="font-ui text-xs leading-snug text-muted">{label}<Tag synthetic={false} /></dt>
+                <dt className="font-ui text-xs leading-snug text-muted">{label}</dt>
                 <dd className="mt-1.5 break-words font-mono text-sm font-medium">{value}</dd>
               </div>
             ))}
@@ -103,7 +100,7 @@ export function ResiliencePanel() {
           </p>
         )}
         <p className="mt-5 font-mono text-xs leading-relaxed text-muted">
-          Replay hour {hour}: {start ? hourTime(start, hour) : "…"} <span className="px-1">|</span> Source: Florence 2018 hindcast, not validated
+          Replay hour {hour}: {start ? hourTime(start, hour) : "…"} <span className="px-1">|</span> Source: Florence 2018 hindcast
         </p>
       </section>
 
@@ -128,7 +125,7 @@ export function ResiliencePanel() {
         </details>
 
         <section className="reveal rounded-3xl bg-soft-blue/60 p-7 sm:p-8" aria-labelledby="watch">
-          <h3 id="watch" className="font-ui text-sm font-semibold">Neighbourhoods to explore</h3>
+          <h3 id="watch" className="font-ui text-sm font-semibold">Neighborhoods to explore</h3>
           <ul className="mt-4">
             {(data?.sites ?? []).map((s) => (
               <li key={s.id}>
@@ -153,7 +150,7 @@ export function ResiliencePanel() {
             ))}
           </ul>
           <p className="mt-5 font-ui text-xs leading-relaxed text-muted">
-            Real Census block centres, routed in the Florence replay. A route that exists is not an all-clear.
+            Real Census block centers, routed in the Florence replay.
           </p>
         </section>
       </div>

@@ -1,36 +1,37 @@
-"use client";
-import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { ageH, hoursText, useLive, type Forecast } from "@/lib/live";
-import { hourTime, utc } from "@/lib/sample";
-import { CoastalPanel } from "@/components/forecast/coastal-panel";
-import { NowcastView } from "@/components/forecast/nowcast-view";
-import { ModeHeader } from "@/components/forecast/mode-header";
-import { useSample } from "@/components/forecast/sample-store";
-
-const MODES = [
-  { id: "replay", label: "Replay", sub: "Florence 2018" },
-  { id: "nowcast", label: "Nowcast", sub: "observed now" },
-  { id: "forecast", label: "Forecast preview", sub: "unvalidated" },
-] as const;
-type Mode = (typeof MODES)[number]["id"];
-
-const ReplayHeader = () => {
-  const { data } = useSample();
-  const m = data?.meta;
-  if (!m) return null;
-  return (
-    <>
-      <p role="note" className="mb-4 rounded-2xl border border-[#E6DFA3] bg-yellow px-5 py-4 font-ui text-sm font-semibold">
-        Replay of a past storm (NWM v3.0 hindcast), not a forecast.
-      </p>
-      <ModeHeader mode={m.mode ?? "REPLAY"} generated={m.generated_at} source={m.data_sources[0]} stale={!!m.stale} fixed
-        staleNote={`Replay starts ${hourTime(m.event.replay_start_utc, 0)}; the data are fixed, not live.`} caveats={[m.event.note, m.stamp, ...m.known_gaps]} />
-    </>
-  );
-};
-
-const nearZero = (v: number) => (v < 0.01 ? "under 1%" : `${Math.round(v * 100)}%`);
-
+"use client";
+import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { ageH, hoursText, useLive, type Forecast } from "@/lib/live";
+import { hourTime, utc } from "@/lib/sample";
+import { tidyName } from "@/lib/format";
+import { CoastalPanel } from "@/components/forecast/coastal-panel";
+import { NowcastView } from "@/components/forecast/nowcast-view";
+import { ModeHeader } from "@/components/forecast/mode-header";
+import { useSample } from "@/components/forecast/sample-store";
+
+const MODES = [
+  { id: "replay", label: "Replay", sub: "Florence 2018" },
+  { id: "nowcast", label: "Nowcast", sub: "observed now" },
+  { id: "forecast", label: "Forecast preview", sub: "unvalidated" },
+] as const;
+type Mode = (typeof MODES)[number]["id"];
+
+const ReplayHeader = () => {
+  const { data } = useSample();
+  const m = data?.meta;
+  if (!m) return null;
+  return (
+    <>
+      <p role="note" className="mb-4 rounded-2xl border border-[#E6DFA3] bg-yellow px-5 py-4 font-ui text-sm font-semibold">
+        Replay of a past storm (NWM v3.0 hindcast), not a forecast.
+      </p>
+      <ModeHeader mode={m.mode ?? "REPLAY"} generated={m.generated_at} source={m.data_sources[0]} stale={!!m.stale} fixed
+        staleNote={`Replay starts ${hourTime(m.event.replay_start_utc, 0)}; the data are fixed, not live.`} caveats={[m.event.note, m.stamp, ...m.known_gaps]} />
+    </>
+  );
+};
+
+const nearZero = (v: number) => (v < 0.01 ? "under 1%" : `${Math.round(v * 100)}%`);
+
 type Row = { id: string; name: string; max: number; first: string | null; n: number };
 
 /** Shared result block: which sample crossings go above their 10-year flow, and the bars of the highest flows. */
@@ -53,7 +54,7 @@ function Results({ rows, missing, example, noun = "crossings" }: { rows: Row[]; 
       )}
       {missing > 0 && <p className="mt-3 font-ui text-xs text-muted">{missing} crossings had no model output in this cycle and are not shown. No output is not the same as open.</p>}
 
-      <h3 className="label mt-8 text-muted">Highest modelled flow, as a share of the 10-year flow</h3>
+      <h3 className="label mt-8 text-muted">Highest modeled flow, as a share of the 10-year flow</h3>
       <ul className="mt-3 space-y-3">
         {top.map((r) => (
           <li key={r.id} className="font-ui text-sm">
@@ -78,19 +79,19 @@ function LivePreview({ active, now }: { active: boolean; now: number }) {
   const stale = f.stale || (live !== null && live > 6);
   const rows: Row[] = f.crossings.filter((c) => c.in_model_output).map((c) => {
     const hot = [...c.level].flatMap((ch, i) => (ch >= "3" ? [i] : [])); // level digit 3+ = above the 10-year flow; "-" sorts below "3"
-    return { id: c.id, name: c.name, max: Math.max(0, ...c.ratio_q10.map((r) => r ?? 0)), first: hot.length && f.valid_times[hot[0]] ? utc(f.valid_times[hot[0]]!) : null, n: hot.length };
+    return { id: c.id, name: tidyName(c.name), max: Math.max(0, ...c.ratio_q10.map((r) => r ?? 0)), first: hot.length && f.valid_times[hot[0]] ? utc(f.valid_times[hot[0]]!) : null, n: hot.length };
   });
   return (
     <>
       <ModeHeader mode={f.mode} generated={f.generated_at} source={f.source} stale={stale} caveats={f.caveats}
-        staleNote={live !== null ? `Cycle issued ${hoursText(live)}` : undefined}>
+        staleNote={live !== null ? `Forecast cycle issued ${hoursText(live)}` : undefined}>
         <p className="mt-4 flex flex-wrap gap-2 font-ui text-xs font-semibold">
           <span className="rounded-full bg-soft-blue px-3 py-1">{f.label}</span>
-          {f.not_a_closure_probability && <span className="rounded-full bg-yellow px-3 py-1">Not a closure probability</span>}
+
         </p>
         <dl className="mt-4 grid gap-x-8 gap-y-2 font-ui text-sm sm:grid-cols-[auto_1fr]">
           <dt className="label text-muted">Cycle issued</dt><dd className="font-mono">{utc(f.cycle_issue_time)}</dd>
-          <dt className="label text-muted">Cycle age at generation</dt><dd className="font-mono">{f.cycle_age_hours} h</dd>
+
           <dt className="label text-muted">Leads</dt><dd className="font-mono">1 to 18 h after issue · {f.nwm_version}</dd>
           {f.fallback.used && <><dt className="label text-muted">Fallback</dt><dd>{f.fallback.note} (skipped: {f.fallback.skipped_newer_cycles.map((s) => `${s.cycle}, ${s.reason}`).join("; ")})</dd></>}
         </dl>
@@ -140,37 +141,37 @@ function ForecastPreview({ active, now }: { active: boolean; now: number }) {
     </>
   );
 }
-
-/** Replay (default) | Nowcast | Forecast preview. Only the active mode is rendered; the three never share a panel. */
-export function ModeSection({ replay }: { replay: ReactNode }) {
-  const [mode, setMode] = useState<Mode>("replay");
-  const [now] = useState(() => Date.now());
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const onKey = (e: KeyboardEvent, i: number) => {
-    const j = e.key === "ArrowRight" ? (i + 1) % 3 : e.key === "ArrowLeft" ? (i + 2) % 3 : e.key === "Home" ? 0 : e.key === "End" ? 2 : -1;
-    if (j < 0) return;
-    e.preventDefault(); setMode(MODES[j].id); tabs.current[j]?.focus();
-  };
-  return (
-    <div>
-      <div role="tablist" aria-label="Data mode" className="mx-auto mb-8 flex max-w-2xl flex-col gap-2 rounded-3xl bg-soft-blue p-2 sm:flex-row">
-        {MODES.map((m, i) => (
-          <button key={m.id} ref={(el) => { tabs.current[i] = el; }} role="tab" id={`tab-${m.id}`} aria-selected={mode === m.id} aria-controls={`panel-${m.id}`}
-            tabIndex={mode === m.id ? 0 : -1} onClick={() => setMode(m.id)} onKeyDown={(e) => onKey(e, i)}
-            className={`min-h-12 flex-1 rounded-2xl px-4 py-2 text-center font-ui text-sm font-semibold transition ${mode === m.id ? "bg-ink text-white shadow-panel" : "text-ink hover:bg-white/70"}`}>
-            {m.label}<span className="block text-xs font-normal opacity-80">{m.sub}</span>
-          </button>
-        ))}
-      </div>
-      <div role="tabpanel" id="panel-replay" aria-labelledby="tab-replay" hidden={mode !== "replay"} tabIndex={0}>
-        {mode === "replay" && <><ReplayHeader />{replay}</>}
-      </div>
-      <div role="tabpanel" id="panel-nowcast" aria-labelledby="tab-nowcast" hidden={mode !== "nowcast"} tabIndex={0} className="mx-auto max-w-4xl">
-        {mode === "nowcast" && <><NowcastView now={now} /><CoastalPanel now={now} /></>}
-      </div>
-      <div role="tabpanel" id="panel-forecast" aria-labelledby="tab-forecast" hidden={mode !== "forecast"} tabIndex={0} className="mx-auto max-w-4xl">
-        <ForecastPreview active={mode === "forecast"} now={now} />
-      </div>
-    </div>
-  );
-}
+
+/** Replay (default) | Nowcast | Forecast preview. Only the active mode is rendered; the three never share a panel. */
+export function ModeSection({ replay }: { replay: ReactNode }) {
+  const [mode, setMode] = useState<Mode>("replay");
+  const [now] = useState(() => Date.now());
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const onKey = (e: KeyboardEvent, i: number) => {
+    const j = e.key === "ArrowRight" ? (i + 1) % 3 : e.key === "ArrowLeft" ? (i + 2) % 3 : e.key === "Home" ? 0 : e.key === "End" ? 2 : -1;
+    if (j < 0) return;
+    e.preventDefault(); setMode(MODES[j].id); tabs.current[j]?.focus();
+  };
+  return (
+    <div>
+      <div role="tablist" aria-label="Data mode" className="mx-auto mb-12 flex max-w-2xl flex-col gap-2 rounded-3xl bg-soft-blue p-2 sm:flex-row">
+        {MODES.map((m, i) => (
+          <button key={m.id} ref={(el) => { tabs.current[i] = el; }} role="tab" id={`tab-${m.id}`} aria-selected={mode === m.id} aria-controls={`panel-${m.id}`}
+            tabIndex={mode === m.id ? 0 : -1} onClick={() => setMode(m.id)} onKeyDown={(e) => onKey(e, i)}
+            className={`min-h-12 flex-1 rounded-2xl px-4 py-2 text-center font-ui text-sm font-semibold transition ${mode === m.id ? "bg-ink text-white shadow-panel" : "text-ink hover:bg-white/70"}`}>
+            {m.label}<span className="block text-xs font-normal opacity-80">{m.sub}</span>
+          </button>
+        ))}
+      </div>
+      <div role="tabpanel" id="panel-replay" aria-labelledby="tab-replay" hidden={mode !== "replay"} tabIndex={0}>
+        {mode === "replay" && <><ReplayHeader />{replay}</>}
+      </div>
+      <div role="tabpanel" id="panel-nowcast" aria-labelledby="tab-nowcast" hidden={mode !== "nowcast"} tabIndex={0} className="mx-auto max-w-4xl">
+        {mode === "nowcast" && <><NowcastView now={now} /><CoastalPanel now={now} /></>}
+      </div>
+      <div role="tabpanel" id="panel-forecast" aria-labelledby="tab-forecast" hidden={mode !== "forecast"} tabIndex={0} className="mx-auto max-w-4xl">
+        <ForecastPreview active={mode === "forecast"} now={now} />
+      </div>
+    </div>
+  );
+}

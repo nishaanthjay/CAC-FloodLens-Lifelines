@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BOUNDS, STYLE, esc, loadMaplibre, type ML } from "@/lib/maplibre";
 import { CLOSED, type HourStatus, type RouteOption } from "@/lib/route";
+import { tidyName } from "@/lib/format";
 
 export type MapService = { id: string; kind: string; kindLabel: string; fill: string; name: string; lat: number; lon: number };
 type Ranked = { o: RouteOption; s: HourStatus }[];
@@ -88,17 +89,17 @@ export function RouteMap({ origin, services, selected, ranked, focusId, hour, li
     m.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding: { top: 60, bottom: 150, left: 50, right: 50 }, maxZoom: 13, duration: 600 });
   }, [ready, origin, services, selected]);
 
-  // Routes and the crossings on them, coloured for the current hour.
+  // Routes and the crossings on them, colored for the current hour.
   useEffect(() => {
     if (!ready) return;
     const m = map.current;
     const seen = new Map<string, { name: string; lat: number; lon: number; cls: number; status: string }>();
-    const label = live ? ["No crossing flagged (not an all-clear)", "At risk", "Crossing flagged in forecast"] : ["Open in replay (not an all-clear)", "At risk", "Blocked in replay"];
+    const label = live ? ["No crossing flagged", "At risk", "Crossing flagged in forecast"] : ["Open", "At risk", "Blocked"];
     const features = [...ranked].reverse().map(({ o, s }) => {
       for (const c of o.on) {
         const lv = c.x ? parseInt(c.x.level[hour] ?? "-", 10) : -1;
-        seen.set(c.id, { name: c.x?.name ?? "Stream crossing (not assessed)", lat: c.lat, lon: c.lon, cls: !(lv >= 0) ? -1 : lv >= CLOSED ? 2 : lv > 0 ? 1 : 0,
-          status: !c.x ? "Not assessed by the model" : Number.isNaN(lv) ? "No flow value for this step (not assumed open)" : lv >= CLOSED ? (live ? "Forecast above 10-year flow (scenario)" : "Closed in scenario (above 10-year flow)") : lv > 0 ? "Above 2-year flow" : "Below 2-year flow · not an all-clear" });
+        seen.set(c.id, { name: c.x ? tidyName(c.x.name) : "Stream crossing (not assessed)", lat: c.lat, lon: c.lon, cls: !(lv >= 0) ? -1 : lv >= CLOSED ? 2 : lv > 0 ? 1 : 0,
+          status: !c.x ? "Not assessed by the model" : Number.isNaN(lv) ? "No flow value for this step (not assumed open)" : lv >= CLOSED ? (live ? "Forecast above 10-year flow (scenario)" : "Closed in scenario (above 10-year flow)") : lv > 0 ? "Above 2-year flow" : "Below 2-year flow" });
       }
       return { type: "Feature", properties: { id: o.id, label: o.label, state: s.state, status: label[s.state], focus: o.id === focusId }, geometry: { type: "LineString", coordinates: o.shape } };
     });

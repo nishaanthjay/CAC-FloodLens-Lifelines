@@ -9,7 +9,7 @@ const facts = [
   { value: "9 kinds of help", label: "Emergency rooms, fire, EMS, police, dialysis, urgent care, nursing homes, pharmacies" },
 ];
 
-/** Faint real map of the region behind the hero; the centre is masked clear for the headline. */
+/** Faint real map of the region behind the hero; the center is masked clear for the headline. */
 function Backdrop() {
   return (
     <svg
@@ -48,12 +48,12 @@ export function Hero() {
           Can you still <Highlight>get to help?</Highlight>
         </h1>
         <p className="enter mx-auto mt-8 max-w-xl [--d:180ms] font-body text-lg leading-relaxed text-ink/70 sm:text-xl">
-          FloodLens Lifelines shows how flooding may interrupt road access to emergency rooms, fire stations, dialysis centres and other lifelines: what is observed now, then the forecast.
+          See whether flooding could cut your route to the ER, fire station, or dialysis center — now, and over the next 18 hours.
         </p>
 
         <AddressSearch />
 
-        <dl className="enter mx-auto mt-16 grid max-w-4xl grid-cols-1 divide-y divide-ink/10 border-y border-ink/10 text-left [--d:360ms] sm:mt-20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <dl className="enter relative mx-auto mt-16 grid max-w-4xl bg-paper grid-cols-1 divide-y divide-ink/10 border-y border-ink/10 text-left [--d:360ms] sm:mt-20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {facts.map(({ value, label }) => (
             <div key={value} className="px-1 py-5 sm:px-8 sm:py-7 sm:text-center">
               <dt className="font-display text-xl font-bold leading-tight">{value}</dt>

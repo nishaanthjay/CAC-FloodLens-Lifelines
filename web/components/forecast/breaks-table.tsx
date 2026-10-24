@@ -51,7 +51,7 @@ export function BreaksTable() {
                     <span className="min-w-0">
                       <span className="block truncate font-ui text-sm font-semibold sm:text-base">{c.name}</span>
                       <span className="mt-1 block font-ui text-xs text-muted">
-                        {c.county} · first above 10-year flow {c.event_first_above_RL10_utc.value ? utc(c.event_first_above_RL10_utc.value) : "not in replay"}
+                        {c.county} · first above 10-year flow {c.event_first_above_RL10_utc.value ? `${utc(c.event_first_above_RL10_utc.value)}${start && Date.parse(c.event_first_above_RL10_utc.value) < Date.parse(start) ? " (before the replay window)" : ""}` : "not in replay"}
                         <span className="sm:hidden"> · {status}</span>
                       </span>
                     </span>

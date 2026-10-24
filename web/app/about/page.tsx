@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const tests = [
   ["0.958", "AUC: river flow at the hours flooded-road reports were filed, versus ordinary hours (74 reports, 66 crossings). Shows storm versus not-storm, not which road."],
-  ["76.7%", "of 73 gauge-storms: modelled peak flow within a factor of 2 of USGS gauges, median peak-time error 4 hours."],
+  ["76.7%", "of 73 gauge-storms: modeled peak flow within a factor of 2 of USGS gauges, median peak-time error 4 hours."],
   ["91.3%", "of 150 test blocks: baseline drive time to the nearest hospital within 30% of OSRM."],
   ["0.69 to 0.72", "AUC across nine 2023 to 2025 NC storm windows: crossings near recorded closures ranked higher. Precision is low (about 5%)."],
 ];
@@ -38,7 +38,7 @@ export default function About() {
 
         <h2 className="mt-14 font-display text-3xl font-bold">What it does</h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
-          Most flood tools answer &ldquo;is this road underwater?&rdquo; FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis centre or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings (1,583 with a flow threshold, so assessed; the other 1,337 are flagged as unassessed, never treated as open) and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast; the Florence replay is kept apart.
+          Most flood tools answer &ldquo;is this road underwater?&rdquo; FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis center or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings (1,583 with a flow threshold, so assessed; the other 1,337 are flagged as unassessed, never treated as open) and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast; the Florence replay is kept apart.
         </p>
 
         <h2 className="mt-14 font-display text-3xl font-bold">Three modes, never mixed</h2>

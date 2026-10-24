@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { LoaderCircle } from "lucide-react";
 import { crossingStatus, getJSON, hourTime } from "@/lib/sample";
 import { BOUNDS, STYLE, esc, loadMaplibre, type ML } from "@/lib/maplibre";
 import { useSample } from "@/components/forecast/sample-store";
@@ -8,22 +9,22 @@ import { HourSlider } from "@/components/ui/hour-slider";
 const CROSSING_KEY = [
   ["Above 10-year flow (closed in scenario)", "#CC0000"],
   ["Above 2-year flow", "#EFAEAE"],
-  ["Below 2-year flow · not flagged, not an all-clear", "#FFFFFF"],
+  ["Below 2-year flow", "#FFFFFF"],
 ] as const;
 
 function Legend() {
   return (
     <div className="grid gap-8 sm:grid-cols-2 sm:gap-12">
       <div>
-        <p className="label mb-3.5 text-muted">Neighbourhoods <span className="ml-1 rounded-full bg-soft-blue px-2 py-0.5 normal-case tracking-normal text-blue">replay</span></p>
+        <p className="label mb-3.5 text-muted">Neighborhoods</p>
         <ul className="grid gap-y-3 font-ui text-xs text-ink/80">
           <li className="flex items-center gap-2"><span className="h-3.5 w-3.5 rounded-full border border-ink/40 bg-[#7A0000]" aria-hidden />No route to an emergency hospital this hour</li>
-          <li className="flex items-center gap-2"><span className="h-3.5 w-3.5 rounded-full border border-ink/40 bg-white" aria-hidden />A route exists · not an all-clear</li>
+          <li className="flex items-center gap-2"><span className="h-3.5 w-3.5 rounded-full border border-ink/40 bg-white" aria-hidden />A route exists</li>
         </ul>
       </div>
       <div>
         <p className="label mb-3.5 text-muted">
-          Crossings <span className="ml-1 rounded-full bg-soft-blue px-2 py-0.5 normal-case tracking-normal text-blue">replay</span>
+          Crossings
         </p>
         <ul className="grid gap-y-3 font-ui text-xs text-ink/80">
           {CROSSING_KEY.map(([label, fill]) => (
@@ -103,14 +104,17 @@ export function ForecastMap() {
           m.on("mousemove", "crossings", (e: ML) => {
             const f = e.features[0].properties;
             m.getCanvas().style.cursor = "pointer";
-            tip.setLngLat(e.lngLat).setHTML(`<b>${esc(f.name)}</b><br>${crossingStatus(f.level)} · replay`).addTo(m);
+            tip.setLngLat(e.lngLat).setHTML(`<b>${esc(f.name)}</b><br>${crossingStatus(f.level)}`).addTo(m);
           });
           m.on("mousemove", "sites", (e: ML) => {
             const f = e.features[0].properties;
             m.getCanvas().style.cursor = "pointer";
-            tip.setLngLat(e.lngLat).setHTML(`<b>${esc(f.name)}</b><br>${f.lost ? "No route to an emergency hospital this hour" : "A route exists this hour"} · replay`).addTo(m);
+            tip.setLngLat(e.lngLat).setHTML(`<b>${esc(f.name)}</b><br>${f.lost ? "No route to an emergency hospital this hour" : "A route exists this hour"}`).addTo(m);
           });
           for (const id of ["crossings", "sites"]) m.on("mouseleave", id, () => { m.getCanvas().style.cursor = ""; tip.remove(); });
+          m.addSource("places", { type: "geojson", data: { type: "FeatureCollection", features: [["Wilmington", -77.9447, 34.2257], ["Southport", -78.0197, 33.9218]].map(([n, x, y]) => ({ type: "Feature", properties: { n }, geometry: { type: "Point", coordinates: [x, y] } })) } });
+          m.addLayer({ id: "places", type: "symbol", source: "places", layout: { "text-field": ["get", "n"], "text-font": ["Noto Sans Regular"], "text-size": 14, "text-offset": [0, -1.3], "text-allow-overlap": true },
+            paint: { "text-color": "#111111", "text-halo-color": "#FFFFFF", "text-halo-width": 2 } });
           m.on("click", "sites", (e: ML) => select(data.sites.find((s) => s.id === e.features[0].properties.id) ?? null));
           setReady(true);
         });
@@ -119,7 +123,7 @@ export function ForecastMap() {
     return () => { gone = true; map.current?.remove(); map.current = null; setReady(false); };
   }, [data, near]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Hour changes recolour crossings and places.
+  // Hour changes recolor crossings and places.
   useEffect(() => {
     if (!ready) return;
     map.current.getSource("crossings").setData(crossingsFC());
@@ -150,20 +154,25 @@ export function ForecastMap() {
          
           role="region"
           aria-label="Map of sample crossings and places in the Cape Fear region"
-          className="block aspect-[4/5] w-full sm:aspect-[16/9]"
+          className="block aspect-[4/5] w-full sm:aspect-[16/10]"
         />
+        {!ready && !error && !mapError && (
+          <p role="status" className="absolute inset-0 z-[1] grid place-content-center justify-items-center gap-3 bg-soft-blue font-ui text-sm font-semibold text-ink/70">
+            <LoaderCircle size={22} className="animate-spin" aria-hidden /> Loading map…
+          </p>
+        )}
         {(error || mapError) && (
           <p className="absolute inset-0 grid place-items-center p-8 text-center font-ui text-sm text-muted">
             The sample map could not load ({error ?? mapError}).
           </p>
         )}
-        <HourSlider hour={hour} hours={hours} start={start} onChange={setHour} />
       </div>
+      <HourSlider dock hour={hour} hours={hours} start={start} onChange={setHour} />
       <div className="reveal mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-start lg:gap-16">
         <figcaption className="max-w-md shrink-0 font-ui text-xs leading-relaxed text-muted lg:w-[26rem]">
           Replay of the NWM v3.0 retrospective for Hurricane Florence, starting {start ? hourTime(start, 0) : "…"}. A crossing closes in this
           scenario while its stream runs above the 10-year flow. River flow only: no storm surge, tide or street flooding. Large circles are
-          Census-block centres: dark means the replay found no route to an emergency hospital that hour.
+          Census-block centers: dark means the replay found no route to an emergency hospital that hour.
         </figcaption>
         <Legend />
       </div>

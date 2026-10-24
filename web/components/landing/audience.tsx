@@ -16,7 +16,7 @@ const people = [
 const principles = [
   { icon: Sigma, title: "Probabilities, not promises", body: "Every outlook is a likelihood with a time range, never a yes or no." },
   { icon: ShieldAlert, title: "No warning is not an all-clear", body: "We never show a road as safe. Missing data is labelled as missing." },
-  { icon: Eye, title: "Uncertainty stays visible", body: "Patterns, labels and timestamps carry meaning, not colour alone." },
+  { icon: Eye, title: "Uncertainty stays visible", body: "Patterns, labels and timestamps carry meaning, not color alone." },
 ];
 
 export function Audience() {
