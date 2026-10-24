@@ -48,8 +48,8 @@ function Shell() {
   const desktop = useDesktop();
   return (
     <>
-    <div id="content" className="fixed inset-0 print:hidden overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
-      <MapView />
+    <main id="content" className="fixed inset-0 print:hidden overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
+      <h1 className="sr-only">FloodLens Lifelines map workspace: how flooding could change road access to help in Cape Fear</h1>
       <Rail />
       <TopBar />
       {desktop === true && <><LeftPanel /><RightPanel /></>}
@@ -57,7 +57,9 @@ function Shell() {
       <TimePill caption={d.base ? d.caption(hour) : undefined} disabled={mode === "nowcast"} />
       <MapControls />
       <MenuSheet />
-    </div>
+      {/* Last in the DOM so keyboard users reach the controls before the map; z-0 keeps it underneath. */}
+      <MapView />
+    </main>
     <PrintSheet />
     </>
   );

@@ -14,7 +14,7 @@ import { useWS } from "@/components/workspace/store";
 export function AccessSection() {
   const r = useRouting();
   const d = useData();
-  const { mode, hour } = useWS();
+  const { mode } = useWS();
   const live = mode !== "replay";
   const X = d.X;
 
@@ -111,7 +111,7 @@ export function AccessSection() {
       {!r.origin && !r.busy && (
         <p className="mt-3 rounded-xl bg-yellow p-3 font-ui text-xs leading-relaxed text-ink/80">
           Enter an address to list the nearest emergency rooms, fire stations, dialysis centers and other services. Pick one or several to compare routes, see which stream crossings
-          each one uses, and how {live ? "the river-flow forecast" : "the Florence replay"} would affect them {live ? "from now on" : "hour by hour"}. At H+{hour} on the time control.
+          each one uses, and how {live ? "the river-flow forecast" : "the Florence replay"} would affect them {live ? "from now on" : "hour by hour"}.
         </p>
       )}
     </div>

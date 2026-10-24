@@ -80,7 +80,7 @@ export function applyEncoding(map: ML, tab: Tab, hour: number, maxPeople: number
   const set = (id: string, prop: string, v: unknown) => map.setPaintProperty(id, prop, v);
   set("x-halo", "circle-color", haloFillAt(hour)); set("x-halo", "circle-radius", haloRadiusExpr(tab, hour, maxPeople));
   set("x-bubble", "circle-color", fillAt(hour)); set("x-bubble", "circle-radius", radiusExpr(tab, hour, maxPeople));
-  set("x-bubble", "circle-stroke-color", strokeAt(hour)); set("x-bubble", "circle-stroke-width", strokeWAt(hour));
+  set("x-bubble", "circle-stroke-color", strokeAt(hour)); set("x-bubble", "circle-stroke-width", strokeWAt(hour, tab));
   set("x-sel", "circle-radius", selRadiusExpr(tab, hour, maxPeople));
   set("x-cluster-halo", "circle-color", clusterHaloAt(hour)); set("x-cluster", "circle-color", clusterFillAt(hour));
   set("x-cluster", "circle-stroke-color", ["match", clusterTier(hour), 0, TIERS[0].stroke, 1, TIERS[1].stroke, 2, TIERS[2].stroke, 3, TIERS[3].stroke, 4, TIERS[4].stroke, NO_VALUE.stroke]);

@@ -52,7 +52,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
   series: Series[]; hour: number; onHour: (h: number) => void; unitLabel: string; ariaLabel: string; hourLabel?: (h: number) => string; emptyText?: string;
 }) {
   const uid = useId().replace(/:/g, "");
-  const W = 320, H = 150, L = 34, R = 8, T = 10, B = 20;
+  const W = 320, H = 176, L = 34, R = 8, T = 16, B = 20;
   const n = series[0]?.values.length ?? 0;
   const tot = Array.from({ length: n }, (_, i) => series.reduce((a, s) => a + s.values[i], 0));
   const empty = Math.max(0, ...tot) === 0;
@@ -90,6 +90,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
         <text key={i} x={x(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"} className="fill-muted font-mono" fontSize="8.5">{hourLabel(i)}</text>))}
       {empty && emptyText && <text x={(L + W - R) / 2} y={(T + H - B) / 2} textAnchor="middle" className="fill-ink/70 font-ui" fontSize="9.5">{emptyText}</text>}
       <line x1={x(hour)} x2={x(hour)} y1={T - 2} y2={H - B} stroke="#111" strokeWidth="1.2" />
+      <text x={Math.min(Math.max(x(hour), L + 12), W - R - 12)} y={T - 3} textAnchor="middle" className="fill-ink font-mono" fontSize="8.5" fontWeight="600">{hourLabel(hour)}</text>
       <circle cx={x(hour)} cy={y(tot[hour] ?? 0)} r="3.2" fill="#fff" stroke="#111" strokeWidth="1.4" />
     </svg>
   );

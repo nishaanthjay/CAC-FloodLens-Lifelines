@@ -21,7 +21,7 @@ export const FILL_OPACITY = 0.35, HALO_OPACITY = 0.12;
 export const fillAt = (h: number): Expr => byTier(h, TIERS.map((t) => t.fill), rgba(NO_VALUE.fill, 0.3)); // no model value: hollow-ish grey
 export const haloFillAt = (h: number): Expr => byTier(h, TIERS.map((t, i) => (i === 0 ? rgba(t.fill, 0.4) : t.fill)), rgba(NO_VALUE.fill, 0)); // the pale "not flagged" tier gets almost no halo
 export const strokeAt = (h: number): Expr => ["interpolate", ["linear"], hover, 0, byTier(h, TIERS.map((t) => rgba(t.stroke, 0.88)), rgba(NO_VALUE.stroke, 0.7)), 1, byTier(h, TIERS.map((t) => t.stroke), NO_VALUE.stroke)]; // full opacity while hovered
-export const strokeWAt = (h: number): Expr => byTier(h, TIERS.map((t) => t.strokeW), 1);
+export const strokeWAt = (h: number, tab?: string): Expr => byTier(h, TIERS.map((t) => (tab === "access" ? Math.min(t.strokeW, 1.5) : t.strokeW)), 1); // Access: context dots, thinner outlines so the route reads first
 
 /** Zoom factor shared by all bubbles: smaller when zoomed out, larger up close. */
 const zoomed = (px: Expr | number): Expr => ["interpolate", ["linear"], ["zoom"], 8, ["*", 0.8, px], 12, px, 15, ["*", 1.6, px]];
@@ -31,7 +31,7 @@ const grow: Expr = ["+", 1, ["*", 0.25, hover]]; // the bubble swells 1.25x on h
 export function baseRadius(tab: "water" | "access" | "consequence", h: number, maxPeople: number): Expr | number {
   if (tab === "water") return ["+", 5, ["*", 15, ["sqrt", ["/", ["min", 3, ["max", 0, ["/", ratioAt(h), 100]]], 3]]]];
   if (tab === "consequence") return ["+", 4, ["*", 24, ["sqrt", ["/", ["get", "ppl"], Math.max(1, maxPeople)]]]];
-  return ["case", [">=", tierAt(h), 3], 6, 4];
+  return ["case", [">=", tierAt(h), 3], 4.5, 3];
 }
 export const radiusExpr = (tab: "water" | "access" | "consequence", h: number, maxPeople: number): Expr => zoomed(["*", baseRadius(tab, h, maxPeople), grow]);
 export const haloRadiusExpr = (tab: "water" | "access" | "consequence", h: number, maxPeople: number): Expr => zoomed(["+", 4, ["*", 1.9, baseRadius(tab, h, maxPeople)]]);

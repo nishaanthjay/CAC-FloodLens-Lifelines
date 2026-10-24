@@ -22,9 +22,9 @@ export function Provenance({ mode, prov }: { mode: Mode; prov: Prov }) {
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-white">{MODE_BADGE[mode]}</span>
         {prov.stale && <span className="rounded border border-alert/50 bg-softred px-1.5 py-0.5 text-[10px] font-semibold text-[#8E0000]">STALE</span>}
-        <span className="min-w-0">{prov.source}</span>
+        <span className="font-mono text-[11px] text-ink/75">Generated {prov.generated}</span>
       </p>
-      <p className="mt-1 font-mono text-[11px] text-ink/70">Generated {prov.generated}</p>
+      <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-ink/75" title={prov.source}>Source: {prov.source}</p>
       <p className="mt-1 text-[11px] leading-snug text-ink/75">{prov.note}</p>
     </div>
   );
@@ -54,7 +54,7 @@ export function CrossingTable({ rows, onPick, selected, valueLabel, caption }: {
           {rows.map((r) => (
             <tr key={r.id} className={`border-b border-ink/5 last:border-0 ${selected === r.id ? "bg-blue/10" : "hover:bg-ink/[0.04]"}`}>
               <td className="max-w-[150px] px-2.5 py-0 align-middle">
-                <button type="button" onClick={() => onPick(r.id)} aria-pressed={selected === r.id} className="flex min-h-10 w-full flex-col items-start justify-center text-left">
+                <button type="button" onClick={() => onPick(r.id)} aria-pressed={selected === r.id} className="flex min-h-10 w-full flex-col items-start justify-center text-left focus-visible:[outline-offset:-3px]">
                   <span className="font-mono text-[11px] font-semibold text-ink">{r.id}</span>
                   <span className="w-full truncate text-[11px] text-muted">{r.name}</span>
                 </button>

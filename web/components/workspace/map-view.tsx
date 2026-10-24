@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BOUNDS, STYLE, loadMaplibre, type ML } from "@/lib/maplibre";
+import { LoaderCircle } from "lucide-react";
 import { tidyName } from "@/lib/format";
 import { restyle } from "@/lib/workspace/basemap";
 import { addLayers, applyEncoding, crossingFeatures, fadeSwap, levelTier, serviceFeatures, unassessedFeatures } from "@/lib/workspace/map-layers";
@@ -10,6 +11,7 @@ import { addIcons } from "@/lib/workspace/sdf";
 import { TIERS } from "@/lib/workspace/tiers";
 import { createTooltip } from "@/lib/workspace/tooltip";
 import { useData } from "@/components/workspace/data";
+import { ErrorCard } from "@/components/workspace/left-panel";
 import { useRouteMap } from "@/components/workspace/use-route-map";
 import { useWS } from "@/components/workspace/store";
 
@@ -43,8 +45,13 @@ export function MapView() {
     loadMaplibre().then((ml) => {
       if (gone || !box.current) return;
       pad.current = mapPadding(window.innerWidth >= 1024, window.innerWidth >= 1280, 0);
-      const m = new ml.Map({ container: box.current, style: STYLE, bounds: BOUNDS, fitBoundsOptions: { padding: pad.current }, attributionControl: false, dragRotate: false, pitchWithRotate: false });
+      const m = new ml.Map({ container: box.current, style: STYLE, center: [-78.15, 34.24], zoom: 8, attributionControl: false, dragRotate: false, pitchWithRotate: false });
       map.current = m;
+      // Opening move: start a little wider than Cape Fear and ease in (1.2 s), unless the visitor prefers reduced motion.
+      const cam = m.cameraForBounds(BOUNDS, { padding: pad.current });
+      if (cam) m.jumpTo({ center: cam.center, zoom: cam.zoom - (reduced() ? 0 : 0.9) });
+      const slow = window.setTimeout(() => { if (!m.loaded()) setError("the basemap did not answer in time"); }, 20000);
+      cleanups.push(() => window.clearTimeout(slow));
       if (process.env.NODE_ENV !== "production") (window as unknown as { __map: ML }).__map = m; // dev only: lets screenshot scripts drive the camera
       m.addControl(new ml.AttributionControl({ compact: true }), "bottom-left");
       api.current = {
@@ -53,6 +60,8 @@ export function MapView() {
         flyTo: (lon, lat, zoom) => m.flyTo({ center: [lon, lat], zoom: zoom ?? Math.max(m.getZoom(), 12), padding: pad.current, essential: true, duration: reduced() ? 0 : 1100 }),
       };
       m.on("load", () => {
+        window.clearTimeout(slow);
+        m.fitBounds(BOUNDS, { padding: pad.current, duration: reduced() ? 0 : 1200 });
         try { restyle(m); } catch { /* the stock style still works */ }
         addIcons(m);
         addLayers(m);
@@ -158,9 +167,18 @@ export function MapView() {
   useRouteMap(map, ready);
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 z-0">
       <div ref={box} className="h-full w-full" role="region" aria-label="Map of crossings and services in the Cape Fear region" />
-      {error && <p className="absolute inset-0 grid place-items-center p-8 text-center font-ui text-sm text-muted">The map could not load ({error}).</p>}
+      {!ready && !error && (
+        <p role="status" className="ws-glass absolute left-1/2 top-1/2 z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full px-4 py-2 font-ui text-xs font-semibold text-ink/80 max-lg:top-[40%]">
+          <LoaderCircle size={14} className="animate-spin" aria-hidden /> Loading map…
+        </p>
+      )}
+      {error && (
+        <div className="absolute inset-0 z-10 grid place-items-center p-6">
+          <div className="ws-glass max-w-sm rounded-2xl p-4"><ErrorCard title="The map could not load" text={`${error}. The summary and charts do not need the map and still work. Check the connection (the basemap comes from OpenFreeMap) and reload.`} /></div>
+        </div>
+      )}
     </div>
   );
 }
