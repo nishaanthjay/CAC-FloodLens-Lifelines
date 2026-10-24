@@ -28,3 +28,4 @@ data/closures_live/logs/
 data/**/*.parquet
 data/**/*.npy
 data/**/*.zip
+data/phase1/raw/nwm_chunks/
