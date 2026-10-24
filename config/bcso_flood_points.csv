@@ -1,0 +1,21 @@
+id,road,route_no,stream,n_road_ways,n_water_ways,method,lon,lat,crossing_id,match_dist_m,name_agrees,note,n_intersections,snap_seg,hazard_threshold_ok
+1,Pireway Rd,904,Waccamaw River,43,7,M1 OSM road x waterway,-78.631594,34.01519,V2_0356,0.0,road=False stream=True,,1,2211.0,True
+2,Ocean Hwy,17,State Line,411,0,unlocated,,,,,,no OSM intersection of the named road and named feature; no name-match crossing,0,,
+3,Ocean Hwy,17,Hickman Rd,411,0,unlocated,,,,,,no OSM intersection of the named road and named feature; no name-match crossing,0,,
+4,Thomasboro Rd,1165,Little CawCaw Creek,3,0,unlocated,,,,,,no OSM intersection of the named road and named feature; no name-match crossing,0,,
+5,Old Shallotte Rd,1316,Cool Run Creek,3,0,unlocated,,,,,,no OSM intersection of the named road and named feature; 9 name-match candidates (ambiguous or none),0,,
+6,Ocean Hwy,17,OmniStorage [McMilly Swamp],411,14,M1 OSM road x waterway,-78.424403,33.958137,V2_1979,0.0,road=True stream=True,,2,144349.0,True
+7,Main St,17-B,Shallotte River,110,34,M1 OSM road x waterway,-78.386519,33.972501,V2_0036,2.2,road=False stream=True,,2,92936.0,True
+8,Main St,17-B,Shallotte District Park [Shallotte River],110,34,M1 OSM road x waterway,-78.386519,33.972501,V2_0036,2.2,road=False stream=True,,2,92936.0,True
+9,Oxpen Rd,1140,Shallotte River,1,34,M2 name-match,-78.320922,33.938344,V2_0044,0.4,road+stream tokens,M2: distance is crossing to nearest OSM way of the named road,0,14663.0,True
+10,Southport-Supply Rd,211,Lockwood Folly River,114,5,M1 OSM road x waterway,-78.263412,34.0108,V2_0056,4.0,road=True stream=True,,1,93774.0,True
+11,Sunset Harbor Rd,1112,Mill Creek,5,70,M1 OSM road x waterway,-78.204246,33.974001,V2_1863,0.0,road=True stream=True,,2,130680.0,True
+12,Midway Rd,903,Middle Swamp Creek,9,17,M1 OSM road x waterway,-78.153133,34.051976,V2_0077,12.8,road=False stream=True,,1,130703.0,True
+13,George II Hwy,87,Patricia Lake,80,0,unlocated,,,,,,no OSM intersection of the named road and named feature; no name-match crossing,0,,
+14,E Boiling Spring Rd,1539,Pretty Pond,0,0,unlocated,,,,,,no OSM intersection of the named road and named feature; 13 name-match candidates (ambiguous or none),0,,
+15,River Rd,133,Orton Curve [Liliput Creek],236,15,M1 OSM road x waterway,-77.95533,34.075334,V2_0045,0.9,road=True stream=True,,1,104655.0,True
+16,River Rd,133,Funston [Sand Hill Creek],236,20,M1 OSM road x waterway,-77.969313,34.099939,V2_1573,0.0,road=True stream=True,,1,104651.0,True
+17,River Rd,133,Daws Creek [Town Creek],236,28,M1 OSM road x waterway,-77.987338,34.136539,V2_0050,8.7,road=True stream=True,,1,72354.0,True
+18,Ocean Hwy,17,Town Creek,411,28,M1 OSM road x waterway,-78.091908,34.15653,V2_0059,1.9,road=True stream=True,,2,71245.0,True
+19,Lanvale Rd,1438,Lanvale Trace Retention Pond,8,0,unlocated,,,,,,no OSM intersection of the named road and named feature; 4 name-match candidates (ambiguous or none),0,,
+20,Grandiflora Rd,,Magnolia Greens Entrance,4,0,unlocated,,,,,,no OSM intersection of the named road and named feature; no name-match crossing,0,,
