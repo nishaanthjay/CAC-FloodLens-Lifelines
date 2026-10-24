@@ -12,6 +12,9 @@
   --color-soft-blue: #E8F0FA;
   --color-soft-red: #F7E1E1;
   --color-muted: #666666;
+  --glass: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(17, 17, 17, 0.08);
+  --glass-shadow: 0 8px 32px rgba(17, 17, 17, 0.08);
 }
 
 @layer base {
@@ -53,6 +56,27 @@
     background: rgb(255 255 255 / 0.72);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  /* Map workspace: floating glass panels over the map. */
+  .ws-glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: saturate(160%) blur(24px);
+    backdrop-filter: saturate(160%) blur(24px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .ws-label {
+    @apply font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-muted;
+  }
+  .ws-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(17 17 17 / 0.18) transparent;
+    overscroll-behavior: contain;
+  }
+  .shimmer {
+    background: linear-gradient(100deg, rgb(17 17 17 / 0.06) 30%, rgb(17 17 17 / 0.12) 50%, rgb(17 17 17 / 0.06) 70%) 0 0 / 200% 100%;
+    animation: shimmer 1.4s linear infinite;
   }
 
   .hl {
@@ -113,6 +137,9 @@
 }
 @keyframes drift-slow {
   to { transform: scale(1.06) translate(-1%, 1%); }
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
 }
 @keyframes pop {
   from { transform: scale(1.18); }

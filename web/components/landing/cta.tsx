@@ -13,7 +13,7 @@ export function Cta() {
           Start with one address and compare routes to the nearest emergency rooms, fire stations, dialysis centers and more. No account, and nothing is stored.
         </p>
         <a
-          href="/route"
+          href="/?tab=access"
           className="relative mt-11 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-7 font-ui text-sm font-semibold text-blue transition duration-200 hover:-translate-y-0.5 hover:shadow-lift focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
         >
           Open route analysis

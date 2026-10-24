@@ -6,13 +6,13 @@ import { ADDRESS_EXAMPLE } from "@/lib/geocode";
 import { Button } from "@/components/ui/button";
 import { useSample } from "@/components/forecast/sample-store";
 
-/** Hero search: hands the address to the route analysis page. */
+/** Hero search: hands the address to the map workspace (Access tab). The address travels in the URL fragment only. */
 export function AddressSearch() {
   const router = useRouter();
   const { data } = useSample();
   const [query, setQuery] = useState("");
   const go = (params: Record<string, string>) =>
-    router.push(`/route?${new URLSearchParams({ ...(params.q ? {} : params) })}${params.q ? `#q=${encodeURIComponent(params.q)}` : ""}`);
+    router.push(`/?${new URLSearchParams({ tab: "access", mode: "forecast", ...(params.q ? {} : params) })}${params.q ? `#q=${encodeURIComponent(params.q)}` : ""}`);
 
   function trySample() {
     // The place that loses its route for the most replay hours, opened at the first hour it is cut off.

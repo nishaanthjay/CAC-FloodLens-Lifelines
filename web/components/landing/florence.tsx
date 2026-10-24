@@ -19,7 +19,7 @@ export function Florence() {
             Florence 2018 replay
           </p>
           <p className="mt-5 max-w-md font-body text-lg leading-relaxed text-white/75">
-            In 2018, Hurricane Florence turned Wilmington into an island. The replay below steps through 18 hours of the storm.
+            In 2018, Hurricane Florence turned Wilmington into an island. The replay steps through 18 hours of the storm on the map.
           </p>
           <dl className="mt-8 divide-y divide-white/10 border-y border-white/10">
             {facts.map(([label, value]) => (
@@ -30,7 +30,7 @@ export function Florence() {
             ))}
           </dl>
           <p className="mt-4 font-ui text-xs text-white/50">Source: NOAA National Hurricane Center, Hurricane Florence report (AL062018).</p>
-          <a href="#map" className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 font-ui text-sm font-semibold text-[#0E2440] transition hover:-translate-y-0.5 hover:shadow-lift">
+          <a href="/?mode=replay" className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 font-ui text-sm font-semibold text-[#0E2440] transition hover:-translate-y-0.5 hover:shadow-lift">
             Step through the replay <ArrowDown size={16} aria-hidden />
           </a>
         </div>
