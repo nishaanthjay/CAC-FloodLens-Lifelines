@@ -1,0 +1,12 @@
+crossing_id,legend_points,road,stream,snap_seg,ranking_people_affected,pop_slowed_gt1min_ed,blocks_slowed_ed,pop_lost_ed,max_added_min_ed,pop_slowed_gt1min_fire
+V2_1979,6,Ocean Hwy,OmniStorage [McMilly Swamp],144349,10253.0,10253,169,0,7.047623135900504,265
+V2_0036,"7,8",Main St,Shallotte River,92936,6150.0,6150,190,0,2.2974589257542637,824
+V2_0056,10,Southport-Supply Rd,Lockwood Folly River,93774,4681.0,4681,128,0,17.12220395116733,1758
+V2_0059,18,Ocean Hwy,Town Creek,71245,767.0,767,18,0,3.1615596886318107,0
+V2_0077,12,Midway Rd,Middle Swamp Creek,130703,641.0,328,6,0,5.973950960339753,641
+V2_0044,9,Oxpen Rd,Shallotte River,14663,201.0,201,5,0,3.2070431667090853,0
+V2_0045,15,River Rd,Orton Curve [Liliput Creek],104655,79.0,79,2,0,3.3100206972251347,0
+V2_0050,17,River Rd,Daws Creek [Town Creek],72354,50.0,50,3,0,5.336389018590319,37
+V2_1863,11,Sunset Harbor Rd,Mill Creek,130680,253.0,17,1,0,1.2811207612721962,236
+V2_1573,16,River Rd,Funston [Sand Hill Creek],104651,0.0,0,0,0,0.0,0
+V2_0356,1,Pireway Rd,Waccamaw River,2211,0.0,0,0,0,0.0,0
