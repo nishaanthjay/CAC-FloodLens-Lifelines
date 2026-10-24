@@ -13,7 +13,7 @@ const tests = [
   ["76.7%", "of 73 gauge-storms: modeled peak flow within a factor of 2 of USGS gauges, median peak-time error 4 hours."],
   ["91.3%", "of 150 test blocks: baseline drive time to the nearest hospital within 30% of OSRM."],
   ["0.69 to 0.72", "AUC across nine 2023 to 2025 NC storm windows: crossings near recorded closures ranked higher. Precision is low (about 5%)."],
-  ["0.77", "AUC: the 11 Brunswick crossings on the Sheriff’s known-flood-point map rank above 1,435 other Brunswick crossings by people affected. The companion test, whether closing them separates the Sheriff’s service islands, failed (AUC 0.58)."],
+  ["0.77", "AUC: the 11 Brunswick crossings on the Sheriff’s known-flood-point map rank above 1,435 other Brunswick crossings by people affected (11 crossings, one county)."],
 ];
 
 const limits = [
@@ -23,6 +23,7 @@ const limits = [
   "Scenarios use river flow only: no storm surge, tide, street flooding, bridge deck height, scour or debris.",
   "Closure labels are positives only, and partly unreviewed.",
   "In the Florence replay the hazard layer saturates (241 of the 250 structure-seeded crossings exceed their 2-year flow at once, and about 1,228 of the 1,583 assessed crossings exceed their 10-year flow at the peak), so scenario levels barely separate. The model also did not reproduce Wilmington’s documented isolation.",
+  "In Brunswick County the model slows people near the Sheriff’s known flood points but does not reproduce the Sheriff’s six service islands, and closing those crossings cuts no Census block off from an ER or fire station (AUC 0.58, 95% CI 0.44 to 0.72, no better than random closures).",
   "Address results are estimates from the nearest Census block, not the exact address.",
   "1,333 of the 1,583 assessed crossings are OpenStreetMap road-stream intersections that may not be bridges; the route page lets you leave them out. Dialysis, nursing-home, urgent-care, police and pharmacy lists come from federal / HHS files (dated per entry) and OpenStreetMap, EMS stations from OpenStreetMap only: all incomplete, none confirmed open. There is no shelter list.",
   "The live forecast is the NOAA National Water Model short-range run, unvalidated and river flow only. Observed gauge readings (nowcast) are shown beside it, not merged into route status.",
@@ -63,10 +64,10 @@ export default function About() {
 
         <h2 className="mt-14 font-display text-3xl font-bold">Case study: Florence, Brunswick County</h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
-          The Brunswick County Sheriff&rsquo;s Office marked 20 known flood points on its 2018 evacuation map and, after Florence, drew six &ldquo;service islands&rdquo;. We matched 12 of the 20 points to 11 road crossings and closed them in our road model, with no flow or forecast input. This tests the road-network model, not the flood forecast.
+          The Brunswick County Sheriff&rsquo;s Office marked 20 known flood points on its 2018 evacuation map. We matched 12 of the 20 to 11 road crossings and checked them against our road model, with no flow or forecast input. This tests the road-network model, not the flood forecast.
         </p>
         <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
-          Take point 10, the NC 211 (Southport-Supply Rd) bridge over Lockwoods Folly River near Supply. Close it and 4,681 people in 128 Census blocks, all in the Sheriff&rsquo;s Town Creek island, can no longer reach the nearest emergency room the way they do now, Novant Health Brunswick Medical Center. With all 11 matched crossings closed, those people go from an average of 12.6 minutes to the nearest ER to 24.3 minutes (+11.7); 3,242 of them are 10 minutes or more slower and 370 are 15 minutes or more slower. The worst block goes from 7.7 to 24.8 minutes, when the nearest ER becomes J. Arthur Dosher Memorial Hospital in Southport. Nobody loses every route.
+          Take point 10, the NC 211 (Southport-Supply Rd) bridge over Lockwoods Folly River near Supply. Close it and 4,681 people in 128 Census blocks, all in the Sheriff&rsquo;s Town Creek island, can no longer reach the nearest emergency room the way they do now, Novant Health Brunswick Medical Center. With all 11 matched crossings closed, those people go from an average of 12.6 minutes to the nearest ER to 24.3 minutes (+11.7); 3,242 of them are 10 minutes or more slower and 370 are 15 minutes or more slower. The worst block goes from 7.7 to 24.8 minutes, when the nearest ER becomes J. Arthur Dosher Memorial Hospital in Southport. Nobody loses every route; the model shows long detours, not cut-off areas.
         </p>
         <figure className="mt-6">
           <Image src="/case-study-brunswick.png" alt="Map of the Supply and Southport area in Brunswick County. The NC 211 bridge over Lockwoods Folly River is marked closed; dots for 128 Census blocks south and east of it are colored by added minutes to the nearest emergency room, mostly 8 to 17 minutes more, with Novant Health Brunswick Medical Center to the west and J. Arthur Dosher Memorial Hospital in Southport to the east." width={953} height={438} className="h-auto w-full rounded-2xl border border-ink/10" />
@@ -75,7 +76,7 @@ export default function About() {
           </figcaption>
         </figure>
         <p className="mt-6 font-body text-lg leading-relaxed text-ink/80">
-          Overall the model is right about which crossings matter and wrong about isolation. The 11 crossings rank above the other 1,435 assessed Brunswick crossings by people affected (AUC 0.77, 95% CI 0.61 to 0.90). But closing all 11 cuts no Census block off from an ER or fire station, and the slowing it causes is no more tied to the Sheriff&rsquo;s islands than 20 randomly chosen closures would be (AUC 0.58, CI 0.44 to 0.72; that test failed).
+          The model picks out the crossings that matter. The 11 matched crossings rank above the other 1,435 assessed Brunswick crossings by people affected (AUC 0.77, 95% CI 0.61 to 0.90): the places the Sheriff&rsquo;s Office flagged are the places where losing a crossing slows the most people.
         </p>
         <p className="mt-4 font-ui text-sm leading-relaxed text-muted">
           The flood-point map is dated 11 September 2018, before landfall, so the points are known flood spots, not confirmed closures; the islands map is dated 9 October 2018. One county, 11 crossings, river crossings only (no surge, tide or street flooding). Full report:{" "}
