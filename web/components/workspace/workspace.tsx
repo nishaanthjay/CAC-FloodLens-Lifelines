@@ -7,6 +7,8 @@ import { LeftPanel } from "@/components/workspace/left-panel";
 import { MenuSheet, Rail } from "@/components/workspace/rail";
 import { RightPanel } from "@/components/workspace/right-panel";
 import { Sheet } from "@/components/workspace/sheet";
+import { RouteAnalysis } from "@/components/route/route-analysis";
+import { RoutingProvider, useRouting } from "@/components/workspace/routing";
 import { WorkspaceData, useData } from "@/components/workspace/data";
 import { WorkspaceState, useWS } from "@/components/workspace/store";
 import { TimePill } from "@/components/workspace/time-pill";
@@ -22,12 +24,31 @@ function useDesktop() {
   return d;
 }
 
+/** Printed address check: only the route analysis, in plain type. The map and panels are hidden in print. */
+function PrintSheet() {
+  const r = useRouting(), d = useData(), { mode } = useWS();
+  if (!r.origin || !r.ranked.length || !d.X) return null;
+  const live = mode !== "replay";
+  return (
+    <div className="hidden bg-white px-6 py-4 font-ui text-black print:block">
+      <h1 className="font-display text-3xl font-bold">FloodLens Lifelines: address check</h1>
+      <p className="mt-2 text-xs font-semibold text-alert">{live ? "Now and forecast preview (unvalidated NWM river flow)." : "Florence 2018 replay scenario. Not a forecast."} Not for emergency use. Call 911 in an emergency. lifelines-nc.vercel.app</p>
+      <p className="mt-3 text-sm"><b>Starting at</b> {r.origin.label}</p>
+      <div className="mt-4">
+        <RouteAnalysis groups={r.groups} focusId={r.focus} onFocus={r.setFocusId} hour={r.hh} hours={d.X.hours} timeText={d.timeText} live={live}
+          names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} nAssessed={d.X.assessed.length} replayStart={d.start} />
+      </div>
+    </div>
+  );
+}
+
 function Shell() {
   const { sheetPx, hour, mode } = useWS();
   const d = useData();
   const desktop = useDesktop();
   return (
-    <div id="content" className="fixed inset-0 overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
+    <>
+    <div id="content" className="fixed inset-0 print:hidden overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
       <MapView />
       <Rail />
       <TopBar />
@@ -37,6 +58,8 @@ function Shell() {
       <MapControls />
       <MenuSheet />
     </div>
+    <PrintSheet />
+    </>
   );
 }
 
@@ -45,7 +68,7 @@ export function Workspace() {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation}>
-        <WorkspaceState><WorkspaceData><Shell /></WorkspaceData></WorkspaceState>
+        <WorkspaceState><WorkspaceData><RoutingProvider><Shell /></RoutingProvider></WorkspaceData></WorkspaceState>
       </LazyMotion>
     </MotionConfig>
   );

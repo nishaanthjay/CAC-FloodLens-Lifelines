@@ -4,17 +4,15 @@ import { BOUNDS, STYLE, loadMaplibre, type ML } from "@/lib/maplibre";
 import { tidyName } from "@/lib/format";
 import { restyle } from "@/lib/workspace/basemap";
 import { addLayers, applyEncoding, crossingFeatures, fadeSwap, levelTier, serviceFeatures, unassessedFeatures } from "@/lib/workspace/map-layers";
+import { mapPadding, reducedMotion as reduced } from "@/lib/workspace/camera";
+import { addRouteLayers } from "@/lib/workspace/route-layers";
 import { addIcons } from "@/lib/workspace/sdf";
 import { TIERS } from "@/lib/workspace/tiers";
 import { createTooltip } from "@/lib/workspace/tooltip";
 import { useData } from "@/components/workspace/data";
+import { useRouteMap } from "@/components/workspace/use-route-map";
 import { useWS } from "@/components/workspace/store";
 
-/** Camera padding that keeps the visible centre between the open panels. Desktop: left 400 (+ rail), right 380, top 90, bottom 110. */
-export const mapPadding = (desktop: boolean, rightOpen: boolean, sheetPx: number) =>
-  desktop ? { left: 460, right: rightOpen ? 392 : 80, top: 90, bottom: 110 } : { left: 24, right: 24, top: 110, bottom: sheetPx + 70 };
-
-const reduced = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const easeOut = (t: number) => 1 - (1 - t) ** 3;
 
 /** Full-viewport map. Hover and selection run through feature-state: nothing here re-renders React per mouse move. */
@@ -58,6 +56,7 @@ export function MapView() {
         try { restyle(m); } catch { /* the stock style still works */ }
         addIcons(m);
         addLayers(m);
+        addRouteLayers(m);
         const tip = createTooltip(box.current!);
         cleanups.push(() => tip.destroy());
 
@@ -155,6 +154,8 @@ export function MapView() {
     selFeature.current = d.selectedId ? ids.current.get(d.selectedId) ?? null : null;
     if (selFeature.current !== null) m.setFeatureState({ source: "xs", id: selFeature.current }, { sel: true });
   }, [ready, d.selectedId, shown]);
+
+  useRouteMap(map, ready);
 
   return (
     <div className="absolute inset-0">

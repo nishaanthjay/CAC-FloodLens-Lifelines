@@ -2,10 +2,12 @@
 import { AnimatePresence, m } from "framer-motion";
 import { AlertTriangle, Anchor, Gauge, Info, Waves, type LucideIcon } from "lucide-react";
 import { Section, Skeleton, TierTag } from "@/components/workspace/ui";
+import { AccessSection } from "@/components/workspace/access-section";
 import { CrossingCard } from "@/components/workspace/crossing-card";
 import { MODE_BADGE } from "@/components/workspace/top-bar";
 import { useData, type Prov } from "@/components/workspace/data";
 import { useDerived, usePick } from "@/components/workspace/derived";
+import { useRouting } from "@/components/workspace/routing";
 import { useWS, type Mode, type Tab } from "@/components/workspace/store";
 import { tierOfCrossing } from "@/lib/workspace/stats";
 
@@ -94,7 +96,9 @@ export function LeftContent() {
   const d = useData();
   const v = useDerived();
   const pick = usePick();
+  const routing = useRouting();
   const X = d.X;
+  const routed = tab === "access" && routing.ranked.length > 0; // a worked route fills the panel; the city-wide lists wait below it
 
   const flagged = v.tiers ? v.tiers.count[3] + v.tiers.count[4] : 0;
   const tidalFlagged = X ? X.assessed.filter((x) => x.tidal && v.keep(x) && tierOfCrossing(x, v.h) >= 3).length : 0;
@@ -122,15 +126,16 @@ export function LeftContent() {
           : loading || !d.prov ? <LeftSkeleton /> : (
           <>
             <Provenance mode={mode} prov={d.prov} />
+            {tab === "access" && <AccessSection />}
             <div className="mt-3"><CrossingCard /></div>
-            {v.insight ? <p className="font-body text-[13.5px] leading-relaxed text-ink/90">{v.insight}</p> : <Skeleton className="h-16" />}
-            <Section label="Top hazards" className="mt-3"><Tiles tiles={tiles} /></Section>
+            {!routed && (v.insight ? <p className="font-body text-[13.5px] leading-relaxed text-ink/90">{v.insight}</p> : <Skeleton className="h-16" />)}
+            {!routed && <><Section label="Top hazards" className="mt-3"><Tiles tiles={tiles} /></Section>
             <Section label={byFlow ? "Top 10 crossings by flow" : "Top 10 crossings by consequence"} className="mt-3">
               {rows.length ? <CrossingTable rows={rows} onPick={pick} selected={d.selectedId} valueLabel={byFlow ? "vs 10-yr" : "People"}
                 caption={byFlow ? "Crossings with the highest flow compared with their 10-year flow at this hour." : "Crossings ranked by the people behind them, flagged crossings first."} />
                 : <p className="rounded-xl border border-ink/8 bg-white/70 p-3 font-ui text-xs text-ink/75">{mode === "replay" ? "No crossing to list for this layer." : "No crossing has a model value for this step, so none can be ranked. They are not assumed open."}</p>}
               <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{byFlow ? "" : "Flagged = above the 10-year flow, which closes the crossing in this scenario. People are the people who lose a route or are slowed by more than a minute if this crossing alone closes."}</p>
-            </Section>
+            </Section></>}
             <Section label="About this view" className="mt-3">
               <label className="flex items-start gap-2.5 font-ui text-xs leading-snug text-ink/85">
                 <input type="checkbox" checked={d.useOsm} onChange={(e) => d.setUseOsm(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#2D5DA1]" />

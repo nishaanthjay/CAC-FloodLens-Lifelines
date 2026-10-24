@@ -1,6 +1,7 @@
 // Self-check for lib/workspace/stats.ts against the real sample data. Run: npm run check:workspace
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { detourRuns, length, midpoint } from "../lib/workspace/geo.ts";
 import { ACCESS_IDS, accessSeries, blockState, replaySummary, tierBreakdown, tierOfLevel, topCrossings } from "../lib/workspace/stats.ts";
 
 const load = (f) => JSON.parse(readFileSync(new URL(`../public/data/sample/${f}`, import.meta.url), "utf8"));
@@ -45,4 +46,14 @@ for (const h of [0, 9, 17]) {
 }
 const noVal = { ...X, assessed: X.assessed.map((x) => ({ ...x, level: "-".repeat(X.hours) })) };
 assert.equal(tierBreakdown(noVal, 0).unknown, X.assessed.length, "no model value is counted as unknown, not as not flagged");
+// Detour runs: the stretch of a scenario route that leaves the normal route, and nothing else.
+const base = [[-78.0, 34.2], [-77.99, 34.2], [-77.98, 34.2], [-77.97, 34.2], [-77.96, 34.2]];
+const scen = [[-78.0, 34.2], [-77.99, 34.2], [-77.985, 34.21], [-77.975, 34.21], [-77.97, 34.2], [-77.96, 34.2]];
+const runs = detourRuns(base, scen, 30);
+assert.equal(runs.length, 1, "one detour");
+assert.deepEqual(runs[0], [[-77.99, 34.2], [-77.985, 34.21], [-77.975, 34.21], [-77.97, 34.2]], "the detour plus one joining vertex each side");
+assert.deepEqual(detourRuns(base, base, 30), [], "an identical route has no detour");
+assert.deepEqual(detourRuns(base, [[-78.0, 34.2], [-77.99, 34.20005]], 30), [], "a 5 m offset is the same road");
+const mid = midpoint(runs[0]);
+assert.ok(mid[0] > -77.985 && mid[0] < -77.975 && length(runs[0]) > 2000, "midpoint lies on the long middle leg");
 console.log(`workspace-check: all assertions passed (${L.blocks.length} blocks, ${pop.toLocaleString("en-US")} people, ${X.assessed.length} crossings)`);
