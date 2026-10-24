@@ -1,0 +1,33 @@
+# Phase 2 / I: Brunswick Sheriff's Office known flood points and service islands vs the crossing -> route-impact mechanism
+
+Run 2026-10-24, once. Protocol: `docs/validation_protocol_bcso_islands.md` (sha256 at run time `d84bd5972c6f0e3afd4e0c3e9886bba7650b9f3ba139b6b8d09a3643b5b75d53`, includes Amendments 1 and 2, both written before any point was matched or any value compared). Code: `src/validation/43a_bcso_points.py` (points), `43c_georef.py` (islands), `43_bcso_islands.py` (tests), `43e_single_closures.py` (post-hoc description); outputs in `data/phase2/bcso_islands/`. **No NWM, recurrence-flow or hazard input is used anywhere**: the closures are the Sheriff's Office's own points. This tests the road-network mechanism, not the hazard layer, not a forecast, not a closure probability.
+
+## Verdicts
+| Test | Result | Verdict |
+|---|---|---|
+| **I2** ranking: `people_affected` of the matched BCSO flood-point crossings vs other assessed Brunswick crossings (11 vs 1,435) | AUC **0.767**, 95% CI **[0.606, 0.900]** (2000 bootstrap resamples of graph-segment clusters); median 253 vs 0 people | **PASS** (CI lower bound > 0.5) |
+| **I1** separation: close all matched points at once; cross-island vs same-island block pairs by added minutes to the nearest ED hospital / fire station (199,687 pop-weighted pairs, 6 islands) | AUC **0.577**, 95% CI **[0.444, 0.722]** (2000 bootstrap resamples of islands) | **FAIL** (CI includes 0.5) |
+| Random-closure baseline for I1 (200 draws of 20 random assessed Brunswick crossings, same pairs and islands) | random AUC median 0.508 (5th to 95th percentile 0.481 to 0.619); the real 0.577 sits at the **86.5th percentile**, one-sided p = 0.139 | reported, no pass/fail; **not distinguishable from random closure sets** |
+
+Secondary (no pass/fail): with the 10 M1-matched points only (point 9 is a name-match), I2 AUC 0.762 [0.588, 0.913], I1 AUC 0.575 [0.444, 0.714]. I1 by target: ED hospital only 0.577, fire station only 0.505. Nothing was re-run with different settings.
+
+## What the numbers say
+- **I2.** The crossings the Sheriff's Office listed as known flood points are, on average, the ones whose loss slows the most people in the model: 9 of 11 have a non-zero `people_affected` (10,253; 6,150; 4,681; 767; 641; 253; 201; 79; 50), 2 have 0 (Pireway Rd over the Waccamaw River, River Rd at Funston/Sand Hill Creek). 1,435 other assessed crossings have a median of 0. The CI is wide because there are only 11 positives.
+- **I1.** The simultaneous closure of the 11 matched crossings (11 graph segments) **cuts no block off**: 0 people lose their route to an ED hospital or to a fire station, 0 block pairs have a reachability break, and the whole road graph stays one connected component (`components.csv`). The mechanism only **slows** people: 28,415 people by more than 1 minute to the nearest ED hospital (median added time 0, 90th percentile 3.0 min, maximum 17.1 min) and 4,185 people by more than 1 minute to the nearest fire station. By island: Calabash 20,681 of 30,347 people slowed (mean +1.9 min), Town Creek 5,885 of 26,624 (mean +2.2 min, maximum +17.1), Shallotte 896 of 20,598, Leland 20 of 42,215, Smithville 0, Royal Oak 0. The Sheriff's Office drew islands as areas that would be **cut off**; the model, which has many alternate roads and only the listed crossings removed, does not reproduce isolation, and the slowing it does produce is not organised by the islands better than a random set of 20 closures (86th percentile).
+
+## Coverage (the main limitation)
+- **Points:** 20 legend points; **12 located and matched** (11 by OSM road-and-waterway intersection, 1 by name), giving 11 unique crossings (points 7 and 8 are the same Shallotte River crossing); all 11 have a closable graph segment and are assessed. **8 unmatched, reported, not dropped:** points 2 (State Line), 3 (Hickman Rd) and 20 (Magnolia Greens Entrance) do not name a waterway; 13 (Patricia Lake), 14 (Pretty Pond) and 19 (Lanvale Trace Retention Pond) are ponds with no OSM intersection; 4 (Little CawCaw Creek) and 5 (Cool Run Creek) found no usable crossing (5 had 9 name-match candidates, 14 and 19 had 13 and 4, none picked because the protocol allows only a unique name match). Match method and distance per point: `config/bcso_flood_points.csv` (distances 0 to 12.8 m).
+- **Islands:** map georeferenced with 6 road-intersection control points, RMSE 31 m (limit 100 m), one held-out intersection 28 m off (`georef.json`); no `gdalwarp` was available, so the fitted affine is the raster's geotransform and polygons are traced from the 150 dpi pixels (about 11 m per pixel). 3,031 Brunswick Census blocks; 2,948 are in the six islands and baseline-reachable (57 are outside every island, 26 are not reachable to both targets); blocks per island 512 to 804 except Royal Oak sub-island (30).
+- **I2 sample:** 11 positives; the CI could not be narrow.
+
+## What this licenses
+- The **ranking** half of the mechanism agrees with the Sheriff's Office: the crossings their pre-storm map lists as flood points are crossings whose loss the model says would slow many more people than a typical Brunswick crossing. This is a structural result: no flow was used.
+- The mechanism is **not shown to reproduce the service islands**. It does not isolate anyone, and the partial slowing it produces does not separate the islands better than chance (I1 fails; random sets of 20 closures do about as well). The documented isolation of Wilmington (test E3) and of these islands is not reproduced by the road graph with river crossings alone.
+- Do not claim closure probability, forecast skill or isolation accuracy.
+
+## Caveats
+- The islands map is dated 9 October 2018, **after** Florence, and is titled "Flood Event Service Islands"; the source does not say whether it records what happened or plans for it, so it is treated as the Sheriff's Office's own drawing of areas that would be served separately, not as measured isolation. The flood-point map is dated 11 September 2018, **before** landfall: the points are known flood spots, not confirmed closures.
+- Single county; one run; matched points are 12 of 20.
+- Bridge-level routing: a whole OSM segment is removed; OSM default speeds, no traffic; 2020 Census block centroids; only ED hospitals and fire stations in the graph's facility lists; coastal and tidal roads are outside this test.
+- I1 closes only 11 segments; the Sheriff's Office islands also reflect surge, tidal and drainage flooding that this model does not represent, and roads flooded without a bridge.
+- Case-study numbers (single-closure description, `single_closures.csv`, `single_block_deltas.csv`) are post hoc and not part of the verdicts.
