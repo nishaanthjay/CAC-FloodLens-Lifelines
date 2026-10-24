@@ -34,7 +34,7 @@ def parse_usgs(j):   # -> {site_no: {param_code: (value, time_str, approval)}}; 
 
 
 def iso(t): return dt.datetime.fromisoformat(t.replace("Z", "+00:00")).astimezone(dt.timezone.utc)
-
+    
 
 def stamp(t, now):   # -> (UTC string, stale flag)
     d = iso(t); return d.strftime("%Y-%m-%dT%H:%MZ"), (now - d) > STALE
@@ -45,7 +45,7 @@ def build_gauge(g, usgs, nws, now):
     u = (usgs or {}); q, h = u.get("00060"), u.get("00065")
     rec["usgs"] = dict(discharge_cfs=q[0] if q else None, discharge_time=stamp(q[1], now)[0] if q else None, discharge_stale=stamp(q[1], now)[1] if q else True,
                        gage_height_ft_usgs_datum=h[0] if h else None, gage_height_time=stamp(h[1], now)[0] if h else None, gage_height_stale=stamp(h[1], now)[1] if h else True,
-                       approval=(q or h or (None, None, None))[2])
+                       approval=(q or h or (None, None, None))[2])  
     o = ((nws or {}).get("status") or {}).get("observed") or {}; th = ((nws or {}).get("flood") or {}).get("categories") or {}
     ok = o.get("primary") is not None and o.get("validTime") and o["primary"] > -900   # NWPS uses -999 for missing
     t, st = stamp(o["validTime"], now) if ok else (None, True)
@@ -53,7 +53,6 @@ def build_gauge(g, usgs, nws, now):
                       thresholds_ft={k: v["stage"] for k, v in th.items() if v.get("stage") is not None and v["stage"] > -900})
     rec["stale"] = rec["nws"]["stage_stale"] and rec["usgs"]["discharge_stale"] and rec["usgs"]["gage_height_stale"]
     return rec
-
 
 def river(now):
     R = pd.read_csv("config/reaches.csv"); R = R[R.in_pilot & R.usgs_ids.notna() & R.nws_lid.notna()]; gauges, errors = [], []; pub = set(pd.read_csv("config/nowcast_gauges.csv").query("public").nws_lid)
