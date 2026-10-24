@@ -1,0 +1,87 @@
+protocol sha256 d84bd5972c6f0e3afd4e0c3e9886bba7650b9f3ba139b6b8d09a3643b5b75d53
+I2 {'n_pos': 11, 'n_ctl': 1435, 'auc': 0.7668356034209692, 'ci95': [0.6057234535374989, 0.9000802966596588], 'pass_': True}
+C:\Users\nisha\OneDrive\Desktop\Projects\lifeline\src\validation\43_bcso_islands.py:46: RuntimeWarning: invalid value encountered in subtract
+  d, _, _ = E.solve(net, closed, fnodes, 0); t = d[org_nodes]; return np.where(np.isfinite(t), (t - base) / 60.0, np.inf)
+I1 {'auc': 0.5774006194159512, 'ci95': [0.444086231495464, 0.7221837580268111], 'pass_': False, 'n_pairs': 199687} 36 s
+C:\Users\nisha\OneDrive\Desktop\Projects\lifeline\src\validation\43_bcso_islands.py:46: RuntimeWarning: invalid value encountered in subtract
+  d, _, _ = E.solve(net, closed, fnodes, 0); t = d[org_nodes]; return np.where(np.isfinite(t), (t - base) / 60.0, np.inf)
+C:\Users\nisha\OneDrive\Desktop\Projects\lifeline\src\validation\43_bcso_islands.py:46: RuntimeWarning: invalid value encountered in subtract
+  d, _, _ = E.solve(net, closed, fnodes, 0); t = d[org_nodes]; return np.where(np.isfinite(t), (t - base) / 60.0, np.inf)
+baseline 40 53 s
+baseline 80 59 s
+baseline 120 65 s
+baseline 160 70 s
+baseline 200 77 s
+{
+ "I2": {
+  "label": "primary: all matched points",
+  "n_pos": 11,
+  "n_ctl": 1435,
+  "auc": 0.7668356034209692,
+  "ci95": [
+   0.6057234535374989,
+   0.9000802966596588
+  ],
+  "n_valid_resamples": 2000,
+  "pass_": true,
+  "pos_people_affected": [
+   10253,
+   6150,
+   4681,
+   767,
+   641,
+   253,
+   201,
+   79,
+   50,
+   0,
+   0
+  ],
+  "median_ctl": 0.0,
+  "median_pos": 253.0
+ },
+ "I1": {
+  "auc": 0.5774006194159512,
+  "ci95": [
+   0.444086231495464,
+   0.7221837580268111
+  ],
+  "n_valid_resamples": 2000,
+  "pass_": false,
+  "n_pairs": 199687,
+  "n_cross": 154777,
+  "n_same": 44910,
+  "frac_pairs_with_break": 0.0,
+  "auc_ed_only": 0.5772457905323156,
+  "auc_fire_only": 0.5049704548534237,
+  "people": {
+   "lost_ed": 0,
+   "lost_fire": 0,
+   "blocks_lost_ed": 0,
+   "blocks_lost_fire": 0,
+   "delta_ed_min": {
+    "median": 0.0,
+    "p90": 3.0150647219231397,
+    "max": 17.12220395116733
+   },
+   "delta_fire_min": {
+    "median": 0.0,
+    "p90": 0.0,
+    "max": 10.013739579844287
+   },
+   "slowed_gt1min_ed_pop": 28415,
+   "slowed_gt1min_fire_pop": 4185
+  }
+ },
+ "baseline": {
+  "draws": 200,
+  "size": 20,
+  "median": 0.5075451031712317,
+  "p5": 0.4807919027410403,
+  "p95": 0.619480943087804,
+  "real_auc": 0.5774006194159512,
+  "percentile_of_real": 0.865,
+  "p_one_sided": 0.13930348258706468,
+  "n_nan": 0
+ }
+}
