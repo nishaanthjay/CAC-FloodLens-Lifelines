@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ageH, hoursText, useLive } from "@/lib/live";
+import { et } from "@/lib/format";
 
 const LAYERS = [
   ["nowcast.json", "Nowcast: river gauges", 3],
@@ -17,12 +18,12 @@ function Row({ file, label, limit, now }: { file: string; label: string; limit: 
   return (
     <tr className="border-t border-ink/10">
       <th scope="row" className="py-3 pr-4 text-left font-ui text-sm font-semibold">{label}</th>
-      <td className="py-3 pr-4 font-mono text-xs">{error ?? data?.generated_at ?? "loading"}</td>
+      <td className="py-3 pr-4 font-mono text-xs">{error ?? (data ? et(data.generated_at) : "loading")}</td>
       <td className="py-3 pr-4 font-ui text-sm">{error ? "unavailable" : data ? hoursText(age) : ""}</td>
       <td className="py-3">
         {(data || error) && (
-          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold ${stale ? "border-alert bg-softred text-alert" : "border-ink/20 bg-soft-blue text-ink"}`}>
-            {stale ? `Stale (over ${limit} h)` : "Fresh"}
+          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold border-ink/20 bg-soft-blue text-ink`}>
+            {stale ? `Older than ${limit} h` : "Fresh"}
           </span>
         )}
       </td>
@@ -51,12 +52,12 @@ function ArchiveRow({ now }: { now: number }) {
   return (
     <tr className="border-t border-ink/10">
       <th scope="row" className="py-3 pr-4 text-left font-ui text-sm font-semibold">NWM forecast archive</th>
-      <td className="py-3 pr-4 font-mono text-xs">{err ?? (m ? m.fetched.slice(0, 16) + "Z" : "loading")}</td>
+      <td className="py-3 pr-4 font-mono text-xs">{err ?? (m ? et(m.fetched.slice(0, 16) + "Z") : "loading")}</td>
       <td className="py-3 pr-4 font-ui text-sm">{err ? "unavailable" : m ? `${hoursText(age)} · ${m.n} cycles` : ""}</td>
       <td className="py-3">
         {(m || err) && (
-          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold ${stale ? "border-alert bg-softred text-alert" : "border-ink/20 bg-soft-blue text-ink"}`}>
-            {stale ? "Stale (over 3 h)" : "Fresh"}
+          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold border-ink/20 bg-soft-blue text-ink`}>
+            {stale ? "Older than 3 h" : "Fresh"}
           </span>
         )}
       </td>
@@ -71,7 +72,7 @@ export function StatusTable() {
     <div className="mt-8 overflow-x-auto">
       <table className="w-full min-w-[34rem]">
         <caption className="sr-only">Freshness of each live data layer</caption>
-        <thead><tr className="text-left font-ui text-xs uppercase tracking-[0.12em] text-muted"><th className="pb-2">Layer</th><th className="pb-2">Generated (UTC)</th><th className="pb-2">Age</th><th className="pb-2">Status</th></tr></thead>
+        <thead><tr className="text-left font-ui text-xs uppercase tracking-[0.12em] text-muted"><th className="pb-2">Layer</th><th className="pb-2">Updated (ET)</th><th className="pb-2">Age</th><th className="pb-2">Status</th></tr></thead>
         <tbody>{now > 0 && <>{LAYERS.map(([f, l, h]) => <Row key={f} file={f} label={l} limit={h} now={now} />)}<ArchiveRow now={now} /></>}</tbody>
       </table>
       <p className="mt-6 font-ui text-xs text-muted">The Florence replay is fixed past-storm data and does not refresh. The forecast archive is kept in a <a className="text-blue underline underline-offset-4" href="https://github.com/nishaanthjay/lifelines-nvm-archive">separate repository</a> and is used for research, not shown on the map.</p>

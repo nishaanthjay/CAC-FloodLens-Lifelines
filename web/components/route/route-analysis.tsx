@@ -2,36 +2,36 @@
 import { AlertTriangle, CircleSlash, Clock, Route as RouteIcon } from "lucide-react";
 import { CLOSED, blockedHours, routeAtHour, routeFlags, type HourStatus, type RouteOption } from "@/lib/route";
 import { utc, type LocationView } from "@/lib/sample";
-import { Tag } from "@/components/ui/tags";
+import { mi, tidyName } from "@/lib/format";
 
 type Ranked = { o: RouteOption; s: HourStatus }[];
 export type Group = { kind: string; title: string; ranked: Ranked };
 type Copy = { label: string; cls: string; note: string };
 const CLS = ["border-blue/30 bg-soft-blue text-blue", "border-alert/40 bg-softred text-alert", "border-[#7A0000] bg-[#7A0000] text-white"];
 const REPLAY: Copy[] = [
-  { label: "Open in replay", cls: CLS[0], note: "Open in this replay hour is not an all-clear: the replay sees river flow only, and streams the model did not assess are not counted." },
+  { label: "Open", cls: CLS[0], note: "Open in this replay hour is not an all-clear: the replay sees river flow only, and streams the model did not assess are not counted." },
   { label: "At risk", cls: CLS[1], note: "Crosses at least one stream above its 2-year flow in this replay hour." },
-  { label: "Blocked in replay", cls: CLS[2], note: "Crosses at least one crossing whose stream is above its 10-year flow, which closes it in this scenario." },
+  { label: "Blocked", cls: CLS[2], note: "Crosses at least one crossing whose stream is above its 10-year flow, which closes it in this scenario." },
 ];
 const LIVE: Copy[] = [
   { label: "No crossing flagged", cls: CLS[0], note: "No crossing on this route is above its 10-year flow in this step. Not an all-clear: the forecast is unvalidated, sees river flow only, and crossings it could not assess are not counted." },
   { label: "At risk", cls: CLS[1], note: "A crossing on this route is above its 2-year flow in this step (unvalidated model flow, not a probability of closure)." },
   { label: "Crossing flagged", cls: CLS[2], note: "At least one crossing on this route is above its 10-year flow, which closes it in this scenario. A scenario level, not a probability of closure." },
 ];
-const mins = (s: number) => (s < 5400 ? `${Math.round(s / 60)} min` : `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} min`);
+const mins = (s: number) => (s < 30 ? "<1 min" : s < 5400 ? `${Math.round(s / 60)} min` : `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} min`);
 const KIND = { fastest: "Fastest route", alternate: "Alternative route", detour: "Detour around closed crossings" };
 
 export function StatusBadge({ state, live }: { state: 0 | 1 | 2; live?: boolean }) {
   return <span className={`inline-flex whitespace-nowrap rounded-full border px-2.5 py-1 font-ui text-xs font-semibold ${(live ? LIVE : REPLAY)[state].cls}`}>{(live ? LIVE : REPLAY)[state].label}</span>;
 }
 
-export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText, live, names, fastest, block, noRoute, nAssessed }: {
+export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText, live, names, fastest, block, noRoute, nAssessed, replayStart }: {
   groups: Group[]; focusId: string | null; onFocus: (id: string) => void; hour: number; hours: number; timeText: (h: number) => string; live: boolean;
-  names: Record<string, string>; fastest: Record<string, number>; block: LocationView | null; noRoute: { name: string; reason: string }[]; nAssessed: number;
+  names: Record<string, string>; fastest: Record<string, number>; block: LocationView | null; noRoute: { name: string; reason: string }[]; nAssessed: number; replayStart?: string;
 }) {
   const live_ = groups.filter((g) => g.ranked.length);
   if (!live_.length) return null;
-  const COPY = live ? LIVE : REPLAY, tag = live ? "forecast" : "replay";
+  const COPY = live ? LIVE : REPLAY;
   const all = live_.flatMap((g) => g.ranked);
   const cur = all.find((r) => r.o.id === focusId) ?? all[0];
   const group = live_.find((g) => g.ranked.includes(cur))!;
@@ -48,7 +48,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
       <div className={`rounded-2xl border p-5 ${allBlocked ? "border-[#7A0000] bg-softred" : "border-ink/10 bg-white"}`}>
         <p className="label text-muted">{cur === best ? `${allBlocked ? (live ? "Every route has a flagged crossing" : "No open route found") : "Best route"} · ${group.title.toLowerCase()}` : "Route you selected"}</p>
         <h2 id="ra" className="mt-1 font-display text-2xl font-bold leading-tight tracking-[-0.02em]">{names[o.serviceId]}</h2>
-        <p className="mt-1 font-ui text-sm text-muted">{KIND[o.kind]} via {o.via}</p>
+        <p className="mt-1 font-ui text-sm text-muted">{KIND[o.kind]} via {tidyName(o.via)}</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <StatusBadge state={s.state} live={live} />
           <span className="font-mono text-xs text-muted">{timeText(hour)}</span>
@@ -59,8 +59,8 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
             {allBlocked
               ? `Every route found to the selected ${group.title.toLowerCase()} crosses a crossing that is ${live ? "flagged in the forecast" : "closed in this replay hour"}${noRoute.length ? ", and no detour around them was found" : ""}. Shown: the option with the fewest. Call 911 in an emergency.`
               : live
-                ? `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: no crossing flagged in this step, and ${mins(o.timeS)} in normal traffic. Not an all-clear.`
-                : `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: open in the replay this hour, and ${mins(o.timeS)} in normal traffic. Not an all-clear.`}
+                ? `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: no crossing flagged in this step, and ${mins(o.timeS)} in normal traffic.`
+                : `Ranked first of ${ranked.length} option${ranked.length > 1 ? "s" : ""}: open in the replay this hour, and ${mins(o.timeS)} in normal traffic.`}
           </p>
         )}
       </div>
@@ -79,13 +79,13 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
         {([
           ["Drive time (normal roads)", mins(o.timeS), null],
           ["Compared with fastest", extra > 30 ? `+${mins(extra)}` : "Fastest", null],
-          ["Distance", `${o.km.toFixed(1)} km`, null],
+          ["Distance", mi(o.km), null],
           ["Crossings assessed on it", `${assessed.length} of ${o.on.length}`, false],
           [live ? "Steps flagged in the forecast" : "Hours blocked in replay", `${bh.length} of ${hours}`, false],
           [live ? "First flagged" : "First blocked", bh.length ? timeText(bh[0]) : live ? "Not in this forecast" : "Not in this window", false],
         ] as [string, string, boolean | null][]).map(([k, v, syn], i) => (
           <div key={k} className={`min-w-0 py-3 ${i < 4 ? "border-b border-ink/10" : ""}`}>
-            <dt className="font-ui text-xs text-muted">{k}{syn !== null && !(live && !syn) && <Tag synthetic={syn} label={tag} />}</dt>
+            <dt className="font-ui text-xs text-muted">{k}</dt>
             <dd className="mt-0.5 break-words font-mono text-sm font-medium">{v}</dd>
           </div>
         ))}
@@ -105,8 +105,8 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
         </div>
         <p className="mt-2 font-ui text-xs text-muted">
           {live
-            ? <>Colour and height: status in that step <Tag synthetic={false} label="forecast" /> · first bar is now, then each forecast hour. Height is not a probability.</>
-            : <>Colour and height: replay status in that hour <Tag synthetic={false} />. Height is not a probability.</>}
+            ? <>Color and height: status in that step. The first bar is now, then each forecast hour. Height is not a probability.</>
+            : <>Color and height: replay status in that hour. Height is not a probability.</>}
         </p>
       </div>
 
@@ -120,17 +120,17 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
               const lv = parseInt(c.x!.level[hour] ?? "-", 10), r = c.x!.ratio_q10[hour];
               return (
                 <li key={c.id} className="grid grid-cols-[3.2rem_minmax(0,1fr)] gap-2 py-2.5">
-                  <span className="font-mono text-xs text-muted">{c.km.toFixed(1)} km</span>
+                  <span className="font-mono text-xs text-muted">{mi(c.km)}</span>
                   <div className="min-w-0">
                     <p className="flex flex-wrap items-center gap-x-2 font-ui text-sm font-medium">
-                      <span className="min-w-0 break-words">{c.x!.name}</span>
+                      <span className="min-w-0 break-words">{tidyName(c.x!.name)}</span>
                       {Number.isNaN(lv) ? <span className="rounded-full bg-yellow px-2 py-px font-ui text-[11px] font-semibold">no data</span>
                         : lv >= CLOSED ? <span className="rounded-full bg-alert px-2 py-px font-ui text-[11px] font-semibold text-white">{live ? "flagged" : "closed"}</span>
                         : lv > 0 ? <span className="rounded-full bg-softred px-2 py-px font-ui text-[11px] font-semibold text-alert">above 2-yr</span> : null}
                     </p>
                     <p className="mt-0.5 font-ui text-xs leading-relaxed text-muted">
-                      Flow {r == null ? "unknown" : `${r}× the 10-year flow`} <Tag synthetic={false} label={tag} />
-                      {live ? null : <> · first above 10-yr {c.x!.first_above_RL10_utc ? utc(c.x!.first_above_RL10_utc) : "not in replay"}</>}
+                      Flow {r == null ? "unknown" : `${r}× the 10-year flow`}
+                      {live ? null : <> · first above 10-yr flow {c.x!.first_above_RL10_utc ? `${utc(c.x!.first_above_RL10_utc)}${replayStart && Date.parse(c.x!.first_above_RL10_utc) < Date.parse(replayStart) ? " (before the replay window)" : ""}` : "not in replay"}</>}
                       {" "}· FEMA {c.x!.fema_zone}
                       {c.x!.tidal ? " · tidal: surge may matter more than river flow" : ""}
                       {c.x!.basis === "osm" ? " · mapped from OpenStreetMap (a road-stream intersection that may not be a bridge)" : ""}
@@ -163,7 +163,7 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
                       className={`grid min-h-12 w-full grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-2 py-2 text-left transition-colors hover:bg-paper ${r.id === o.id ? "bg-soft-blue/60" : ""}`}>
                       <span className="font-mono text-xs text-muted">{i + 1}</span>
                       <span className="min-w-0">
-                        <span className="block truncate font-ui text-sm font-medium">{names[r.serviceId]}</span>
+                        <span className="line-clamp-2 font-ui text-sm font-medium">{names[r.serviceId]}</span>
                         <span className="block truncate font-ui text-xs text-muted">
                           {KIND[r.kind]} · {mins(r.timeS)}{r.on.some((c) => !c.x) ? ` · ${r.on.filter((c) => !c.x).length} unassessed` : ""}
                           {fl.some((f) => f.code === "slow") ? " · long trip" : ""}{fl.some((f) => f.code === "detour") ? " · long detour" : ""}
@@ -194,10 +194,10 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
             <p className="mt-2 font-ui text-sm text-ink/80">Your Census block has no route in the model&rsquo;s network, so the replay did not assess it. That is a gap, not a low risk.</p>
           ) : (
             <p className="mt-2 font-ui text-sm leading-relaxed text-ink/80">
-              In the pipeline&rsquo;s routing of your nearest Census block ({block.distanceKm?.toFixed(1)} km away), the block has
+              In the model&rsquo;s routing of your nearest Census block ({mi(block.distanceKm ?? 0)} away), the block has
               {block.hours.some((h) => h.lost) ? ` no route to any emergency hospital in ${block.hours.filter((h) => h.lost).length} of ${hours} hours` : " a route to an emergency hospital in every hour"}
               {block.hours[hour].lost ? ", including this one" : block.hours[hour].detour ? `; this hour adds ${block.hours[hour].detour} min` : ""}.
-              <Tag synthetic={false} /> Its road network and speeds differ from the routes above, so the two can disagree.
+              Its road network and speeds differ from the routes above, so the two can disagree.
             </p>
           )}
         </div>

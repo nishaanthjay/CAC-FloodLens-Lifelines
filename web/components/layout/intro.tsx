@@ -48,6 +48,8 @@ const steps = [
 
 const EXPO_OUT = [0.16, 1, 0.3, 1] as const;
 const IN_OUT = [0.65, 0, 0.35, 1] as const;
+const T = 0.32; // playback speed: every delay and duration below was written for a 10 s intro
+const t = (n: number) => n * T;
 const ASPECT = 0.625; // viewBox height / width (1600 x 1000)
 
 type Camera = { x: MotionValue<number>; y: MotionValue<number>; w: MotionValue<number>; W: MotionValue<number>; H: MotionValue<number> };
@@ -67,7 +69,7 @@ function useProjected(cam: Camera, X: number, Y: number) {
   });
 }
 
-/** HTML marker pinned to a map point; children are centred on it. */
+/** HTML marker pinned to a map point; children are centered on it. */
 function Marker({ cam, at, children }: { cam: Camera; at: number[]; children: React.ReactNode }) {
   const transform = useProjected(cam, at[0], at[1]);
   return (
@@ -80,13 +82,13 @@ function Marker({ cam, at, children }: { cam: Camera; at: number[]; children: Re
 const pop = (delay: number) => ({
   initial: { opacity: 0, transform: "scale(0.2)" },
   animate: { opacity: 1, transform: "scale(1)" },
-  transition: { delay, duration: 0.6, ease: EXPO_OUT },
+  transition: { delay: t(delay), duration: t(0.6), ease: EXPO_OUT },
 });
 
 const fade = (delay: number, duration = 0.6) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { delay, duration, ease: "easeOut" as const },
+  transition: { delay: t(delay), duration: t(duration), ease: "easeOut" as const },
 });
 
 /** Expanding ring around a marker; `repeat` keeps it pulsing for a fixed number of beats. */
@@ -97,7 +99,7 @@ const Ring = ({ delay, color = "border-white", size = 44, repeat = 0 }: { delay:
     style={{ width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
     initial={{ opacity: 0.9, transform: "scale(0.6)" }}
     animate={{ opacity: 0, transform: "scale(2.2)" }}
-    transition={{ delay, duration: 1.4, ease: EXPO_OUT, repeat }}
+    transition={{ delay: t(delay), duration: t(1.4), ease: EXPO_OUT, repeat }}
   />
 );
 
@@ -105,7 +107,7 @@ function MapLayer({ cam }: { cam: Camera }) {
   // One transform so x, y, w and h always come from the same frame (a derived h lagged a frame and shook the map).
   const viewBox = useTransform([cam.x, cam.y, cam.w], ([x, y, w]: number[]) => `${x} ${y} ${w} ${w * ASPECT}`);
   const [wx, wy] = wilmington;
-  const scan = (delay: number) => ({ initial: { r: 0 }, animate: { r: 1500 }, transition: { delay, duration: 2.4, ease: [0.33, 0, 0.2, 1] as const } });
+  const scan = (delay: number) => ({ initial: { r: 0 }, animate: { r: 1500 }, transition: { delay: t(delay), duration: t(2.4), ease: [0.33, 0, 0.2, 1] as const } });
 
   return (
     <m.svg className="absolute inset-0 h-full w-full" viewBox={viewBox} preserveAspectRatio="xMidYMid slice">
@@ -139,7 +141,7 @@ function MapLayer({ cam }: { cam: Camera }) {
         strokeLinejoin="round"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ delay: 0.2, duration: 2.2, ease: IN_OUT }}
+        transition={{ delay: t(0.2), duration: t(2.2), ease: IN_OUT }}
       />
       <m.path d={islands} fill="none" stroke="#8FB3E6" strokeOpacity=".7" strokeWidth="1" vectorEffect="non-scaling-stroke" {...fade(1.4)} />
 
@@ -163,7 +165,7 @@ function MapLayer({ cam }: { cam: Camera }) {
           vectorEffect="non-scaling-stroke"
           initial={{ r: 0, opacity: 0.9 }}
           animate={{ r: 1300, opacity: 0 }}
-          transition={{ delay, duration: 2.4, ease: [0.33, 0, 0.2, 1] }}
+          transition={{ delay: t(delay), duration: t(2.4), ease: [0.33, 0, 0.2, 1] }}
         />
       ))}
 
@@ -175,7 +177,7 @@ function MapLayer({ cam }: { cam: Camera }) {
           vectorEffect="non-scaling-stroke"
           initial={{ opacity: 0, strokeWidth: 4 }}
           animate={{ opacity: 0.35, strokeWidth: 28 }}
-          transition={{ delay: 4, duration: 2.6, ease: EXPO_OUT }}
+          transition={{ delay: t(4), duration: t(2.6), ease: EXPO_OUT }}
         />
         <m.path
           d={riversMajor}
@@ -183,10 +185,10 @@ function MapLayer({ cam }: { cam: Camera }) {
           vectorEffect="non-scaling-stroke"
           initial={{ opacity: 0, strokeWidth: 2 }}
           animate={{ opacity: 0.6, strokeWidth: 10 }}
-          transition={{ delay: 4, duration: 2.6, ease: EXPO_OUT }}
+          transition={{ delay: t(4), duration: t(2.6), ease: EXPO_OUT }}
         />
       </g>
-      <m.circle cx={route.crossing[0]} cy={route.crossing[1]} fill="url(#i-hatch)" initial={{ r: 0 }} animate={{ r: 7 }} transition={{ delay: 4.6, duration: 1.6, ease: EXPO_OUT }} />
+      <m.circle cx={route.crossing[0]} cy={route.crossing[1]} fill="url(#i-hatch)" initial={{ r: 0 }} animate={{ r: 7 }} transition={{ delay: t(4.6), duration: t(1.6), ease: EXPO_OUT }} />
 
       {/* The trip, on real roads: Leland across the Cape Fear River to New Hanover Regional */}
       <g fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -194,7 +196,7 @@ function MapLayer({ cam }: { cam: Camera }) {
           { stroke: "#0A1C33", strokeOpacity: 0.6, strokeWidth: 2.2 },
           { stroke: "#fff", strokeOpacity: 1, strokeWidth: 1.2 },
         ].map((s) => (
-          <m.path key={s.stroke} d={route.d} {...s} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 5.8, duration: 1.1, ease: IN_OUT }} />
+          <m.path key={s.stroke} d={route.d} {...s} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: t(5.8), duration: t(1.1), ease: IN_OUT }} />
         ))}
         {/* Traffic flowing toward the crossing */}
         <m.path
@@ -204,7 +206,7 @@ function MapLayer({ cam }: { cam: Camera }) {
           strokeDasharray="0.1 2.5"
           initial={{ opacity: 0, strokeDashoffset: 0 }}
           animate={{ opacity: 1, strokeDashoffset: -2.6 }}
-          transition={{ opacity: { delay: 6.7, duration: 0.4 }, strokeDashoffset: { delay: 6.7, duration: 0.9, ease: "linear", repeat: 2 } }}
+          transition={{ opacity: { delay: t(6.7), duration: t(0.4) }, strokeDashoffset: { delay: t(6.7), duration: t(0.9), ease: "linear", repeat: 2 } }}
         />
         <m.path
           d={route.afterCrossing}
@@ -213,7 +215,7 @@ function MapLayer({ cam }: { cam: Camera }) {
           strokeDasharray="1.6 1.6"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0.3, 1, 1] }}
-          transition={{ delay: 6.9, duration: 0.9, times: [0, 0.2, 0.35, 0.5, 1] }}
+          transition={{ delay: t(6.9), duration: t(0.9), times: [0, 0.2, 0.35, 0.5, 1] }}
         />
       </g>
     </m.svg>
@@ -285,22 +287,22 @@ function Storm() {
         }}
         {...storm}
         animate={{ ...storm.animate, transform: ["translate3d(6%, -3%, 0)", "translate3d(-6%, 3%, 0)"] }}
-        transition={{ opacity: { delay: 3.4, duration: 4, times: [0, 0.2, 0.75, 1] }, transform: { delay: 3.4, duration: 4, ease: "linear" } }}
+        transition={{ opacity: { delay: t(3.4), duration: t(4), times: [0, 0.2, 0.75, 1] }, transform: { delay: t(3.4), duration: t(4), ease: "linear" } }}
       />
-      <m.div className="absolute -inset-x-[15%] inset-y-0 rotate-[14deg]" {...storm} transition={{ delay: 3.6, duration: 3.8, times: [0, 0.2, 0.75, 1] }}>
+      <m.div className="absolute -inset-x-[15%] inset-y-0 rotate-[14deg]" {...storm} transition={{ delay: t(3.6), duration: t(3.8), times: [0, 0.2, 0.75, 1] }}>
         <m.div
           className="absolute inset-x-0 -top-[160px] bottom-0"
           style={{ backgroundImage: RAIN }}
           initial={{ transform: "translate3d(0, 0, 0)" }}
           animate={{ transform: "translate3d(0, 160px, 0)" }}
-          transition={{ delay: 3.6, duration: 0.38, ease: "linear", repeat: 10 }}
+          transition={{ delay: t(3.6), duration: 0.2, ease: "linear", repeat: 7 }}
         />
       </m.div>
       <m.div
         className="absolute inset-0 bg-[#DCE8FF]"
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 0.22, 0.04, 0.16, 0] }}
-        transition={{ delay: 4.5, duration: 0.9, times: [0, 0.08, 0.16, 0.24, 1] }}
+        transition={{ delay: t(4.5), duration: t(0.9), times: [0, 0.08, 0.16, 0.24, 1] }}
       />
     </div>
   );
@@ -310,7 +312,7 @@ function Hud() {
   const hours = useMotionValue(0);
   const label = useTransform(hours, (v) => `+${String(Math.round(v)).padStart(2, "0")}H`);
   useEffect(() => {
-    const c = animate(hours, 18, { delay: 3.8, duration: 1.9, ease: [0.45, 0, 0.55, 1] });
+    const c = animate(hours, 18, { delay: t(3.8), duration: t(1.9), ease: [0.45, 0, 0.55, 1] });
     return () => c.stop();
   }, [hours]);
 
@@ -323,7 +325,7 @@ function Hud() {
         </span>
         FloodLens Lifelines
       </m.div>
-      <m.div className="absolute right-6 top-7 hidden text-right font-mono text-xs uppercase leading-relaxed tracking-[0.2em] text-white/60 sm:right-10 sm:top-10 sm:block" {...fade(0.4)}>
+      <m.div className="absolute right-6 top-7 hidden text-right font-mono text-xs uppercase leading-relaxed tracking-[0.2em] text-white/85 sm:right-10 sm:top-10 sm:block" {...fade(0.4)}>
         34.2257° N · 77.9447° W
         <br />
         New Hanover · Brunswick · Pender
@@ -343,7 +345,7 @@ function Hud() {
                     ? { opacity: 1, transform: "translateY(0px)" }
                     : { opacity: [0, 1, 1, 0], transform: ["translateY(8px)", "translateY(0px)", "translateY(0px)", "translateY(-8px)"] }
                 }
-                transition={{ delay: 0.3 + i * 1.3, duration: last ? 0.5 : 1.3, times: last ? undefined : [0, 0.15, 0.85, 1], ease: "easeInOut" }}
+                transition={{ delay: t(0.3 + i * 1.3), duration: t(last ? 0.5 : 1.3), times: last ? undefined : [0, 0.15, 0.85, 1], ease: "easeInOut" }}
               >
                 <span className="mr-2 inline-block h-1.5 w-1.5 -translate-y-0.5 rounded-full bg-yellow" />
                 {step}
@@ -352,7 +354,7 @@ function Hud() {
           })}
         </div>
         <m.div className="mt-3" {...fade(3.7)}>
-          <div className="flex items-baseline justify-between font-mono text-xs uppercase tracking-[0.2em] text-white/60">
+          <div className="flex items-baseline justify-between font-mono text-xs uppercase tracking-[0.2em] text-white/85">
             <span>Forecast</span>
             <m.span className="text-sm font-semibold tabular-nums text-yellow [contain:layout_paint]">{label}</m.span>
           </div>
@@ -361,7 +363,7 @@ function Hud() {
               className="h-full origin-left rounded-full bg-yellow"
               initial={{ transform: "scaleX(0)" }}
               animate={{ transform: "scaleX(1)" }}
-              transition={{ delay: 3.8, duration: 1.9, ease: [0.45, 0, 0.55, 1] }}
+              transition={{ delay: t(3.8), duration: t(1.9), ease: [0.45, 0, 0.55, 1] }}
             />
           </div>
         </m.div>
@@ -374,7 +376,7 @@ function TitleCard() {
   const line = (delay: number) => ({
     initial: { transform: "translateY(110%)" },
     animate: { transform: "translateY(0%)" },
-    transition: { delay, duration: 1.1, ease: EXPO_OUT },
+    transition: { delay: t(delay), duration: t(1.1), ease: EXPO_OUT },
   });
   return (
     <>
@@ -424,7 +426,7 @@ function Scene({ onDone }: { onDone: () => void }) {
     const [cx, cy] = [(route.address[0] + route.hospital[0]) / 2, (route.address[1] + route.hospital[1]) / 2];
     const frames = [shot(1.3, 800, 500), shot(1, 800, 500), shot(1.05, 800, 500), shot(narrow ? 1.6 : 3.2, cx, cy), shot(narrow ? 1.75 : 3.5, cx, cy)];
     const options = {
-      duration: 9.2,
+      duration: t(9.2),
       times: [0, 0.37, 0.576, 0.74, 1],
       ease: [
         [0.33, 0, 0.2, 1],
@@ -447,7 +449,7 @@ function Scene({ onDone }: { onDone: () => void }) {
       className="absolute inset-0"
       initial={{ opacity: 1, transform: "scale(1)" }}
       animate={{ opacity: 0, transform: "scale(1.08)" }}
-      transition={{ delay: 9.2, duration: 1, ease: [0.7, 0, 0.84, 0] }}
+      transition={{ delay: t(9.2), duration: t(1), ease: [0.7, 0, 0.84, 0] }}
       onAnimationComplete={onDone}
     >
       <MapLayer cam={cam} />

@@ -21,8 +21,8 @@ export default function Page() {
 
         <Florence />
         <section id="map" className="scroll-mt-16">
-          <div className="mx-auto max-w-screen-xl px-4 pb-24 pt-20 sm:px-6 sm:pt-32 lg:pb-36">
-            <div className="reveal mx-auto mb-14 max-w-2xl text-center sm:mb-16">
+          <div className="mx-auto max-w-screen-xl px-4 pb-28 pt-12 sm:px-6 sm:pt-16 lg:pb-44">
+            <div className="reveal mx-auto mb-12 max-w-2xl text-center sm:mb-16">
               <h2 className="font-display text-4xl font-bold leading-tight tracking-[-0.03em] sm:text-6xl">
                 Replay, nowcast, forecast preview
               </h2>

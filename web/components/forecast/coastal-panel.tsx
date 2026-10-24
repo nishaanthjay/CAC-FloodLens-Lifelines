@@ -1,11 +1,14 @@
 "use client";
 import { ageH, hoursText, useLive, type Coastal, type Station } from "@/lib/live";
 import { utc } from "@/lib/sample";
+import { et } from "@/lib/format";
+
+const etDay = (t: string) => et(t).replace(/,? \d+:\d\d [AP]M ET$/, "");
 import { ModeHeader } from "@/components/forecast/mode-header";
 
 const W = 360, Ht = 200, PAD = { l: 34, r: 8, t: 10, b: 20 };
 
-/** Observed vs predicted tide for one station. Lines differ by dash and weight, not colour alone. */
+/** Observed vs predicted tide for one station. Lines differ by dash and weight, not color alone. */
 function Chart({ s }: { s: Station }) {
   const rows = s.hourly, n = rows.length;
   const vals = rows.flatMap((r) => [r.tide_pred_m_navd88, r.observed_m_navd88]).filter((v): v is number => typeof v === "number");
@@ -22,7 +25,7 @@ function Chart({ s }: { s: Station }) {
       {iNow >= 0 && <g><line x1={x(iNow)} x2={x(iNow)} y1={PAD.t} y2={Ht - PAD.b} stroke="#111" strokeDasharray="2 3" /></g>}
       <polyline points={line((r) => r.tide_pred_m_navd88)} fill="none" stroke="#2D5DA1" strokeWidth="1.5" />
       <polyline points={line((r) => r.observed_m_navd88)} fill="none" stroke="#111" strokeWidth="3" />
-      <text x={PAD.l} y={Ht - 5} fontSize="11" fill="#555">{rows[0].t.slice(5, 10)} UTC</text>
+      <text x={PAD.l} y={Ht - 5} fontSize="11" fill="#555">{etDay(rows[0].t)} (ET)</text>
     </svg>
   );
 }
@@ -45,7 +48,7 @@ function StationCard({ s, now }: { s: Station; now: number }) {
       <p className="mt-2 flex flex-wrap gap-2 font-ui text-xs font-semibold">
         {!s.has_observations && <span className="rounded-full bg-yellow px-3 py-1">Predictions only: no observed water level here</span>}
         {s.riverine_influence && <span className="rounded-full bg-yellow px-3 py-1">Riverine: up the Cape Fear River, so the residual includes river flow, not only surge</span>}
-        {s.has_observations && <span className={`rounded-full border px-3 py-1 ${s.stale ? "border-alert bg-softred text-alert" : "border-ink/20 bg-soft-blue"}`}>{s.stale ? "Stale observations" : "Observations current"}</span>}
+        {s.has_observations && <span className={`rounded-full border px-3 py-1 border-ink/20 bg-soft-blue`}>{s.stale ? "Older observations" : "Observations current"}</span>}
       </p>
       {s.has_observations && s.latest_observed_time && (
         <p className="mt-3 font-ui text-sm">
@@ -60,8 +63,8 @@ function StationCard({ s, now }: { s: Station; now: number }) {
           <summary className="flex min-h-11 cursor-pointer items-center font-ui text-sm font-semibold">Recent hourly values (table)</summary>
           <table className="mt-1 w-full font-mono text-xs">
             <caption className="sr-only">Recent hourly water level at {s.name}, metres NAVD88</caption>
-            <thead><tr className="text-left text-muted"><th scope="col" className="py-1">Hour (UTC)</th><th scope="col">Observed</th><th scope="col">Predicted</th><th scope="col">Residual</th></tr></thead>
-            <tbody>{recent.map((r) => <tr key={r.t} className="border-t border-divider"><th scope="row" className="py-1 text-left font-normal">{r.t.slice(5, 16).replace("T", " ")}</th><td>{r.observed_m_navd88}</td><td>{r.tide_pred_m_navd88}</td><td>{r.residual_m}</td></tr>)}</tbody>
+            <thead><tr className="text-left text-muted"><th scope="col" className="py-1">Hour (ET)</th><th scope="col">Observed</th><th scope="col">Predicted</th><th scope="col">Residual</th></tr></thead>
+            <tbody>{recent.map((r) => <tr key={r.t} className="border-t border-divider"><th scope="row" className="py-1 text-left font-normal">{et(r.t)}</th><td>{r.observed_m_navd88}</td><td>{r.tide_pred_m_navd88}</td><td>{r.residual_m}</td></tr>)}</tbody>
           </table>
         </details>
       )}
@@ -78,8 +81,8 @@ export function CoastalPanel({ now }: { now: number }) {
   return (
     <section aria-labelledby="coast-h">
       <h3 id="coast-h" className="font-display text-2xl font-bold">Coastal water levels: a separate layer</h3>
-      <p className="mb-4 mt-2 font-ui text-sm text-ink/80">Observed and predicted tide at three NOAA stations ({c.datum}). Shown on its own: it is not combined with the river gauges or the crossing scenarios, and is not a probability of anything.</p>
-      <ModeHeader mode={c.mode} generated={c.generated_at} source={c.source} stale={c.stale || (age !== null && age > 3)} staleNote={age !== null ? `File generated ${hoursText(age)}` : undefined} caveats={c.caveats} />
+      <p className="mb-4 mt-2 font-ui text-sm text-ink/80">Observed and predicted tide at three NOAA stations ({c.datum}). Shown on its own: it does not change any crossing or route result, which use river flow only, and it is not a probability of anything. Road-level surge and tide flooding is not modeled yet; it would need road elevations and NOAA total-water-level guidance.</p>
+      <ModeHeader mode={c.mode} generated={c.generated_at} source={c.source} stale={c.stale || (age !== null && age > 3)} staleNote={age !== null ? `Updated ${hoursText(age)}` : undefined} caveats={c.caveats} />
       <div className="grid gap-5">{c.stations.map((s) => <StationCard key={s.id} s={s} now={now} />)}</div>
     </section>
   );

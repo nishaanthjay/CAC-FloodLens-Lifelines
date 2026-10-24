@@ -15,8 +15,10 @@ export function AddressSearch() {
     router.push(`/route?${new URLSearchParams({ ...(params.q ? {} : params) })}${params.q ? `#q=${encodeURIComponent(params.q)}` : ""}`);
 
   function trySample() {
-    const site = data?.sites.find((s) => s.kind === "residential" && s.hours.some((h) => h.lost));
-    if (site) go({ lat: String(site.lat), lon: String(site.lon), label: site.name, mode: "replay" });
+    // The place that loses its route for the most replay hours, opened at the first hour it is cut off.
+    const lost = (s: { hours: { lost: boolean }[] }) => s.hours.filter((h) => h.lost).length;
+    const site = [...(data?.sites ?? [])].filter((s) => lost(s) > 0).sort((a, b) => lost(b) - lost(a))[0];
+    if (site) go({ lat: String(site.lat), lon: String(site.lon), label: site.name, mode: "replay", hour: String(site.hours.findIndex((h) => h.lost)) });
   }
 
   return (
@@ -45,15 +47,12 @@ export function AddressSearch() {
       <p className="mx-auto mt-4 max-w-md text-center font-ui text-xs leading-relaxed text-muted">
         Use a street address with the town name, {ADDRESS_EXAMPLE}. Place names like &ldquo;City Hall&rdquo; often do not match.
       </p>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-1 font-ui text-sm text-ink/75">
-        <button type="button" onClick={trySample} className="min-h-11 underline underline-offset-4 hover:text-blue">Try a Florence replay location</button>
-        <button type="button" onClick={() => go({ q: "1029 N Howe St, Southport NC" })} className="min-h-11 underline underline-offset-4 hover:text-blue">Try an example address</button>
-        <a href="/emergency" className="inline-flex min-h-11 items-center font-semibold text-alert underline underline-offset-4 hover:text-ink">Quick emergency finder</a>
-        <a href="#breaks" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-blue">What breaks first?</a>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-ui text-sm">
+        <button type="button" onClick={trySample} className="min-h-11 font-semibold text-ink underline underline-offset-4 hover:text-blue">Try a Florence example</button>
+        <a href="/emergency" className="inline-flex min-h-11 items-center rounded-full border border-alert/40 bg-softred px-5 font-semibold text-alert hover:border-alert">Quick emergency finder</a>
       </div>
-      <p className="mt-6 inline-block rounded-full bg-yellow px-3.5 py-1.5 font-mono text-xs font-medium text-ink">Preview: unvalidated forecast, not for emergency use</p>
       <p className="mx-auto mt-6 max-w-md font-ui text-xs leading-relaxed text-muted">
-        No user data is stored (cookie-free page-view counts only). Addresses go to OpenStreetMap&rsquo;s Nominatim to find the location, and routes come from the public Valhalla router.
+        No user data is stored. Addresses go to OpenStreetMap&rsquo;s Nominatim to find the location, and routes come from the public Valhalla router.
       </p>
     </div>
   );

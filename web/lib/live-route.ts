@@ -10,7 +10,7 @@ export type RouteForecast = {
 };
 
 export type LiveWindow = {
-  X: RouteCrossings; // step 0 = the modelled hour standing in for now, then one step per forecast hour
+  X: RouteCrossings; // step 0 = the modeled hour standing in for now, then one step per forecast hour
   times: string[]; // valid time of each step (ISO)
   expired: boolean; // the forecast ended before now: every step is unknown, never shown as open
   withData: number; // assessed crossings that have a value at step 0
@@ -41,5 +41,5 @@ export function liveWindow(base: RouteCrossings, f: RouteForecast, nowMs: number
   };
 }
 
-/** Plain-language label of a step: the first is the modelled hour covering now, the rest are forecast hours ahead of it. */
+/** Plain-language label of a step: the first is the modeled hour covering now, the rest are forecast hours ahead of it. */
 export const stepLabel = (k: number) => (k === 0 ? "Now" : `+${k} h`);

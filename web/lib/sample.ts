@@ -1,3 +1,5 @@
+import { et, mi } from "./format";
+
 // SAMPLE / PREVIEW data from the FloodLens pipeline (lifeline/export/sample, copied by `npm run sample:sync`).
 // Real values come from the Florence 2018 hindcast replay; values marked synthetic are placeholders.
 
@@ -10,10 +12,10 @@ export type HourView = {
   p: number; // placeholder isolation probability, 0-1
   tti: number | null; // placeholder hours until p >= 0.5
   dur: number | null; // placeholder hours p stays >= 0.5
-  lost: boolean; // replay: no route to any ED hospital
+  lost: boolean; // replay: no route to any ER
   detour: number | null; // replay: added minutes, null = no route
   crit: string | null; // replay: first closed crossing on the baseline path
-  red: number; // replay: ED hospitals within 30 min
+  red: number; // replay: ERs within 30 min
 };
 
 export type LocationView = {
@@ -128,7 +130,7 @@ export function blockView(L: Lookup, b: Block, km: number, query: string): Locat
   const p = r ? r.p_pct.map((v) => v / 100) : Array(L.hours).fill(L.p_floor);
   return {
     id: geoid, name: query, kind: "address", county: L.counties[ci], lat, lon, assessed: !!assessed,
-    basis: `Nearest 2020 Census block centroid (${km.toFixed(1)} km away)`, distanceKm: km, query,
+    basis: `Nearest 2020 Census block centroid (${mi(km)} away)`, distanceKm: km, query,
     baselineDrive: drive, baselineRed: red, tolerance: L.isolation_tolerance_hours,
     hours: Array.from({ length: L.hours }, (_, t) => {
       const [tti, dur] = onsetAndDuration(p, t);
@@ -155,6 +157,7 @@ export const crossingStatus = (level: string) =>
 export const pct = (p: number) => `${Math.round(p * 100)}%`;
 /** Placeholder chances are never shown as percentages: only this coarse band, always next to an "Illustrative" tag. */
 export const band = (p: number) => risk(p).label;
-export const utc = (iso: string) => iso.replace("T", " ").replace("Z", " UTC");
+/** Times show in US Eastern ("Sat Oct 24, 1:00 PM ET"). The name is kept because the data and callers are UTC ISO strings. */
+export const utc = et;
 export const hourTime = (start: string, h: number) =>
   utc(new Date(Date.parse(start) + h * 3600e3).toISOString().slice(0, 16) + "Z");

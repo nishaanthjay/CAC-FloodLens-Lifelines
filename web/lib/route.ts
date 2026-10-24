@@ -127,7 +127,7 @@ export const blockedHours = (on: OnRoute[], hours: number) =>
 
 // ---- Flags: a route can be open and still be a bad answer in an emergency ----
 
-/** Guide times in minutes by service kind. ED access within 30 min is the standard the pipeline already uses for redundancy; fire, EMS and police are quicker. */
+/** Guide times in minutes by service kind. ER access within 30 min is the standard the pipeline already uses for redundancy; fire, EMS and police are quicker. */
 export const LIMIT_MIN: Record<string, number> = { hospital_ed: 30, hospital: 30, urgent_care: 30, pharmacy: 30, dialysis: 45, nursing_home: 45, fire: 15, ems: 15, police: 15 };
 export const DETOUR_EXTRA_S = 600, DETOUR_EXTRA_RATIO = 0.5; // a long detour adds 10+ min AND 50%+ over the fastest normal route
 

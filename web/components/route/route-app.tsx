@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Check, Link2, LoaderCircle, MapPin, Phone, Printer, Search, Siren } from "lucide-react";
 import { ADDRESS_EXAMPLE, geocode } from "@/lib/geocode";
+import { mi, mins } from "@/lib/format";
 import { blockView, getJSON, hourTime, nearestBlock, utc, type LocationView, type Lookup, type Meta } from "@/lib/sample";
 import { ageH, hoursText, useLive, type Forecast, type Nowcast } from "@/lib/live";
 import { liveWindow, stepLabel, type RouteForecast } from "@/lib/live-route";
@@ -21,7 +22,6 @@ type Mode = "live" | "replay";
 
 const PER_KIND = 5; // nearest services of each kind that get drive times (9 kinds x 5 stays under the router's 50-target limit)
 const SHOW_ALL = 3; // per kind in the "All" view
-const mins = (s: number) => `${Math.round(s / 60)} min`;
 const FILTERS: ["all" | Kind, string][] = [["all", "All"], ...KINDS.map((k) => [k.id, k.label] as ["all" | Kind, string])];
 const NO_FORECAST: RouteForecast = { mode: "FORECAST", label: "", stale: true, generated_at: "", cycle_issue_time: "", cycle_age_hours: 0, nwm_version: "", caveats: [], valid_times: [],
   fallback: { used: false, skipped_newer_cycles: [], note: "" }, crossings: [] };
@@ -40,13 +40,14 @@ export function RouteApp() {
   const [selected, setSelected] = useState<string[]>([]);
   const [trips, setTrips] = useState<Record<string, Trip[] | Pending | string>>({});
   const [detours, setDetours] = useState<Record<string, RouteOption | Pending | string>>({});
-  const [hour, setHour] = useState(0);
+  const [hour, setHour] = useState(() => (params.get("mode") === "replay" ? Math.max(0, Number(params.get("hour")) || 0) : 0));
   const [copied, setCopied] = useState(false);
   const [focusId, setFocusId] = useState<string | null>(null);
   const [block, setBlock] = useState<LocationView | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [net, setNet] = useState({ slow: false, lastMs: 0, timeouts: 0 });
   const [slowWait, setSlowWait] = useState(false);
+  const [showMapBtn, setShowMapBtn] = useState(false);
   const [useOsm, setUseOsm] = useState(true);
   const asked = useRef(new Set<string>()); // route / detour requests already made for this origin
   const token = useRef(0); // ignores answers that arrive after the origin changed
@@ -59,10 +60,15 @@ export function RouteApp() {
       .then(([meta, svc, X]) => setBase({ meta, svc, X }))
       .catch((e: Error) => setLoadErr(e.message));
   }, []);
+  useEffect(() => {
+    const on = () => setShowMapBtn(window.scrollY > window.innerHeight * 0.6);
+    on(); window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 300000); return () => clearInterval(t); }, []); // keep "Now" current in a tab left open
   useEffect(() => onTiming((t) => setNet((n) => ({ lastMs: t.ms, slow: t.timedOut || t.ms > SLOW_MS, timeouts: n.timeouts + (t.timedOut ? 1 : 0) }))), []);
 
-  // The live axis: step 0 = modelled hour covering now, then the forecast hours. Without a forecast every crossing is "no data", never open.
+  // The live axis: step 0 = modeled hour covering now, then the forecast hours. Without a forecast every crossing is "no data", never open.
   const win = useMemo(() => (base ? liveWindow(base.X, (fc.data as RouteForecast | null) ?? NO_FORECAST, now) : null), [base, fc.data, now]);
   const Xraw = base ? (live ? win!.X : base.X) : null;
   // OpenStreetMap-mapped crossings (1,333 of the assessed set) are road-stream intersections that may not be bridges. Switching them off moves them to "not assessed".
@@ -233,16 +239,14 @@ export function RouteApp() {
   }
 
   const f = fc.data, age = f ? ageH(f.cycle_issue_time, now) : null;
-  const fcStale = !!f && (f.stale || (age !== null && age > 6));
   const gauges = nc.data?.gauges ?? [];
   const up = gauges.filter((g) => ["major", "moderate", "minor", "action"].includes(g.nws.flood_category)).length;
   const ncAge = nc.data ? ageH(nc.data.generated_at, now) : null;
-  const ncStale = !!nc.data && (nc.data.stale || (ncAge !== null && ncAge > 3));
   const sliderTicks: [number, string][] | undefined = live ? [...new Set([0, Math.round((hours - 1) / 2), hours - 1])].map((h) => [h, h === 0 ? "NOW" : `+${h}H`] as [number, string]) : undefined;
 
   return (
     <main id="content" className="flex flex-1 flex-col lg:min-h-0 lg:flex-row print:block">
-      <div className={`relative order-1 h-[58vh] min-h-[360px] bg-soft-blue print:hidden lg:order-2 lg:block lg:h-auto lg:flex-1 ${origin ? "" : "hidden"}`}>
+      <div id="route-map" className={`relative order-1 h-[58vh] min-h-[360px] bg-soft-blue print:hidden lg:order-2 lg:block lg:h-auto lg:flex-1 ${origin ? "" : "hidden"}`}>
         <RouteMap origin={origin} services={mapServices} selected={selected} ranked={ranked} focusId={focus} hour={hh} live={live} onService={toggle} onRoute={setFocusId} />
         {origin && hours > 1 && (live
           ? <HourSlider hour={hh} hours={hours} onChange={setHour} title={`Now, then the next ${hours - 1} forecast hours`} text={timeText(hh)} ticks={sliderTicks} />
@@ -295,20 +299,19 @@ export function RouteApp() {
 
         {live ? (
           <div className="mt-5 space-y-3 rounded-2xl border border-ink/10 bg-white p-5 font-ui text-xs leading-relaxed" role="region" aria-label="What Now and forecast are based on">
-            <p className="font-semibold text-ink"><span className="mr-2 rounded-full bg-blue px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Nowcast</span>Observed river gauges{ncStale && <span className="ml-2 rounded-full border border-ink/40 px-2 py-px font-semibold">Stale</span>}</p>
+            <p className="font-semibold text-ink"><span className="mr-2 rounded-full bg-blue px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Nowcast</span>Observed river gauges</p>
             <p className="text-ink/80">
               {nc.error ? `Gauge file could not be loaded (${nc.error}).`
                 : !nc.data ? "Loading gauge readings…"
-                : `${up} of ${gauges.length} gauges near the pilot counties at or above NWS action stage · file generated ${hoursText(ncAge)}.`}
+                : `${up} of ${gauges.length} gauges near the pilot counties at or above NWS action stage · updated ${hoursText(ncAge)}.`}
               {" "}These are readings, not route status. Route status below uses the model.
             </p>
-            <p className="font-semibold text-ink"><span className="mr-2 rounded-full bg-ink px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Forecast</span>NWM short-range, unvalidated{fcStale && <span className="ml-2 rounded-full border border-alert px-2 py-px font-semibold text-alert">Old</span>}</p>
+            <p className="font-semibold text-ink"><span className="mr-2 rounded-full bg-ink px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Forecast</span>NWM short-range, unvalidated</p>
             <p className="text-ink/80">
               {fc.error ? `Forecast file could not be loaded (${fc.error}). Every crossing is shown as "no data", never as open.`
                 : !f || !win ? "Loading forecast…"
                 : win.expired ? `The latest forecast cycle (issued ${utc(f.cycle_issue_time)}) has ended. Every crossing is shown as "no data", never as open.`
-                : `Cycle issued ${utc(f.cycle_issue_time)} (${hoursText(age)}); step 0 is the modelled hour covering now, the next ${hours - 1} are forecast hours. ${win!.withData.toLocaleString()} of ${base!.X.assessed.length.toLocaleString()} assessed crossings have a model value now; ${base!.X.not_assessed.length.toLocaleString()} could not be assessed.`}
-              {fcStale && !win?.expired && " The cycle is more than 6 hours old: treat it with extra caution."}
+                : `Forecast cycle issued ${utc(f.cycle_issue_time)} (${hoursText(age)}). The first step is the modeled hour covering now, then ${hours - 1} forecast hours. ${win!.withData === base!.X.assessed.length ? "All" : `${win!.withData.toLocaleString()} of`} ${base!.X.assessed.length.toLocaleString()} assessed crossings have a model value now.`}
               {f?.fallback.used && ` Newest cycle was incomplete; the previous one is shown.`}
             </p>
             <p className="text-muted">Not a closure probability and not validated. River flow only: no surge, tide or street flooding.</p>
@@ -370,11 +373,11 @@ export function RouteApp() {
                         {on ? <Check size={16} aria-hidden /> : <KindIcon kind={s.k} />}
                       </span>
                       <span className="min-w-0">
-                        <span className="block truncate font-ui text-sm font-medium">{s.name}</span>
+                        <span className="line-clamp-2 font-ui text-sm font-medium">{s.name}</span>
                         <span className="block truncate font-ui text-xs text-muted">{s.sub}{s.addr ? ` · ${s.addr}` : ""}</span>
                       </span>
                       <span className="flex flex-col items-end gap-1 text-right">
-                        <span className="font-mono text-xs">{s.timeS != null ? mins(s.timeS) : s.timeS === null ? "no route" : `${s.straightKm.toFixed(0)} km`}</span>
+                        <span className="font-mono text-xs">{s.timeS != null ? mins(s.timeS) : s.timeS === null ? "no route" : mi(s.straightKm, 0)}</span>
                         {on && (b ? <StatusBadge state={b.s.state} live={live} /> : r === "loading" ? <LoaderCircle size={14} className="animate-spin text-muted" aria-label="Routing" /> : null)}
                       </span>
                     </button>
@@ -388,7 +391,7 @@ export function RouteApp() {
               })}
             </ul>
             <p className="mt-2 font-ui text-xs leading-relaxed text-muted">
-              {filter === "all" ? `The ${SHOW_ALL} nearest of each kind; pick a kind to see ${PER_KIND}.` : `The ${PER_KIND} nearest.`} Times are normal driving. Emergency rooms (CMS) and fire stations come from the pipeline&rsquo;s lists; the rest
+              {filter === "all" ? `The ${SHOW_ALL} nearest of each kind; pick a kind to see ${PER_KIND}.` : `The ${PER_KIND} nearest.`} Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest
               are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call ahead; call 911 in an emergency.
             </p>
           </section>
@@ -397,16 +400,22 @@ export function RouteApp() {
         {ranked.length > 0 && X && (
           <div className="mt-8">
             <RouteAnalysis groups={groups} focusId={focus} onFocus={setFocusId} hour={hh} hours={hours} timeText={timeText} live={live}
-              names={names} fastest={fastest} block={block} noRoute={noRoute} nAssessed={X.assessed.length} />
+              names={names} fastest={fastest} block={block} noRoute={noRoute} nAssessed={X.assessed.length} replayStart={start} />
           </div>
         )}
         {!origin && !busy && (
           <p className="mt-8 rounded-2xl bg-yellow p-4 font-ui text-sm leading-relaxed text-ink/80">
-            Enter an address to list the nearest emergency rooms, fire stations, dialysis centres and other services. Pick one or several to compare routes, see which stream crossings
+            Enter an address to list the nearest emergency rooms, fire stations, dialysis centers and other services. Pick one or several to compare routes, see which stream crossings
             each one uses, and how {live ? "the river-flow forecast" : "the Florence replay"} would affect them {live ? "from now on" : "hour by hour"}.
           </p>
         )}
       </aside>
+      {origin && showMapBtn && (
+        <button type="button" onClick={() => document.getElementById("route-map")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+          className="fixed bottom-4 right-4 z-30 inline-flex min-h-12 items-center gap-2 rounded-full bg-ink px-5 font-ui text-sm font-semibold text-white shadow-lift print:hidden lg:hidden">
+          <MapPin size={16} aria-hidden /> Map
+        </button>
+      )}
     </main>
   );
 }

@@ -48,12 +48,12 @@ export function HowItWorks() {
             <li><b>Street and drainage (pluvial) flooding</b> from rain that never reaches a stream.</li>
             <li><b>Road deck height</b>, and <b>debris and scour</b> at a crossing.</li>
             <li>
-              <b>Service-island cutoffs.</b> Areas that lose their route without a modelled stream crossing closing, such as the Smithville Island area
+              <b>Service-island cutoffs.</b> Areas that lose their route without a modeled stream crossing closing, such as the Smithville Island area
               served by Dosher Memorial Hospital on Brunswick County Emergency Management&rsquo;s service-islands map, may not appear in a river-flow-only replay.
             </li>
           </ul>
           <p className="mt-6 font-ui text-xs leading-relaxed text-white/70">
-            Brunswick County Emergency Management&rsquo;s service-islands map is a modelled reference, not an observation of what happened.
+            Brunswick County Emergency Management&rsquo;s service-islands map is a modeled reference, not an observation of what happened.
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getJSON, siteView, type Crossing, type LocationView, type Meta } from "@/lib/sample";
+import { placeName, tidyName } from "@/lib/format";
 
 type Data = { meta: Meta; sites: LocationView[]; crossings: Crossing[] };
 type Ctx = {
@@ -26,7 +27,8 @@ export function SampleProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     Promise.all([getJSON<Meta>("meta.json"), getJSON<{ addresses: Parameters<typeof siteView>[0][] }>("addresses.json"),
       getJSON<{ crossings: Crossing[] }>("crossings.json")])
-      .then(([meta, a, c]) => setData({ meta, sites: a.addresses.filter((x) => x.kind === "residential").map(siteView), crossings: c.crossings }))
+      .then(([meta, a, c]) => setData({ meta, sites: a.addresses.filter((x) => x.kind === "residential").map(siteView).map((s) => ({ ...s, name: `Census block near ${placeName(s.lat, s.lon)}` })),
+        crossings: c.crossings.map((x) => ({ ...x, name: tidyName(x.name) })) }))
       .catch((e: Error) => setError(e.message));
   }, []);
 
