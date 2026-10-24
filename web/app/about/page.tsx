@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Masthead } from "@/components/layout/masthead";
 import { Footer } from "@/components/layout/footer";
 
@@ -12,6 +13,7 @@ const tests = [
   ["76.7%", "of 73 gauge-storms: modeled peak flow within a factor of 2 of USGS gauges, median peak-time error 4 hours."],
   ["91.3%", "of 150 test blocks: baseline drive time to the nearest hospital within 30% of OSRM."],
   ["0.69 to 0.72", "AUC across nine 2023 to 2025 NC storm windows: crossings near recorded closures ranked higher. Precision is low (about 5%)."],
+  ["0.77", "AUC: the 11 Brunswick crossings on the Sheriff’s known-flood-point map rank above 1,435 other Brunswick crossings by people affected. The companion test, whether closing them separates the Sheriff’s service islands, failed (AUC 0.58)."],
 ];
 
 const limits = [
@@ -59,6 +61,27 @@ export default function About() {
           ))}
         </ul>
 
+        <h2 className="mt-14 font-display text-3xl font-bold">Case study: Florence, Brunswick County</h2>
+        <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
+          The Brunswick County Sheriff&rsquo;s Office marked 20 known flood points on its 2018 evacuation map and, after Florence, drew six &ldquo;service islands&rdquo;. We matched 12 of the 20 points to 11 road crossings and closed them in our road model, with no flow or forecast input. This tests the road-network model, not the flood forecast.
+        </p>
+        <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
+          Take point 10, the NC 211 (Southport-Supply Rd) bridge over Lockwoods Folly River near Supply. Close it and 4,681 people in 128 Census blocks, all in the Sheriff&rsquo;s Town Creek island, can no longer reach the nearest emergency room the way they do now, Novant Health Brunswick Medical Center. With all 11 matched crossings closed, those people go from an average of 12.6 minutes to the nearest ER to 24.3 minutes (+11.7); 3,242 of them are 10 minutes or more slower and 370 are 15 minutes or more slower. The worst block goes from 7.7 to 24.8 minutes, when the nearest ER becomes J. Arthur Dosher Memorial Hospital in Southport. Nobody loses every route.
+        </p>
+        <figure className="mt-6">
+          <Image src="/case-study-brunswick.png" alt="Map of the Supply and Southport area in Brunswick County. The NC 211 bridge over Lockwoods Folly River is marked closed; dots for 128 Census blocks south and east of it are colored by added minutes to the nearest emergency room, mostly 8 to 17 minutes more, with Novant Health Brunswick Medical Center to the west and J. Arthur Dosher Memorial Hospital in Southport to the east." width={953} height={438} className="h-auto w-full rounded-2xl border border-ink/10" />
+          <figcaption className="mt-2 font-ui text-xs leading-relaxed text-muted">
+            The 128 blocks this one bridge slows by more than a minute, colored by added minutes in the run with all 11 matched crossings closed (<code>block_deltas.csv</code>). Scenario only; roads, no flow input.
+          </figcaption>
+        </figure>
+        <p className="mt-6 font-body text-lg leading-relaxed text-ink/80">
+          Overall the model is right about which crossings matter and wrong about isolation. The 11 crossings rank above the other 1,435 assessed Brunswick crossings by people affected (AUC 0.77, 95% CI 0.61 to 0.90). But closing all 11 cuts no Census block off from an ER or fire station, and the slowing it causes is no more tied to the Sheriff&rsquo;s islands than 20 randomly chosen closures would be (AUC 0.58, CI 0.44 to 0.72; that test failed).
+        </p>
+        <p className="mt-4 font-ui text-sm leading-relaxed text-muted">
+          The flood-point map is dated 11 September 2018, before landfall, so the points are known flood spots, not confirmed closures; the islands map is dated 9 October 2018. One county, 11 crossings, river crossings only (no surge, tide or street flooding). Full report:{" "}
+          <a className="text-blue underline underline-offset-4" href="https://github.com/nishaanthjay/CAC-FloodLens-Lifelines/blob/main/reports/phase2_bcso_islands.md">reports/phase2_bcso_islands.md</a>.
+        </p>
+
         <h2 className="mt-14 font-display text-3xl font-bold">What we do not claim</h2>
         <ul className="mt-4 list-disc space-y-3 pl-6 font-body text-lg leading-relaxed text-ink/80">
           {limits.map((l) => <li key={l}>{l}</li>)}
@@ -66,7 +89,7 @@ export default function About() {
 
         <h2 className="mt-14 font-display text-3xl font-bold">Data and privacy</h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-ink/80">
-          No account and no user data stored. Addresses you type go to OpenStreetMap Nominatim and routes to the public Valhalla router; neither is kept by us. Basic, cookie-free page-view counts are collected to see whether the site is used. Sources: NOAA, USGS, NCDOT, FEMA, US Census, CMS, NC OSFM, OpenStreetMap contributors, OpenFreeMap. Hourly NOAA forecast cycles are archived in an open repository: github.com/nishaanthjay/lifelines-nvm-archive.
+          No account and no user data stored. Addresses you type go to OpenStreetMap Nominatim and routes to the public Valhalla router; neither is kept by us. Sources: NOAA, USGS, NCDOT, FEMA, US Census, CMS, NC OSFM, OpenStreetMap contributors, OpenFreeMap. Hourly NOAA forecast cycles are archived in an open repository: github.com/nishaanthjay/lifelines-nvm-archive.
         </p>
 
         <p className="mt-6 font-ui text-sm"><a className="text-blue underline underline-offset-4" href="/status">Data freshness status</a></p>
