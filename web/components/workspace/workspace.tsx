@@ -7,6 +7,7 @@ import { LeftPanel } from "@/components/workspace/left-panel";
 import { MenuSheet, Rail } from "@/components/workspace/rail";
 import { RightPanel } from "@/components/workspace/right-panel";
 import { Sheet } from "@/components/workspace/sheet";
+import { WorkspaceData } from "@/components/workspace/data";
 import { WorkspaceState, useWS } from "@/components/workspace/store";
 import { TimePill } from "@/components/workspace/time-pill";
 import { TopBar } from "@/components/workspace/top-bar";
@@ -43,7 +44,7 @@ export function Workspace() {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation}>
-        <WorkspaceState><Shell /></WorkspaceState>
+        <WorkspaceState><WorkspaceData><Shell /></WorkspaceData></WorkspaceState>
       </LazyMotion>
     </MotionConfig>
   );

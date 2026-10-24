@@ -16,6 +16,9 @@ export const TIERS: Tier[] = [
 /** Route-crossings level digit (index into RouteCrossings.levels: RL0, RL2, RL5, RL10, RL25, RL50) -> tier id. RL25 and RL50 both read "Very high". -1 = no model value (never shown as open). */
 export const tierOfLevel = (lv: number): -1 | 0 | 1 | 2 | 3 | 4 => (Number.isNaN(lv) || lv < 0 ? -1 : (Math.min(lv, 4) as 0 | 1 | 2 | 3 | 4));
 
+/** Same, from the level character of the per-step string ("-" or anything unreadable = -1). */
+export const tierFromLevel = (ch: string) => tierOfLevel(parseInt(ch, 10));
+
 /** Access states for the "people by access state" chart (replay, from the block lookup). Order = bottom to top of the stack. */
 export type AccessState = { id: "lost" | "gt10" | "s1_10" | "none" | "na"; label: string; fill: string; pattern: "cross" | "diag" | "dots" | "plain" | "sparse" };
 export const ACCESS_STATES: AccessState[] = [
