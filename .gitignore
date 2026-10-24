@@ -23,3 +23,8 @@ archive/
 # hourly TIMS snapshots (local archiver output; large, re-fetchable going forward)
 data/closures_live/20*/
 data/closures_live/logs/
+
+# large data outputs are kept out of git (re-creatable with the pipeline; see docs/)
+data/**/*.parquet
+data/**/*.npy
+data/**/*.zip
