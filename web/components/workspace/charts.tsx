@@ -1,6 +1,6 @@
 "use client";
 import { useId, useRef } from "react";
-import { TIERS, type AccessState } from "@/lib/workspace/tiers";
+import type { AccessState } from "@/lib/workspace/tiers";
 
 /** Monotone cubic path through (x, y) points: smooth, and never overshoots the data (a stacked band must not cross its neighbour). */
 function smooth(pts: [number, number][]): string {
@@ -48,13 +48,14 @@ export function Swatch({ fill, pattern, uid, size = 12 }: { fill: string; patter
 const fmt = (v: number) => (v >= 1000 ? `${+(v / 1000).toFixed(v >= 10000 ? 0 : 1)}k` : `${Math.round(v)}`);
 
 /** Hand-written stacked area chart: smooth curves, a vertical marker at the current hour; click or drag to move it, arrow keys when focused. */
-export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLabel = (h) => `H+${h}` }: {
-  series: Series[]; hour: number; onHour: (h: number) => void; unitLabel: string; ariaLabel: string; hourLabel?: (h: number) => string;
+export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLabel = (h) => `H+${h}`, emptyText }: {
+  series: Series[]; hour: number; onHour: (h: number) => void; unitLabel: string; ariaLabel: string; hourLabel?: (h: number) => string; emptyText?: string;
 }) {
   const uid = useId().replace(/:/g, "");
   const W = 320, H = 150, L = 34, R = 8, T = 10, B = 20;
   const n = series[0]?.values.length ?? 0;
   const tot = Array.from({ length: n }, (_, i) => series.reduce((a, s) => a + s.values[i], 0));
+  const empty = Math.max(0, ...tot) === 0;
   const max = Math.max(1, ...tot);
   const nice = (() => { const p = 10 ** Math.floor(Math.log10(max)); const f = max / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p; })();
   const x = (i: number) => L + (n < 2 ? 0 : (i / (n - 1)) * (W - L - R));
@@ -79,7 +80,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
       onPointerMove={(e) => e.buttons && at(e)}
       onKeyDown={(e) => { const d = e.key === "ArrowRight" || e.key === "ArrowUp" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowDown" ? -1 : 0; if (d) { e.preventDefault(); onHour(hour + d); } }}>
       <Patterns uid={uid} />
-      {[0, 0.5, 1].map((f) => { const v = f * nice; return (
+      {(empty ? [0] : [0, 0.5, 1]).map((f) => { const v = f * nice; return (
         <g key={f}><line x1={L} x2={W - R} y1={y(v)} y2={y(v)} stroke="rgb(17 17 17 / .1)" strokeDasharray={v ? "2 3" : undefined} />
           <text x={L - 5} y={y(v) + 3} textAnchor="end" className="fill-muted font-mono" fontSize="8.5">{fmt(v)}</text></g>); })}
       {bands.map((d, k) => (
@@ -87,6 +88,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
           <path d={d} fill="none" stroke="#fff" strokeWidth=".8" /></g>))}
       {[0, Math.round((n - 1) / 2), n - 1].map((i) => (
         <text key={i} x={x(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"} className="fill-muted font-mono" fontSize="8.5">{hourLabel(i)}</text>))}
+      {empty && emptyText && <text x={(L + W - R) / 2} y={(T + H - B) / 2} textAnchor="middle" className="fill-ink/70 font-ui" fontSize="9.5">{emptyText}</text>}
       <line x1={x(hour)} x2={x(hour)} y1={T - 2} y2={H - B} stroke="#111" strokeWidth="1.2" />
       <circle cx={x(hour)} cy={y(tot[hour] ?? 0)} r="3.2" fill="#fff" stroke="#111" strokeWidth="1.4" />
     </svg>
@@ -104,20 +106,22 @@ export function Legend({ items }: { items: { id: string; label: string; fill: st
   );
 }
 
-/** Horizontal bars with a percent and a count; the fill carries the tier stroke weight, so tiers differ by more than hue. */
-export function TierBars({ rows, unitLabel }: { rows: { tier: number; value: number }[]; unitLabel: string }) {
+export type BarRow = { key: string; label: string; fill: string; stroke: string; strokeW: number; value: number };
+
+/** Horizontal bars with a percent and a count; the fill carries a stroke weight, so rows differ by more than hue. */
+export function Bars({ rows, unitLabel }: { rows: BarRow[]; unitLabel: string }) {
   const total = rows.reduce((a, r) => a + r.value, 0) || 1;
   return (
     <ul className="grid gap-2.5">
-      {rows.map(({ tier, value }) => {
-        const t = TIERS[tier], p = (value / total) * 100;
+      {rows.map((r) => {
+        const p = (r.value / total) * 100;
         return (
-          <li key={t.id} className="grid grid-cols-[76px_1fr_auto] items-center gap-2 font-ui text-xs">
-            <span className="font-medium text-ink">{t.label}</span>
+          <li key={r.key} className="grid grid-cols-[88px_1fr_auto] items-center gap-2 font-ui text-xs">
+            <span className="font-medium leading-tight text-ink">{r.label}</span>
             <span className="h-3 overflow-hidden rounded-full bg-ink/[0.07]" aria-hidden>
-              <span className="block h-full rounded-full" style={{ width: `${Math.max(p, value ? 2 : 0)}%`, background: t.fill, boxShadow: `inset 0 0 0 ${Math.min(t.strokeW, 2.5)}px ${t.stroke}` }} />
+              <span className="block h-full rounded-full" style={{ width: `${Math.max(p, r.value ? 2 : 0)}%`, background: r.fill, boxShadow: `inset 0 0 0 ${Math.min(r.strokeW, 2.5)}px ${r.stroke}` }} />
             </span>
-            <span className="min-w-[78px] text-right font-mono tabular-nums text-ink"><b className="font-semibold">{p < 10 && p > 0 ? p.toFixed(1) : Math.round(p)}%</b> <span className="text-muted">{value.toLocaleString("en-US")}</span><span className="sr-only"> {unitLabel}</span></span>
+            <span className="min-w-[70px] text-right font-mono tabular-nums text-ink"><b className="font-semibold">{p < 10 && p > 0 ? p.toFixed(1) : Math.round(p)}%</b> <span className="text-muted">{r.value.toLocaleString("en-US")}</span><span className="sr-only"> {unitLabel}</span></span>
           </li>
         );
       })}

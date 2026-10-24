@@ -40,10 +40,10 @@ export function TimePill({ caption, disabled }: { caption?: string; disabled?: b
             <div role="slider" tabIndex={disabled ? -1 : 0} aria-label="Hour of the scenario" aria-valuemin={0} aria-valuemax={last} aria-valuenow={hour} aria-valuetext={`H+${hour}${caption ? `, ${caption}` : ""}`} aria-disabled={disabled}
               onKeyDown={key} className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-ink bg-white shadow-md transition-[left] duration-150 ease-out active:cursor-grabbing motion-reduce:transition-none" style={{ left: `${pos(hour)}%` }} />
           </div>
-          <span className="w-[46px] shrink-0 text-right font-mono text-sm font-semibold tabular-nums" aria-live="off">H+{hour}</span>
+          <span className="w-[46px] shrink-0 text-right font-mono text-sm font-semibold tabular-nums" aria-live="off">{hours < 2 ? "Now" : `H+${hour}`}</span>
         </div>
         <div aria-hidden className="relative ml-[92px] mr-[62px] mt-0.5 h-4 font-mono text-[10px] text-muted max-sm:ml-[84px] max-sm:mr-[56px]">
-          {labels.map((h) => <span key={h} className="absolute -translate-x-1/2" style={{ left: `${pos(h)}%` }}>H+{h}</span>)}
+          {hours > 1 && labels.map((h) => <span key={h} className="absolute -translate-x-1/2" style={{ left: `${pos(h)}%` }}>H+{h}</span>)}
         </div>
         {caption && <p className="pb-1 text-center font-mono text-[11px] text-ink/70">{caption}</p>}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { getJSON, hourTime, utc, type Lookup, type Meta } from "@/lib/sample";
-import { ageH, hoursText, useLive, type Forecast, type Load, type Nowcast } from "@/lib/live";
+import { ageH, hoursText, useLive, type Coastal, type Forecast, type Load, type Nowcast } from "@/lib/live";
 import { liveWindow, stepLabel, type LiveWindow, type RouteForecast } from "@/lib/live-route";
 import type { RouteCrossings, XAssessed } from "@/lib/route";
 import { loadServices, type ServicesDoc } from "@/lib/services";
@@ -15,6 +15,7 @@ type Ctx = {
   error: string | null;
   fc: Load<Forecast>;
   nc: Load<Nowcast>;
+  co: Load<Coastal>;
   blocks: Lookup | null; // Florence replay only: Census blocks with population and per-hour access results
   now: number;
   useOsm: boolean; setUseOsm: (v: boolean) => void; nOsm: number;
@@ -47,6 +48,7 @@ export function WorkspaceData({ children }: { children: ReactNode }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const fc = useLive<Forecast>("forecast_latest.json", true);
   const nc = useLive<Nowcast>("nowcast.json", true);
+  const co = useLive<Coastal>("coastal.json", mode === "nowcast");
 
   useEffect(() => {
     Promise.all([getJSON<Meta>("meta.json"), loadServices(), getJSON<RouteCrossings>("route_crossings.json")])
@@ -86,8 +88,8 @@ export function WorkspaceData({ children }: { children: ReactNode }) {
     return { source: f ? f.source : fc.error ? "Forecast file unavailable" : "Loading forecast…", generated: f ? `${utc(f.generated_at)} · cycle ${hoursText(age)}` : "not loaded", note: note(mode, stale), stale };
   }, [base, mode, nc, fc, win, now]);
 
-  const v = useMemo<Ctx>(() => ({ base, error, fc, nc, blocks, now, useOsm, setUseOsm, nOsm, X, win, hours, start, timeText, caption, prov, selectedId, setSelectedId, byId }),
+  const v = useMemo<Ctx>(() => ({ base, error, fc, nc, co, blocks, now, useOsm, setUseOsm, nOsm, X, win, hours, start, timeText, caption, prov, selectedId, setSelectedId, byId }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [base, error, fc, nc, blocks, now, useOsm, nOsm, X, win, hours, start, mode, prov, selectedId, byId]);
+    [base, error, fc, nc, co, blocks, now, useOsm, nOsm, X, win, hours, start, mode, prov, selectedId, byId]);
   return <D.Provider value={v}>{children}</D.Provider>;
 }

@@ -7,7 +7,7 @@ import { LeftPanel } from "@/components/workspace/left-panel";
 import { MenuSheet, Rail } from "@/components/workspace/rail";
 import { RightPanel } from "@/components/workspace/right-panel";
 import { Sheet } from "@/components/workspace/sheet";
-import { WorkspaceData } from "@/components/workspace/data";
+import { WorkspaceData, useData } from "@/components/workspace/data";
 import { WorkspaceState, useWS } from "@/components/workspace/store";
 import { TimePill } from "@/components/workspace/time-pill";
 import { TopBar } from "@/components/workspace/top-bar";
@@ -23,7 +23,8 @@ function useDesktop() {
 }
 
 function Shell() {
-  const { sheetPx } = useWS();
+  const { sheetPx, hour, mode } = useWS();
+  const d = useData();
   const desktop = useDesktop();
   return (
     <div id="content" className="fixed inset-0 overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
@@ -32,7 +33,7 @@ function Shell() {
       <TopBar />
       {desktop === true && <><LeftPanel /><RightPanel /></>}
       {desktop === false && <Sheet />}
-      <TimePill />
+      <TimePill caption={d.base ? d.caption(hour) : undefined} disabled={mode === "nowcast"} />
       <MapControls />
       <MenuSheet />
     </div>

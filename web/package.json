@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "sample:sync": "node -e \"require('fs').cpSync('../export/sample','public/data/sample',{recursive:true,filter:s=>!/\\.(py|html|md)$/.test(s)})\"",
-    "check:route": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/route-check.mjs"
+    "check:route": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/route-check.mjs",
+    "check:workspace": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/workspace-check.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
