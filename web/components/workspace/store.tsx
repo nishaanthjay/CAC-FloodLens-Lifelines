@@ -8,10 +8,10 @@ export type Mode = "replay" | "nowcast" | "forecast";
 export type LayerSel = "rivers" | "coastal" | "both";
 export type Snap = "peek" | "half" | "full";
 
-export const TABS: { id: Tab; label: string }[] = [
-  { id: "water", label: t("tabs.water") },
-  { id: "access", label: t("tabs.access") },
-  { id: "consequence", label: t("tabs.consequence") },
+export const TABS: { id: Tab; label: string; short: string; explain: string }[] = [
+  { id: "water", label: t("tabs.water"), short: t("tabs.water.short"), explain: t("tabs.water.explain") },
+  { id: "access", label: t("tabs.access"), short: t("tabs.access.short"), explain: t("tabs.access.explain") },
+  { id: "consequence", label: t("tabs.consequence"), short: t("tabs.consequence.short"), explain: t("tabs.consequence.explain") },
 ];
 
 /** Handle the map registers so controls outside it (zoom buttons, table rows) can drive the camera. */

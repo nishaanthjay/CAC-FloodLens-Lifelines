@@ -255,16 +255,34 @@ Uses Hurricane Florence (2018) as a replay. Not for emergencies: call 911.
 Map view
 
 ## tabs.water
+Where is water high?
+
+## tabs.water.short
 Water
 
+## tabs.water.explain
+Shows how high each river is compared with a typical big flood.
+
 ## tabs.access
-Access
+Can I get to help?
+
+## tabs.access.short
+Get help
+
+## tabs.access.explain
+Enter an address to see how you would reach an ER and a fire station.
 
 ## tabs.consequence
-Consequence
+What breaks first?
+
+## tabs.consequence.short
+What breaks
+
+## tabs.consequence.explain
+Ranks the crossings where a closure would affect the most people.
 
 ## topbar.mode.label
-Mode
+Storm
 
 ## topbar.mode.replay.badge
 REPLAY
@@ -279,32 +297,36 @@ FORECAST
 Florence 2018
 
 ## topbar.mode.nowcast.value
-Observed now
+Live now
 
 ## topbar.mode.forecast.value
 Preview
 
 ## topbar.mode.replay.label
-Replay · Florence 2018
+Florence 2018 (replay)
 
 ## topbar.mode.replay.sub
 Past storm, fixed data
 
 ## topbar.mode.nowcast.label
-Nowcast
+Right now (live)
 
 ## topbar.mode.nowcast.sub
 Observed gauges and tide stations
 
 ## topbar.mode.forecast.label
-Forecast preview
+Next 18 hours (preview, unvalidated)
 
 <!-- keep meaning: the forecast preview is unvalidated -->
 ## topbar.mode.forecast.sub
 NWM short-range, unvalidated
 
+<!-- placeholders: age; meaning: how long ago a live data file was last updated, for example "25 h ago" -->
+## topbar.stale
+Last updated {age}
+
 ## topbar.layer.label
-Layer
+Which crossings to show
 
 ## topbar.layer.rivers.label
 Rivers
@@ -364,6 +386,9 @@ Reset view to Cape Fear
 
 ## mapcontrols.facilities
 Hospitals and fire stations
+
+## mapcontrols.options
+Map options
 
 ## map.region
 Map of crossings and services in the Cape Fear region

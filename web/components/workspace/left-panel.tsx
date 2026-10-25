@@ -8,7 +8,7 @@ import { MODE_BADGE } from "@/components/workspace/top-bar";
 import { useData, type Prov } from "@/components/workspace/data";
 import { useDerived, usePick } from "@/components/workspace/derived";
 import { useRouting } from "@/components/workspace/routing";
-import { useWS, type Mode, type Tab } from "@/components/workspace/store";
+import { TABS, useWS, type Mode, type Tab } from "@/components/workspace/store";
 import { tierOfCrossing } from "@/lib/workspace/stats";
 import { t } from "@/content/copy";
 
@@ -123,6 +123,7 @@ export function LeftContent() {
     <AnimatePresence mode="wait" initial={false}>
       <m.div key={tab} id="ws-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.16 }}>
         <h2 className="font-display text-[26px] font-bold leading-tight tracking-[-0.02em] text-ink">{TITLE[tab]}</h2>
+        <p className="mt-1 text-sm text-muted">{TABS.find((x) => x.id === tab)!.explain}</p>
         {d.error ? <ErrorCard title={t("leftpanel.error.title")} text={t("leftpanel.error.text", { error: d.error })} />
           : loading || !d.prov ? <LeftSkeleton /> : (
           <>
