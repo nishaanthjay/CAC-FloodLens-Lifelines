@@ -1,8 +1,8 @@
 import { Droplets } from "lucide-react";
 
 const cols = [
-  ["Explore", [["Florence replay", "/#florence"], ["Route analysis", "/route"], ["What breaks first", "/#breaks"]]],
-  ["About", [["How it works", "/#how"], ["About and limits", "/about"], ["Data status", "/status"]]],
+  ["Explore", [["Florence replay", "/?mode=replay"], ["Address check", "/?tab=access"], ["What breaks first", "/?tab=consequence"]]],
+  ["About", [["How it works", "/about#how"], ["About and limits", "/about#limits"], ["Data status", "/status"]]],
 ] as const;
 
 export function Footer() {

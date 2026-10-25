@@ -4,11 +4,11 @@ import { Droplets, Menu, X } from "lucide-react";
 
 const links = [
   ["Emergency finder", "/emergency"],
-  ["Route analysis", "/route"],
-  ["Florence replay", "/#florence"],
-  ["What breaks first?", "/#breaks"],
-  ["How it works", "/#how"],
-  ["About and limits", "/about"],
+  ["Map workspace", "/"],
+  ["Address check", "/?tab=access"],
+  ["What breaks first?", "/?tab=consequence"],
+  ["How it works", "/about#how"],
+  ["About and limits", "/about#limits"],
 ];
 
 export function Masthead() {

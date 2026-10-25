@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Masthead } from "@/components/layout/masthead";
 import { Footer } from "@/components/layout/footer";
+import { Hero } from "@/components/landing/hero";
+import { Florence } from "@/components/landing/florence";
+import { Audience } from "@/components/landing/audience";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { Cta } from "@/components/landing/cta";
+import { SampleProvider } from "@/components/forecast/sample-store";
 
 export const metadata: Metadata = {
   title: "About and limits",
@@ -33,8 +39,15 @@ export default function About() {
   return (
     <>
       <Masthead />
-      <main id="content" className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
-        <h1 className="font-display text-5xl font-black leading-tight tracking-[-0.03em]">About and limits</h1>
+      <SampleProvider>
+      <main id="content">
+        <Hero />
+        <Florence />
+        <Audience />
+        <HowItWorks />
+        <Cta />
+      <section id="limits" className="mx-auto max-w-3xl scroll-mt-16 px-4 py-16 sm:px-6 sm:py-24">
+        <h2 className="font-display text-5xl font-black leading-tight tracking-[-0.03em]">About and limits</h2>
         <p role="note" className="mt-6 rounded-2xl border border-alert/30 bg-softred p-5 font-ui text-base font-semibold text-alert">
           Not for emergency use. In an emergency, call 911. This is a scenario and nowcast tool for a student pilot, not a warning service.
         </p>
@@ -94,7 +107,9 @@ export default function About() {
         </p>
 
         <p className="mt-6 font-ui text-sm"><a className="text-blue underline underline-offset-4" href="/status">Data freshness status</a></p>
+      </section>
       </main>
+      </SampleProvider>
       <Footer />
     </>
   );
