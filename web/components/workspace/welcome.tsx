@@ -6,10 +6,9 @@ import { useRouting } from "@/components/workspace/routing";
 import { useWS } from "@/components/workspace/store";
 import { TOUR_KEY } from "@/components/workspace/tour";
 
-export const WELCOME_KEY = "lifelines.welcome";
 const DEEP = ["tab", "mode", "lat", "lon", "svc", "hour"]; // a shared or in-site link already says what to show: no card
 
-/** First-load card over the dimmed map: one question, one address box. Remembers its dismissal; skipped for deep links. */
+/** First-load card over the dimmed map: one question, one address box. Shows on every visit to the bare address; skipped for deep links. */
 export function Welcome() {
   const r = useRouting(), { setTab, setTour } = useWS();
   const [open, setOpen] = useState(false);
@@ -17,16 +16,13 @@ export function Welcome() {
   const box = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    let seen = false;
-    try { seen = localStorage.getItem(WELCOME_KEY) === "1"; } catch { /* storage blocked: the card shows each visit */ }
     const sp = new URLSearchParams(window.location.search);
     const linked = DEEP.some((k) => sp.has(k)) || /(^|[#&])q=/.test(window.location.hash);
-    if (!seen && !linked) setOpen(true);
+    if (!linked) setOpen(true);
   }, []);
   useEffect(() => { if (open) box.current?.focus(); }, [open]);
 
   const close = () => {
-    try { localStorage.setItem(WELCOME_KEY, "1"); } catch { /* ignore */ }
     setOpen(false);
     let toured = false;
     try { toured = localStorage.getItem(TOUR_KEY) === "done"; } catch { /* ignore */ }
