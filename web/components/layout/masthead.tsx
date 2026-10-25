@@ -5,7 +5,7 @@ import { t } from "@/content/copy";
 
 const links = [
   [t("masthead.link.emergency"), "/emergency"],
-  [t("masthead.link.workspace"), "/"],
+  [t("masthead.link.workspace"), "/?tab=water"],
   [t("masthead.link.address"), "/?tab=access"],
   [t("masthead.link.breaks"), "/?tab=consequence"],
   [t("masthead.link.how"), "/about#how"],

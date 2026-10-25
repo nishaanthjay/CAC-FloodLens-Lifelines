@@ -19,7 +19,7 @@ export function Rail() {
   const { tab, setTab, setTour } = useWS();
   return (
     <nav aria-label={t("rail.nav")} className="ws-glass absolute inset-y-0 left-0 z-30 hidden w-14 flex-col items-center gap-1 rounded-none border-y-0 border-l-0 bg-white/90 py-3 lg:flex">
-      <a href="/about" aria-label={t("rail.logo")} className="mb-3 grid h-9 w-9 place-items-center rounded-[10px] bg-blue text-white">
+      <a href="/" aria-label={t("rail.logo")} className="mb-3 grid h-9 w-9 place-items-center rounded-[10px] bg-blue text-white">
         <Droplets size={18} strokeWidth={1.8} aria-hidden />
       </a>
       {NAV.map((n) => {
