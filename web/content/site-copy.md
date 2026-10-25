@@ -818,19 +818,16 @@ Print
 ## access.emergency
 Emergency finder
 
-## access.services.title
-Essential services
-
 ## access.services.hint
 Tap to add or remove a route
 
 ## access.services.filter
 Filter services
 
-<!-- placeholders: all, kind; meaning: all = how many of each kind are shown in the "All" view, kind = how many are shown when one kind is picked -->
+<!-- placeholders: kind; meaning: how many are shown when one kind is picked -->
 <!-- keep meaning: lists are incomplete; a listing does not mean a place is open; call 911 in an emergency -->
 ## access.services.note.all
-The {all} nearest of each kind; pick a kind to see {kind}. Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call 911 in an emergency.
+The nearest of each kind; pick a kind to see the {kind} nearest. Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call ahead; call 911 in an emergency.
 
 <!-- placeholders: kind; meaning: how many nearest services are shown for the picked kind -->
 <!-- keep meaning: lists are incomplete; a listing does not mean a place is open; call 911 in an emergency -->
@@ -872,6 +869,93 @@ no detour found ({reason})
 <!-- placeholders: name; meaning: the crossing a backup route avoids -->
 ## routing.label.backup
 If {name} closes
+
+# Workspace: the answer card, other places and the route strip
+
+## answer.aria
+Your answer
+
+## answer.er.noroute
+No road route to the nearest ER was found.
+
+## answer.er.finding
+Finding the way to the nearest ER…
+
+<!-- placeholders: time; meaning: drive time such as "11 min" -->
+## answer.head.ok
+You can reach an ER in {time}
+
+<!-- placeholders: n; meaning: how many crossings on the main route have above-normal water -->
+## answer.head.watch.one
+but the main route crosses {n} high-water stream
+
+<!-- placeholders: n; meaning: how many crossings on the main route have above-normal water -->
+## answer.head.watch.other
+but the main route crosses {n} high-water streams
+
+<!-- keep meaning: nothing flagged is NOT an all-clear -->
+## answer.sub.ok
+Nothing on the main route is flagged in this scenario. That is not an all-clear.
+
+<!-- keep meaning: a scenario, not a prediction that the road will close -->
+## answer.sub.watch
+Water is above normal at these crossings in this scenario. That is not a prediction that the road will close.
+
+<!-- placeholders: time; meaning: drive time of the backup route such as "26 min" -->
+## answer.head.closed.backup
+The fastest way to an ER is likely closed. A backup takes {time}.
+
+<!-- keep meaning: likely closed in the scenario; call 911 -->
+## answer.sub.closed
+In this scenario the main route crosses a crossing that is likely closed. Call 911 in an emergency.
+
+## answer.head.closed.all
+Every route we found to an ER is likely closed
+
+<!-- keep meaning: every route has a likely-closed crossing; call 911 -->
+## answer.sub.closed.all
+Shown: the option with the fewest likely-closed crossings. Call 911 in an emergency.
+
+## answer.row.er
+Nearest ER
+
+## answer.row.fire
+Nearest fire station
+
+## answer.row.backup
+Backup route
+
+## answer.backup.looking
+Looking for a backup route…
+
+## access.other.title
+Other places (dialysis, urgent care, pharmacy…)
+
+## strip.title
+Crossings on the way
+
+## strip.home
+Your address
+
+## strip.dest
+Destination
+
+## strip.aria
+Route from your address to the destination, with a dot for each stream crossing
+
+## strip.nodata
+No data
+
+<!-- keep meaning: no crossing flagged is NOT an all-clear -->
+## strip.none
+No crossing on the way is at Watch or above in this scenario. That is not an all-clear.
+
+<!-- placeholders: n; meaning: how many crossings on the route are at Normal level -->
+## strip.normal
++{n} normal crossings
+
+## route.details.title
+Trip details
 
 # Workspace: selected-crossing card
 
@@ -928,46 +1012,46 @@ OpenStreetMap road-stream intersection: may not be a bridge.
 # Workspace: route analysis (used in the Access tab and the printed address check)
 
 ## route.badge.replay.open
-Open
+No crossing flagged
 
 <!-- keep meaning: open in the replay is not an all-clear; the replay sees river flow only -->
 ## route.note.replay.open
-Open in this replay hour is not an all-clear: the replay sees river flow only, and streams the model did not assess are not counted.
+No crossing on this route is flagged in this replay hour. That is not an all-clear: the replay sees river flow only, and streams the model did not assess are not counted.
 
 ## route.badge.replay.risk
-At risk
+Watch
 
 <!-- keep meaning: at risk = a stream on the route is above its 2-year flow -->
 ## route.note.replay.risk
-Crosses at least one stream above its 2-year flow in this replay hour.
+At least one crossing on this route has water higher than a flood that happens about every 2 years, in this replay hour.
 
 ## route.badge.replay.blocked
-Blocked
+Likely closed
 
 <!-- keep meaning: blocked = above the 10-year flow, which closes it in this scenario -->
 ## route.note.replay.blocked
-Crosses at least one crossing whose stream is above its 10-year flow, which closes it in this scenario.
+At least one crossing on this route has water higher than a typical big flood (about every 10 years), so it is treated as closed in this scenario.
 
 ## route.badge.live.open
 No crossing flagged
 
 <!-- keep meaning: not an all-clear; the forecast is unvalidated and sees river flow only -->
 ## route.note.live.open
-No crossing on this route is above its 10-year flow in this step. Not an all-clear: the forecast is unvalidated, sees river flow only, and crossings it could not assess are not counted.
+No crossing on this route is flagged in this step. Not an all-clear: the forecast is unvalidated, sees river flow only, and crossings it could not assess are not counted.
 
 ## route.badge.live.risk
-At risk
+Watch
 
 <!-- keep meaning: unvalidated model flow, not a probability of closure -->
 ## route.note.live.risk
-A crossing on this route is above its 2-year flow in this step (unvalidated model flow, not a probability of closure).
+At least one crossing on this route has water higher than a flood that happens about every 2 years in this step (unvalidated model flow, not a probability of closure).
 
 ## route.badge.live.blocked
-Crossing flagged
+Likely closed
 
 <!-- keep meaning: a scenario level, not a probability of closure -->
 ## route.note.live.blocked
-At least one crossing on this route is above its 10-year flow, which closes it in this scenario. A scenario level, not a probability of closure.
+At least one crossing on this route has water higher than a typical big flood (about every 10 years), so it is treated as closed in this scenario. A scenario level, not a probability of closure.
 
 ## route.kind.fastest
 Fastest route
@@ -1039,38 +1123,38 @@ Route you selected
 <!-- placeholders: kind; meaning: the kind of place, in lower case -->
 <!-- keep meaning: every route crosses a flagged crossing; call 911 -->
 ## route.blocked.live
-Every route found to the selected {kind} crosses a crossing that is flagged in the forecast. Shown: the option with the fewest. Call 911 in an emergency.
+Every route found to the selected {kind} crosses a crossing that is likely closed in the forecast. Shown: the option with the fewest. Call 911 in an emergency.
 
 <!-- placeholders: kind; meaning: the kind of place, in lower case -->
 <!-- keep meaning: every route crosses a flagged crossing and no detour was found; call 911 -->
 ## route.blocked.live.nodetour
-Every route found to the selected {kind} crosses a crossing that is flagged in the forecast, and no detour around them was found. Shown: the option with the fewest. Call 911 in an emergency.
+Every route found to the selected {kind} crosses a crossing that is likely closed in the forecast, and no detour around them was found. Shown: the option with the fewest. Call 911 in an emergency.
 
 <!-- placeholders: kind; meaning: the kind of place, in lower case -->
 <!-- keep meaning: every route crosses a closed crossing; call 911 -->
 ## route.blocked.replay
-Every route found to the selected {kind} crosses a crossing that is closed in this replay hour. Shown: the option with the fewest. Call 911 in an emergency.
+Every route found to the selected {kind} crosses a crossing that is likely closed in this replay hour. Shown: the option with the fewest. Call 911 in an emergency.
 
 <!-- placeholders: kind; meaning: the kind of place, in lower case -->
 <!-- keep meaning: every route crosses a closed crossing and no detour was found; call 911 -->
 ## route.blocked.replay.nodetour
-Every route found to the selected {kind} crosses a crossing that is closed in this replay hour, and no detour around them was found. Shown: the option with the fewest. Call 911 in an emergency.
+Every route found to the selected {kind} crosses a crossing that is likely closed in this replay hour, and no detour around them was found. Shown: the option with the fewest. Call 911 in an emergency.
 
 <!-- placeholders: n, time; meaning: n = how many route options there are, time = drive time such as "13 min" -->
 ## route.first.live.one
-Ranked first of {n} option: no crossing flagged in this step, and {time} in normal traffic.
+Ranked first of {n} option: no crossing likely closed in this step, and {time} in normal traffic.
 
 <!-- placeholders: n, time; meaning: n = how many route options there are, time = drive time such as "13 min" -->
 ## route.first.live.other
-Ranked first of {n} options: no crossing flagged in this step, and {time} in normal traffic.
+Ranked first of {n} options: no crossing likely closed in this step, and {time} in normal traffic.
 
 <!-- placeholders: n, time; meaning: n = how many route options there are, time = drive time such as "13 min" -->
 ## route.first.replay.one
-Ranked first of {n} option: open in the replay this hour, and {time} in normal traffic.
+Ranked first of {n} option: no crossing likely closed in the replay this hour, and {time} in normal traffic.
 
 <!-- placeholders: n, time; meaning: n = how many route options there are, time = drive time such as "13 min" -->
 ## route.first.replay.other
-Ranked first of {n} options: open in the replay this hour, and {time} in normal traffic.
+Ranked first of {n} options: no crossing likely closed in the replay this hour, and {time} in normal traffic.
 
 ## route.flags.aria
 Flags for this route
@@ -1103,16 +1187,16 @@ Distance
 Crossings assessed on it
 
 ## route.fact.steps.live
-Steps flagged in the forecast
+Steps likely closed in the forecast
 
 ## route.fact.steps.replay
-Hours blocked in replay
+Hours likely closed in replay
 
 ## route.fact.first.live
-First flagged
+First likely closed
 
 ## route.fact.first.replay
-First blocked
+First likely closed
 
 ## route.fact.never.live
 Not in this forecast
@@ -1121,10 +1205,10 @@ Not in this forecast
 Not in this window
 
 ## route.timeline.live
-This route, now and over the forecast
+When this route is affected, now and over the forecast
 
 ## route.timeline.replay
-This route, hour by hour
+When this route is affected during Florence
 
 ## route.timeline.aria.live
 Route status per step: now, then forecast hours
@@ -1144,59 +1228,9 @@ Color and height: status in that step. The first bar is now, then each forecast 
 ## route.timeline.note.replay
 Color and height: replay status in that hour. Height is not a probability.
 
-<!-- placeholders: n; meaning: how many stream crossings are on the route -->
-## route.crossings.title
-Stream crossings on this route ({n})
-
 <!-- placeholders: n; meaning: how many assessed crossings there are in total -->
 ## route.crossings.none
 None of the {n} assessed crossings lie on this route.
-
-## route.crossing.nodata
-no data
-
-## route.crossing.flagged
-flagged
-
-## route.crossing.closed
-closed
-
-## route.crossing.above2
-above 2-yr
-
-## route.crossing.flow.unknown
-Flow unknown
-
-<!-- placeholders: ratio; meaning: the stream's flow as a multiple of its 10-year flow -->
-## route.crossing.flow
-Flow {ratio}× the 10-year flow
-
-<!-- placeholders: when; meaning: the time the stream first goes above its 10-year flow, or "not in replay" -->
-## route.crossing.firstabove
-first above 10-yr flow {when}
-
-<!-- placeholders: time; meaning: the time the stream first goes above its 10-year flow, when that is before the replay window starts -->
-## route.crossing.beforewindow
-{time} (before the replay window)
-
-## route.crossing.notinreplay
-not in replay
-
-<!-- placeholders: zone; meaning: the FEMA flood zone code -->
-## route.crossing.fema
-FEMA {zone}
-
-<!-- keep meaning: tidal crossings can flood in ways river flow does not capture -->
-## route.crossing.tidal
-tidal: surge may matter more than river flow
-
-<!-- keep meaning: crossings mapped from OpenStreetMap may not be bridges -->
-## route.crossing.osm
-mapped from OpenStreetMap (a road-stream intersection that may not be a bridge)
-
-<!-- placeholders: n; meaning: how many people live behind the crossing -->
-## route.crossing.people
-{n} people affected if it closes alone
 
 <!-- placeholders: n; meaning: how many crossings on the route the model could not assess -->
 <!-- keep meaning: unassessed is not the same as open -->
@@ -1227,10 +1261,10 @@ long detour
 {name}: {reason}.
 
 ## route.ranking.live
-Ranking: fewest flagged crossings first (clear routes lead), then the shorter drive.
+Ranking: fewest likely-closed crossings first (clear routes lead), then the shorter drive.
 
 ## route.ranking.replay
-Ranking: fewest closed crossings first (open routes lead), then the shorter drive.
+Ranking: fewest likely-closed crossings first (open routes lead), then the shorter drive.
 
 ## route.block.title
 Cross-check: the model’s own road network (Florence replay)

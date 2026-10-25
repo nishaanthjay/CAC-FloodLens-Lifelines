@@ -12,7 +12,7 @@ export function HowToRead({ panel, children }: { panel: HowPanel; children: Reac
   const { how, setHow } = useWS();
   return (
     <details id={`ws-how-${panel}`} open={how[panel]} onToggle={(e) => setHow(panel, (e.currentTarget as HTMLDetailsElement).open)} className="mt-4 border-t border-ink/10 pt-1">
-      <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-ink">
+      <summary className="disclose flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-ink">
         <Info size={16} aria-hidden className="shrink-0 text-blue" />{t("howto.title")}
       </summary>
       <div className="space-y-3 pb-2 text-[13px] leading-snug text-ink/80">{children}</div>

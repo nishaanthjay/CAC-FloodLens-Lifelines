@@ -71,6 +71,11 @@
   .ws-label {
     @apply text-[13px] font-medium text-muted;
   }
+  /* a small chevron on every "show more" summary */
+  .disclose { position: relative; padding-right: 1.75rem; list-style: none; }
+  .disclose::-webkit-details-marker { display: none; }
+  .disclose::after { content: ""; position: absolute; right: 0.5rem; top: 50%; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-70%) rotate(45deg); transition: transform 0.15s; opacity: 0.6; }
+  details[open] > .disclose::after { transform: translateY(-30%) rotate(-135deg); }
   .ws-scroll {
     scrollbar-width: thin;
     scrollbar-color: rgb(17 17 17 / 0.18) transparent;

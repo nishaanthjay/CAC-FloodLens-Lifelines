@@ -18,7 +18,8 @@ type Pending = "loading";
 type Ranked = { o: RouteOption; s: HourStatus }[];
 
 export const PER_KIND = 5; // nearest services of each kind that get drive times (9 kinds x 5 stays under the router's 50-target limit)
-export const SHOW_ALL = 3; // per kind in the "All" view
+export const SHOW_ALL = 1; // per kind in the "All" view of "Other places"
+export const SHOW_KIND = 3; // when one kind is picked
 const BACKUP_GAP_MS = 400; // spacing between backup-route requests (public server, fair use)
 const MAX_OPTIONS = 4; // routes kept per service
 export const FILTERS: ["all" | Kind, string][] = [["all", t("common.all")], ...KINDS.map((k) => [k.id, k.label] as ["all" | Kind, string])];
@@ -33,6 +34,7 @@ type Ctx = {
   groups: Group[]; ranked: Ranked; focus: string | null; setFocusId: (id: string | null) => void;
   names: Record<string, string>; fastest: Record<string, number>; noRoute: { name: string; reason: string }[];
   noBackup: Record<string, boolean>; // services where backup routes were tried and every way there uses the same crossings
+  backupBusy: boolean; // a backup search is still running for a selected service
   baseline: Record<string, RouteOption>; // the normal-conditions fastest route per selected service
   bestFor: (id: string) => Ranked[number] | undefined;
   block: LocationView | null;
@@ -102,8 +104,10 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
     setServices(list); setSelected([]); setTrips({}); setDetours({}); setBackups({}); setFocusId(null);
     const pick = (l: Service[]) => {
       const w = want ? l.find((s) => s.id === want) : undefined;
-      const h = w ?? l.filter((s) => s.k === "hospital_ed").sort((a, b) => (a.timeS ?? a.straightKm * 1e4) - (b.timeS ?? b.straightKm * 1e4))[0];
-      if (h) setSelected([h.id]);
+      const near = (k: Kind) => l.filter((s) => s.k === k).sort((a, b) => (a.timeS ?? a.straightKm * 1e4) - (b.timeS ?? b.straightKm * 1e4))[0];
+      const h = w ?? near("hospital_ed"), f = near("fire"); // the answer card shows the nearest ER and the nearest fire station
+      const ids = [h?.id, f?.id].filter((x): x is string => !!x);
+      if (ids.length) setSelected(ids);
     };
     matrix([origin.lon, origin.lat], list.map((s) => [s.lon, s.lat] as LngLat))
       .then((m) => {
@@ -246,8 +250,9 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
   const bestFor = (id: string) => ranked.find((r) => r.o.serviceId === id);
   const byTime = (a: Service, b: Service) => (a.timeS ?? Infinity) - (b.timeS ?? Infinity) || a.straightKm - b.straightKm;
   const shown = filter === "all"
-    ? KINDS.flatMap((k) => services.filter((s) => s.k === k.id).sort(byTime).slice(0, SHOW_ALL))
-    : services.filter((s) => s.k === filter).sort(byTime);
+    ? KINDS.filter((k) => k.id !== "hospital_ed" && k.id !== "fire").flatMap((k) => services.filter((s) => s.k === k.id).sort(byTime).slice(0, SHOW_ALL)) // the ER and fire station are in the answer card
+    : services.filter((s) => s.k === filter).sort(byTime).slice(0, SHOW_KIND);
+  const backupBusy = selected.some((id) => Array.isArray(trips[id]) && (trips[id] as Trip[]).length > 0 && !backups[id]);
   const toggle = (id: string) => setSelected((sel) => (sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]));
 
   // Link back to this starting point only (coordinates of the geocoded place, never the typed text).
@@ -260,6 +265,6 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
   }
 
   const v: Ctx = { query, setQuery, search, busy, msg, origin, net, slowWait, loading, services, shown, filter, setFilter, selected, toggle, trips, groups, ranked, focus, setFocusId,
-    names, fastest, noRoute, noBackup, baseline, bestFor, block, copied, share, hh };
+    names, fastest, noRoute, noBackup, backupBusy, baseline, bestFor, block, copied, share, hh };
   return <R.Provider value={v}>{children}</R.Provider>;
 }

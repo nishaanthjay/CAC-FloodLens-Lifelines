@@ -4,10 +4,10 @@ import { ADDRESS_EXAMPLE } from "@/lib/geocode";
 import { mi, mins } from "@/lib/format";
 import { telHref } from "@/lib/services";
 import { KindIcon } from "@/components/ui/kind-icon";
-import { RouteAnalysis, StatusBadge } from "@/components/route/route-analysis";
-import { Section } from "@/components/workspace/ui";
+import { RouteAnalysis, RouteNotes, StatusBadge } from "@/components/route/route-analysis";
+import { AnswerCard } from "@/components/workspace/answer-card";
 import { useData } from "@/components/workspace/data";
-import { FILTERS, PER_KIND, SHOW_ALL, useRouting } from "@/components/workspace/routing";
+import { FILTERS, SHOW_KIND, useRouting } from "@/components/workspace/routing";
 import { useWS } from "@/components/workspace/store";
 import { t } from "@/content/copy";
 
@@ -61,50 +61,54 @@ export function AccessSection() {
         </>
       )}
 
+      <AnswerCard />
+
       {r.services.length > 0 && (
-        <Section label={t("access.services.title")} className="mt-3" aside={<span className="text-[13px] text-muted">{t("access.services.hint")}</span>}>
-          <div className="mb-2 flex flex-wrap gap-1.5" role="group" aria-label={t("access.services.filter")}>
-            {FILTERS.map(([k, label]) => (
-              <button key={k} type="button" onClick={() => r.setFilter(k)} aria-pressed={r.filter === k}
-                className={`min-h-8 rounded-full border px-3 text-xs font-semibold transition-colors ${r.filter === k ? "border-blue bg-blue text-white" : "border-ink/15 bg-white text-ink/75 hover:border-blue"}`}>{label}</button>
-            ))}
+        <details className="mt-3 rounded-xl border border-ink/10 bg-white/70">
+          <summary className="disclose flex min-h-11 cursor-pointer items-center gap-2 px-3 text-sm font-medium text-ink">{t("access.other.title")}</summary>
+          <div className="px-2.5 pb-3">
+            <p className="mb-2 text-[13px] text-muted">{t("access.services.hint")}</p>
+            <div className="mb-2 flex flex-wrap gap-1.5" role="group" aria-label={t("access.services.filter")}>
+              {FILTERS.map(([k, label]) => (
+                <button key={k} type="button" onClick={() => r.setFilter(k)} aria-pressed={r.filter === k}
+                  className={`min-h-11 rounded-full border px-3 text-[13px] font-medium transition-colors ${r.filter === k ? "border-blue bg-blue text-white" : "border-ink/15 bg-white text-ink/80 hover:border-blue"}`}>{label}</button>
+              ))}
+            </div>
+            <ul className="divide-y divide-ink/10 rounded-xl border border-ink/10 bg-white/80">
+              {r.shown.map((s) => {
+                const on = r.selected.includes(s.id), b = r.bestFor(s.id), trip = r.trips[s.id], tel = telHref(s.phone);
+                return (
+                  <li key={s.id}>
+                    <button type="button" onClick={() => r.toggle(s.id)} aria-pressed={on}
+                      className={`grid min-h-14 w-full grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-ink/[0.03] ${on ? "bg-blue/8" : ""}`}>
+                      <span className={`grid h-8 w-8 place-items-center rounded-full ${on ? "bg-blue text-white" : "bg-ink/5 text-ink"}`}>
+                        {on ? <Check size={15} aria-hidden /> : <KindIcon kind={s.k} />}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="text-sm font-medium leading-snug">{s.name}</span>
+                        <span className="block text-[13px] text-muted">{s.sub}{s.addr ? ` · ${s.addr}` : ""}</span>
+                      </span>
+                      <span className="flex flex-col items-end gap-1 text-right">
+                        <span className="tabular-nums text-sm">{s.timeS != null ? mins(s.timeS) : s.timeS === null ? t("common.noroute") : mi(s.straightKm, 0)}</span>
+                        {on && (b ? <StatusBadge state={b.s.state} live={live} /> : trip === "loading" ? <LoaderCircle size={13} className="animate-spin text-muted" aria-label={t("access.routing.aria")} /> : null)}
+                      </span>
+                    </button>
+                    {tel && (
+                      <a href={tel} className="mb-1.5 ml-[3.1rem] inline-flex min-h-11 items-center gap-1.5 text-[13px] font-semibold text-blue hover:underline"><Phone size={13} aria-hidden /> {t("common.call", { phone: s.phone ?? "" })}</a>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            <ServicesNote />
           </div>
-          <ul className="divide-y divide-ink/10 rounded-xl border border-ink/10 bg-white/80">
-            {r.shown.map((s) => {
-              const on = r.selected.includes(s.id), b = r.bestFor(s.id), trip = r.trips[s.id], tel = telHref(s.phone);
-              return (
-                <li key={s.id}>
-                  <button type="button" onClick={() => r.toggle(s.id)} aria-pressed={on}
-                    className={`grid min-h-14 w-full grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-ink/[0.03] ${on ? "bg-blue/8" : ""}`}>
-                    <span className={`grid h-8 w-8 place-items-center rounded-full ${on ? "bg-blue text-white" : s.k === "hospital_ed" ? "bg-softred text-alert" : "bg-ink/5 text-ink"}`}>
-                      {on ? <Check size={15} aria-hidden /> : <KindIcon kind={s.k} />}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="text-[13px] font-medium leading-snug">{s.name}</span>
-                      <span className="block text-[13px] text-muted">{s.sub}{s.addr ? ` · ${s.addr}` : ""}</span>
-                    </span>
-                    <span className="flex flex-col items-end gap-1 text-right">
-                      <span className="tabular-nums text-xs tabular-nums">{s.timeS != null ? mins(s.timeS) : s.timeS === null ? t("common.noroute") : mi(s.straightKm, 0)}</span>
-                      {on && (b ? <StatusBadge state={b.s.state} live={live} /> : trip === "loading" ? <LoaderCircle size={13} className="animate-spin text-muted" aria-label={t("access.routing.aria")} /> : null)}
-                    </span>
-                  </button>
-                  {tel && (
-                    <a href={tel} className="mb-1.5 ml-[3.1rem] inline-flex min-h-9 items-center gap-1.5 text-xs font-semibold text-blue hover:underline"><Phone size={12} aria-hidden /> {t("common.call", { phone: s.phone ?? "" })}</a>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          <p className="mt-1.5 text-[13px] leading-snug text-muted">
-            {r.filter === "all" ? t("access.services.note.all", { all: SHOW_ALL, kind: PER_KIND }) : t("access.services.note.kind", { kind: PER_KIND })}
-          </p>
-        </Section>
+        </details>
       )}
 
       {r.ranked.length > 0 && X && (
         <div className="mt-4 border-t border-ink/8 pt-4">
           <RouteAnalysis groups={r.groups} focusId={r.focus} onFocus={r.setFocusId} hour={r.hh} hours={X.hours} timeText={d.timeText} live={live}
-            names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} nAssessed={X.assessed.length} replayStart={d.start} noBackup={r.noBackup} />
+            names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} noBackup={r.noBackup} />
         </div>
       )}
       {!r.origin && !r.busy && (
@@ -113,5 +117,23 @@ export function AccessSection() {
         </p>
       )}
     </div>
+  );
+}
+
+/** The "listing is not confirmed open" note, shown under the extra places and again under "How to read this". */
+function ServicesNote() {
+  const r = useRouting();
+  return <p className="mt-1.5 text-[13px] leading-snug text-muted">{r.filter === "all" ? t("access.services.note.all", { kind: SHOW_KIND }) : t("access.services.note.kind", { kind: SHOW_KIND })}</p>;
+}
+
+/** Access-tab caveats for the panel's "How to read this" (ranking rule, the model's own road cross-check, disclaimers, how complete the place lists are). */
+export function AccessNotes() {
+  const r = useRouting(), d = useData(), { mode } = useWS();
+  const live = mode !== "replay";
+  return (
+    <>
+      <ServicesNote />
+      {r.ranked.length > 0 && d.X && <RouteNotes live={live} block={r.block} hour={r.hh} hours={d.X.hours} />}
+    </>
   );
 }

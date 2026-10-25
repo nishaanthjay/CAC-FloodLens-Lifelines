@@ -2,7 +2,7 @@
 import { AnimatePresence, m } from "framer-motion";
 import { AlertTriangle, Anchor, Gauge, Info, Waves, type LucideIcon } from "lucide-react";
 import { Section, Skeleton, TierTag } from "@/components/workspace/ui";
-import { AccessSection } from "@/components/workspace/access-section";
+import { AccessNotes, AccessSection } from "@/components/workspace/access-section";
 import { CrossingCard } from "@/components/workspace/crossing-card";
 import { HowToRead, InfoDot } from "@/components/workspace/how-to-read";
 import { MODE_BADGE } from "@/components/workspace/top-bar";
@@ -105,7 +105,7 @@ export function Summary({ insight }: { insight: { stat: string; short: string; m
       <p className="text-xl font-semibold leading-snug text-ink">{insight.stat}</p>
       <p className="mt-1 text-sm leading-snug text-ink/80">{insight.short} <InfoDot panel="left" className="align-middle" /></p>
       <details className="mt-1">
-        <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-blue">{t("leftpanel.more")}</summary>
+        <summary className="disclose flex min-h-11 cursor-pointer items-center text-sm font-medium text-blue">{t("leftpanel.more")}</summary>
         <p className="pb-1 text-[13px] leading-relaxed text-ink/80">{insight.more}</p>
       </details>
     </div>
@@ -169,6 +169,7 @@ export function LeftContent() {
               <p>{t("leftpanel.source", { source: d.prov.source })}</p>
               <p>{t("howto.unassessed", { n: X ? X.not_assessed.length.toLocaleString("en-US") : "0" })}</p>
               {tab === "consequence" && <p>{t("leftpanel.table.note.people")}</p>}
+              {tab === "access" && <AccessNotes />}
               <div>
                 <p className="font-semibold text-ink">{t("leftpanel.section.about")}</p>
                 <label className="mt-1.5 flex items-start gap-2.5 leading-snug text-ink/85">

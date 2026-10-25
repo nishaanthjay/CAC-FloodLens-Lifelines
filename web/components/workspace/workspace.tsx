@@ -38,7 +38,7 @@ function PrintSheet() {
       <p className="mt-3 text-sm"><b>{t("access.starting")}</b> {r.origin.label}</p>
       <div className="mt-4">
         <RouteAnalysis groups={r.groups} focusId={r.focus} onFocus={r.setFocusId} hour={r.hh} hours={d.X.hours} timeText={d.timeText} live={live}
-          names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} nAssessed={d.X.assessed.length} replayStart={d.start} noBackup={r.noBackup} />
+          names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} noBackup={r.noBackup} inlineNotes />
       </div>
     </div>
   );

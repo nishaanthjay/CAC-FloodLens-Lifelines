@@ -20,7 +20,7 @@ export function CrossingCard() {
   const name = crossingName(x, d.X.assessed);
   const steps = Array.from({ length: d.X.hours }, (_, i) => tierOfCrossing(x, i));
   return (
-    <section aria-label={t("crossing.aria")} className="mb-3 rounded-xl border border-ink/10 bg-white/80 p-3 [animation:rise-sm_0.2s_ease-out]">
+    <section id="ws-crossing-card" aria-label={t("crossing.aria")} className="mb-3 rounded-xl border border-ink/10 bg-white/80 p-3 [animation:rise-sm_0.2s_ease-out]">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="ws-label">{t("crossing.label")} · <span className="tabular-nums normal-case tracking-normal">{x.id}</span></p>
