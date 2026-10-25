@@ -3,18 +3,19 @@ import { m } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { Bars, Legend, StackedArea, type BarRow, type Series } from "@/components/workspace/charts";
 import { ErrorCard } from "@/components/workspace/left-panel";
+import { HowToRead, InfoDot } from "@/components/workspace/how-to-read";
 import { Section, Segmented, Skeleton } from "@/components/workspace/ui";
 import { useData } from "@/components/workspace/data";
 import { useDerived } from "@/components/workspace/derived";
 import { useWS } from "@/components/workspace/store";
 import { ageH, hoursText, type Gauge } from "@/lib/live";
 import { utc } from "@/lib/sample";
-import { ACCESS_STATES, TIERS } from "@/lib/workspace/tiers";
+import { ACCESS_STATES, LEVELS, levelSum, type Level } from "@/lib/workspace/tiers";
 import { t } from "@/content/copy";
 
-const PATTERN = ["sparse", "dots", "diag", "cross"] as const; // tier 1..4: Low, Elevated, High, Very high
+const PATTERN = ["sparse", "dots", "diag", "cross"] as const; // levels 1..3 (Watch, High, Likely closed) use the first three
 const n = (v: number) => v.toLocaleString("en-US");
-const tierBar = (i: number, value: number): BarRow => ({ key: String(i), label: TIERS[i].label, fill: TIERS[i].fill, stroke: TIERS[i].stroke, strokeW: TIERS[i].strokeW, value });
+const levelBar = (l: Level, value: number): BarRow => ({ key: String(l.id), label: l.label, fill: l.fill, stroke: l.stroke, strokeW: l.strokeW, value });
 
 const CAT: Record<string, { label: string; w: number }> = {
   major: { label: t("rp.cat.major"), w: 4 }, moderate: { label: t("rp.cat.moderate"), w: 3 }, minor: { label: t("rp.cat.minor"), w: 2.5 }, action: { label: t("rp.cat.action"), w: 2 },
@@ -41,7 +42,6 @@ function Gauges({ gauges, now }: { gauges: Gauge[]; now: number }) {
             </li>
           ))}
         </ul>
-        <p className="mt-1.5 text-[13px] leading-snug text-muted">{t("rp.gauges.note")}</p>
       </Section>
     </>
   );
@@ -65,7 +65,6 @@ function Coastal() {
               </li>
             ))}
           </ul>
-          <p className="mt-1.5 text-[13px] leading-snug text-muted">{t("rp.coastal.note")}</p>
         </>
       )}
     </Section>
@@ -92,9 +91,10 @@ export function RightContent() {
     aNote = t("rp.area.note.replay");
     opts = [{ id: "people", label: t("rp.opt.people") }, { id: "blocks", label: t("rp.opt.blocks") }];
   } else if (mode === "forecast" && v.liveSeries) {
-    const pick = (k: number) => v.liveSeries!.map((s) => (unit === "people" ? s.people[k] : s.count[k]));
-    series = [4, 3, 2, 1].map((k) => ({ id: `t${k}`, label: TIERS[k].label, fill: TIERS[k].fill, pattern: PATTERN[k - 1], values: pick(k) }));
-    legend = [4, 3, 2, 1, 0].map((k) => ({ id: `t${k}`, label: k === 0 ? t("rp.legend.notflagged") : TIERS[k].label, fill: TIERS[k].fill, pattern: k === 0 ? "plain" : PATTERN[k - 1], value: n(unit === "people" ? v.liveSeries![v.h].people[k] : v.liveSeries![v.h].count[k]) }));
+    const pick = (l: Level) => v.liveSeries!.map((s) => levelSum(unit === "people" ? s.people : s.count)[l.id]);
+    const at = (l: Level) => levelSum(unit === "people" ? v.liveSeries![v.h].people : v.liveSeries![v.h].count)[l.id];
+    series = [3, 2, 1].map((k) => ({ id: `l${k}`, label: LEVELS[k].label, fill: LEVELS[k].fill, pattern: PATTERN[k - 1], values: pick(LEVELS[k]) }));
+    legend = [3, 2, 1, 0].map((k) => ({ id: `l${k}`, label: k === 0 ? t("rp.legend.notflagged") : LEVELS[k].label, fill: LEVELS[k].fill, pattern: k === 0 ? "plain" : PATTERN[k - 1], value: n(at(LEVELS[k])) }));
     if (v.liveSeries[v.h].unknown) legend.push({ id: "none", label: t("rp.legend.novalue"), fill: "#FFFFFF", pattern: "sparse", value: n(v.liveSeries[v.h].unknown) });
     aTitle = unit === "people" ? t("rp.area.title.live.people") : t("rp.area.title.live.crossings");
     aNote = unit === "people" ? t("rp.area.note.live.people") : t("rp.area.note.live.crossings");
@@ -112,22 +112,28 @@ export function RightContent() {
       ) : (
         <>
           {series.length > 0 ? (
-            <Section label={aTitle} className="mt-3">
+            <Section label={aTitle} className="mt-3" aside={<InfoDot panel="right" />}>
               <StackedArea series={series} hour={v.h} onHour={setHour} unitLabel={unit === "people" ? t("rp.unit.people") : mode === "replay" ? t("rp.unit.blocks") : t("rp.unit.crossings")} ariaLabel={t("rp.area.aria", { title: aTitle })} emptyText={t("rp.area.empty")} />
               <Legend items={legend} />
-              <p className="mt-1.5 text-[13px] leading-snug text-muted">{aNote}</p>
               <div className="mt-2 flex items-center justify-between gap-2 border-t border-ink/8 pt-2">
                 <span className="ws-label">{t("rp.distributed")}</span>
                 <Segmented size="sm" label={t("rp.distributed")} value={unit} onChange={setUnit} options={opts} />
               </div>
             </Section>
           ) : <Skeleton className="mt-3 h-40" />}
-          <Section label={t("rp.tiers.title")} className="mt-3" aside={<span className="tabular-nums text-[13px] text-muted">{t("common.hour", { hour: v.h })}</span>}>
-            <Bars rows={[4, 3, 2, 1, 0].map((k) => tierBar(k, v.tiers!.count[k]))} unitLabel={t("rp.unit.crossings")} />
-            {v.tiers!.unknown > 0 && <p className="mt-2 text-[13px] leading-snug text-ink/80">{t("rp.tiers.unknown", { n: n(v.tiers!.unknown) })}</p>}
-            <p className="mt-1.5 text-[13px] leading-snug text-muted">{t("rp.tiers.unassessed", { n: n(d.X!.not_assessed.length) })}</p>
+          <Section label={t("rp.tiers.title")} className="mt-3" aside={<span className="flex items-center gap-1"><span className="tabular-nums text-[13px] text-muted">{t("common.hour", { hour: v.h })}</span><InfoDot panel="right" /></span>}>
+            <Bars rows={[3, 2, 1, 0].map((k) => levelBar(LEVELS[k], levelSum(v.tiers!.count)[k]))} unitLabel={t("rp.unit.crossings")} />
           </Section>
         </>
+      )}
+      {!d.error && ready && (
+        <HowToRead panel="right">
+          {mode !== "nowcast" && aNote && <p>{aNote}</p>}
+          {mode !== "nowcast" && v.tiers && v.tiers.unknown > 0 && <p>{t("rp.tiers.unknown", { n: n(v.tiers.unknown) })}</p>}
+          {mode !== "nowcast" && <p>{t("rp.tiers.unassessed", { n: n(d.X!.not_assessed.length) })}</p>}
+          {mode === "nowcast" && <p>{t("rp.gauges.note")}</p>}
+          {mode === "nowcast" && <p>{t("rp.coastal.note")}</p>}
+        </HowToRead>
       )}
     </div>
   );

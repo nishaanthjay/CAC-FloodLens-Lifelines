@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
 import { esc, type ML } from "@/lib/maplibre";
 import { crossingRoad, tidyName } from "@/lib/format";
+import { crossingLine, crossingName } from "@/lib/workspace/names";
 import { CLOSED, type LngLat, type OnRoute } from "@/lib/route";
 import { mapPadding, reducedMotion } from "@/lib/workspace/camera";
 import { detourRuns, length, midpoint } from "@/lib/workspace/geo";
@@ -9,6 +10,7 @@ import { flowDash, setDestinations, setListed } from "@/lib/workspace/route-laye
 import { tierOfLevel } from "@/lib/workspace/stats";
 import { TIERS } from "@/lib/workspace/tiers";
 import { createTooltip } from "@/lib/workspace/tooltip";
+import { useData } from "@/components/workspace/data";
 import { useRouting } from "@/components/workspace/routing";
 import { useWS } from "@/components/workspace/store";
 import { t } from "@/content/copy";
@@ -21,6 +23,7 @@ const ROUTE_LINES = ["route-alt-casing", "route-alt", "route-base-casing", "rout
 /** Everything the Access tab draws, derived from the routing state and the selected hour. */
 function useModel() {
   const r = useRouting();
+  const all = useData().X?.assessed ?? [];
   const hh = r.hh;
   return useMemo(() => {
     const routes: Feat[] = [], detours: Feat[] = [], rx = new Map<string, Feat>();
@@ -31,7 +34,7 @@ function useModel() {
     const crossingPoint = (c: OnRoute) => {
       const lv = c.x ? parseInt(c.x.level[hh] ?? "-", 10) : NaN;
       const cls = !c.x ? -2 : tierOfLevel(lv);
-      rx.set(c.id, { type: "Feature", properties: { id: c.id, cls, name: c.x ? tidyName(c.x.name) : t("routemap.crossing.unassessed"),
+      rx.set(c.id, { type: "Feature", properties: { id: c.id, cls, name: c.x ? crossingLine(crossingName(c.x, all)) : t("routemap.crossing.unassessed"),
         status: !c.x ? t("routemap.status.unassessed") : cls < 0 ? t("routemap.status.novalue") : cls >= 3 ? t("routemap.status.closed") : `${TIERS[cls].label}: ${TIERS[cls].note}` },
         geometry: { type: "Point", coordinates: [c.lon, c.lat] } });
     };
@@ -53,7 +56,7 @@ function useModel() {
       const ref = base ?? scen.o; // closed crossings on the normal (baseline) path
       for (const c of ref.on) {
         const lv = c.x ? parseInt(c.x.level[hh] ?? "-", 10) : NaN;
-        if (c.x && lv >= CLOSED) closed.set(c.id, { lon: c.lon, lat: c.lat, id: c.id, name: tidyName(c.x.name), km: c.km });
+        if (c.x && lv >= CLOSED) closed.set(c.id, { lon: c.lon, lat: c.lat, id: c.id, name: crossingLine(crossingName(c.x, all)), km: c.km });
       }
       if (base && scen.o.id !== base.id) {
         const runs = detourRuns(base.shape, scen.o.shape);
@@ -63,7 +66,7 @@ function useModel() {
       }
     }
     return { routes, detours, avoids: [...avoids.values()], rx: [...rx.values()], closed: [...closed.values()].sort((a, b) => a.km - b.km), chips, shapes };
-  }, [r.selected, r.ranked, r.focus, r.baseline, r.fastest, hh]);
+  }, [r.selected, r.ranked, r.focus, r.baseline, r.fastest, hh, all]);
 }
 
 const initial = (label: string) => (label.match(/[A-Za-z0-9]/)?.[0] ?? "•").toUpperCase();

@@ -221,6 +221,102 @@ Not for emergency use · call 911
 ## sheet.menu
 Open menu
 
+# Plain words: risk levels, water, names
+
+## tier.normal
+Normal
+
+<!-- keep meaning: Normal is not flagged in this scenario and is NOT an all-clear -->
+## tier.normal.note
+Not flagged in this scenario. That is not an all-clear.
+
+## tier.watch
+Watch
+
+## tier.watch.note
+Water is higher than a flood that happens about every 2 years.
+
+## tier.high
+High
+
+## tier.high.note
+Water is higher than a flood that happens about every 5 years.
+
+## tier.closed
+Likely closed
+
+<!-- keep meaning: at this level the road is treated as closed in the scenario (flow above the 10-year level) -->
+## tier.closed.note
+Water is higher than a flood that happens about every 10 years, so the road is treated as closed in this scenario.
+
+<!-- placeholders: pct; meaning: a percentage, for example 30% -->
+## plain.share.pct
+{pct}% of
+
+## plain.share.under1
+Under 1% of
+
+<!-- placeholders: n; meaning: a share written as "1 in n", for example 1 in 3 -->
+## plain.share.oneIn
+1 in {n}
+
+<!-- A "typical big flood" means the flow that is reached about once in 10 years. -->
+<!-- placeholders: x; meaning: how many times the water flow is the typical big-flood flow, for example 7 -->
+## plain.water.high
+Water is about {x}× higher than a typical big flood
+
+<!-- placeholders: x; meaning: the water flow as a multiple of the typical big-flood flow, between 1 and 1.5 -->
+## plain.water.near
+Water is at about a typical big-flood level ({x}×)
+
+<!-- placeholders: pct; meaning: the water flow as a percentage of the typical big-flood flow -->
+## plain.water.part
+Water is about {pct}% of a typical big flood
+
+## plain.water.low
+Water is well below a typical big flood
+
+## plain.water.none
+No water reading for this hour
+
+<!-- placeholders: x; meaning: short form for hover tips, for example 7 -->
+## plain.water.short
+{x}× a typical big flood
+
+<!-- placeholders: ratio; meaning: the technical figure shown in small type, for example 6.95 -->
+## plain.water.figure
+{ratio}× 10-yr flow
+
+<!-- placeholders: road; meaning: a road name, for example "Pine Road" -->
+## names.road
+{road} stream crossing
+
+<!-- placeholders: road; meaning: the nearest road that has a name -->
+## names.near
+Small stream crossing near {road}
+
+## names.small
+Small stream crossing
+
+<!-- placeholders: road, stream; meaning: a road and the stream it crosses -->
+## names.over
+{road} over {stream}
+
+## access.state.lost
+Lost access
+
+## access.state.gt10
+Slowed more than 10 min
+
+## access.state.s1_10
+Slowed 1 to 10 min
+
+## access.state.none
+Not flagged in this scenario
+
+## access.state.na
+Not assessed
+
 # Workspace: first-visit welcome card
 
 ## welcome.title
@@ -408,15 +504,6 @@ The map could not load
 
 # Workspace: map hover tooltips
 
-## tip.crossing.id
-Crossing ID
-
-## tip.crossing.stream
-Stream
-
-## tip.crossing.notnamed
-Not named
-
 ## tip.crossing.flow
 Flow vs 10-year
 
@@ -427,21 +514,18 @@ no model value
 People affected
 
 ## tip.crossing.tier
-Tier
+Risk
 
 ## tip.crossing.tier.novalue
 No model value
 
-<!-- placeholders: n; meaning: how many crossings a map cluster holds -->
+<!-- placeholders: n, worst; meaning: how many crossings a map cluster holds and the worst risk level among them -->
 ## tip.cluster.title
-{n} crossings
+{n} crossings, worst: {worst}
 
 <!-- placeholders: n; meaning: people behind a cluster of crossings, summed per crossing so one person may be counted twice -->
 ## tip.cluster.people
 {n} (summed)
-
-## tip.cluster.worst
-Worst tier now
 
 ## tip.unassessed.title
 Stream crossing
@@ -579,29 +663,29 @@ The data failed to load
 {error}. The map still works, but nothing here is computed. Try reloading.
 
 ## leftpanel.section.hazards
-Top hazards
+At a glance
 
 ## leftpanel.tile.flagged
-Crossings above 10-year flow
+Crossings likely closed
 
 ## leftpanel.tile.tidal
-Tidal crossings flagged
+Coastal crossings likely closed
 
 ## leftpanel.tile.gauges
-Gauges at action stage
+River gauges on alert
 
 ## leftpanel.tile.gauges.now
-Gauges at action stage (now)
+River gauges on alert (now)
 
 <!-- keep meaning: crossings the model could not assess are not assumed open -->
 ## leftpanel.tile.unassessed
-Not assessed: not assumed open
+Crossings we could not assess
 
 ## leftpanel.section.top.flow
-Top 10 crossings by flow
+Where the water is highest
 
 ## leftpanel.section.top.people
-Top 10 crossings by consequence
+Where a closure would affect the most people
 
 ## leftpanel.table.crossing
 Crossing
@@ -609,17 +693,8 @@ Crossing
 ## leftpanel.table.risk
 Risk
 
-## leftpanel.table.vs10
-vs 10-yr
-
-## leftpanel.table.people
-People
-
-## leftpanel.table.na
-n/a
-
 ## leftpanel.table.caption.flow
-Crossings with the highest flow compared with their 10-year flow at this hour.
+Crossings with the highest water compared with a typical big flood at this hour.
 
 ## leftpanel.table.caption.people
 Crossings ranked by the people behind them, flagged crossings first.
@@ -638,8 +713,29 @@ No crossing has a model value for this step, so none can be ranked. They are not
 ## leftpanel.table.note.people
 Flagged = above the 10-year flow, which closes the crossing in this scenario. People are the people who lose a route or are slowed by more than a minute if this crossing alone closes.
 
+## leftpanel.more
+More
+
+<!-- placeholders: n; meaning: people who would be affected if this crossing closed -->
+## leftpanel.row.people
+{n} people affected if it closes
+
+## howto.title
+How to read this
+
+## howto.colors
+What the colors mean
+
+## howto.info
+More about this number
+
+<!-- placeholders: n; meaning: how many crossings the model could not assess -->
+<!-- keep meaning: crossings the model could not assess are not assumed open -->
+## howto.unassessed
+{n} crossings could not be assessed (no matching stream or flow threshold). They are not assumed open.
+
 ## leftpanel.section.about
-About this view
+About the crossings counted
 
 <!-- placeholders: nOsm, nStructures; meaning: nOsm = crossings mapped from OpenStreetMap, nStructures = crossings from NCDOT / NBI bridge records -->
 <!-- keep meaning: OpenStreetMap crossings may not be bridges, so they are less certain -->
@@ -648,7 +744,7 @@ Count the {nOsm} OpenStreetMap-mapped crossings. They are road-stream intersecti
 
 <!-- keep meaning: the Layer chip only filters the display; address route checks always use every crossing -->
 ## leftpanel.layer.note
-The Layer chip filters what is drawn and listed here. Address route checks always use every crossing.
+The “Which crossings to show” map option (the sliders button on the map) filters what is drawn and listed here. Address route checks always use every crossing.
 
 <!-- placeholders: n; meaning: how many caveats are listed -->
 ## leftpanel.caveats
@@ -796,13 +892,6 @@ Close crossing card
 ## crossing.novalue
 No model value this step (not assumed open)
 
-## crossing.noflow
-no flow value
-
-<!-- placeholders: ratio; meaning: the stream's flow as a multiple of its 10-year flow, for example 1.25 -->
-## crossing.ratio
-{ratio}× the 10-year flow
-
 ## crossing.people
 People affected
 
@@ -813,7 +902,7 @@ County
 FEMA zone
 
 ## crossing.first
-First above 10-year flow
+First likely closed
 
 ## crossing.notinreplay
 not in replay
@@ -1333,7 +1422,7 @@ Unvalidated model flow compared with each stream's recurrence flows. Not a closu
 Nothing flagged in this window. Not an all-clear.
 
 ## rp.legend.notflagged
-Not flagged in this scenario
+Normal (not flagged in this scenario)
 
 <!-- keep meaning: crossings with no model value are not assumed open -->
 ## rp.legend.novalue
@@ -1427,8 +1516,51 @@ on non-tidal streams
 ## insight.layer.coastal
 that are tidal-influenced
 
-## insight.unnamed
-Unnamed crossing
+<!-- placeholders: share, county; meaning: share = "1 in 3" or "30% of", county = a county name -->
+## insight.stat.replay.slow
+{share} {county} neighborhoods need a 10+ min detour to reach an ER
+
+<!-- placeholders: share, county; meaning: share = "1 in 3" or "30% of", county = a county name -->
+## insight.stat.replay.lost
+{share} {county} neighborhoods have no route to an ER
+
+<!-- placeholders: county; meaning: a county name -->
+## insight.stat.replay.none
+No {county} neighborhood needs a 10+ min detour to reach an ER
+
+## insight.stat.replay.clear
+No assessed neighborhood is cut off or slowed in this scenario
+
+<!-- placeholders: lostPeople, gt10People; meaning: people with no route to an ER, and people slowed by more than 10 min -->
+<!-- keep meaning: counts of people with no route and people slowed by 10+ minutes, across the three counties -->
+## insight.short.replay
+Across the three counties, {lostPeople} people have no route to an ER and {gt10People} more are slowed by 10+ min.
+
+<!-- keep meaning: nothing flagged is NOT an all-clear; the replay sees river flow only -->
+## insight.short.replay.clear
+That is not an all-clear: this replay sees river flow only.
+
+<!-- placeholders: above10, assessed, step; meaning: crossings likely closed, crossings assessed, which forecast step -->
+## insight.stat.live.some
+{above10} of {assessed} crossings are likely closed for {step}
+
+<!-- placeholders: people; meaning: people living behind the crossings; summed per crossing so some are counted twice -->
+## insight.short.live.some
+About {people} people live behind them.
+
+## insight.stat.live.none
+No crossing is likely closed in this model run
+
+<!-- keep meaning: none likely closed is NOT an all-clear; unvalidated, river flow only -->
+## insight.short.live.none
+That is not an all-clear: the run is unvalidated and sees river flow only.
+
+## insight.stat.live.expired
+The latest forecast has ended
+
+<!-- keep meaning: with no data every crossing shows as "no data", never as open -->
+## insight.short.live.expired
+Every crossing shows as “no data”, never as open.
 
 <!-- placeholders: hour, when, naShare; meaning: hour = scenario hour, when = its date and time, naShare = share of blocks not assessed, for example 12% -->
 <!-- keep meaning: nothing flagged is NOT an all-clear; the replay sees river flow only -->

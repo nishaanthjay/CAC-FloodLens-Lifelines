@@ -1,8 +1,8 @@
 "use client";
 import { useMemo } from "react";
-import { tidyName } from "@/lib/format";
 import { utc } from "@/lib/sample";
 import { liveInsight, replayInsight } from "@/lib/workspace/insight";
+import { crossingName } from "@/lib/workspace/names";
 import { accessSeries, layerKeep, replaySummary, tierBreakdown, tierSeries, topCrossings } from "@/lib/workspace/stats";
 import { useData } from "@/components/workspace/data";
 import { useWS } from "@/components/workspace/store";
@@ -36,7 +36,7 @@ export function useDerived() {
       expired: !!d.win?.expired, layerNote: layer === "rivers" ? ` ${t("insight.layer.rivers")}` : layer === "coastal" ? ` ${t("insight.layer.coastal")}` : "" });
   }, [X, tiers, access, d, mode, h, layer]);
 
-  const rows = useMemo(() => top.map((r) => ({ id: r.id, name: r.name === r.id ? t("insight.unnamed") : tidyName(r.name), tier: r.tier, people: r.people, ratio: r.ratio })), [top]);
+  const rows = useMemo(() => top.map((r) => ({ id: r.id, name: crossingName(r.x, X?.assessed ?? []), tier: r.tier, people: r.people, ratio: r.ratio })), [top, X]);
   return { h, keep, access, liveSeries, tiers, rows, gauges, gaugesUp, insight };
 }
 

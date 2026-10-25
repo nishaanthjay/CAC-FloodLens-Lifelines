@@ -2,7 +2,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BOUNDS, STYLE, loadMaplibre, type ML } from "@/lib/maplibre";
 import { LoaderCircle } from "lucide-react";
-import { tidyName } from "@/lib/format";
+import { crossingLine, crossingName } from "@/lib/workspace/names";
+import { waterShort } from "@/lib/workspace/plain";
 import { restyle } from "@/lib/workspace/basemap";
 import { addLayers, applyEncoding, crossingFeatures, fadeSwap, levelTier, serviceFeatures, unassessedFeatures } from "@/lib/workspace/map-layers";
 import { mapPadding, reducedMotion as reduced } from "@/lib/workspace/camera";
@@ -28,8 +29,8 @@ export function MapView() {
   const [error, setError] = useState<string | null>(null);
   const [maxPeople, setMaxPeople] = useState(1);
   const pad = useRef(mapPadding(true, true, 0));
-  const live = useRef({ tab, hour, byId: d.byId });
-  live.current = { tab, hour, byId: d.byId };
+  const live = useRef({ tab, hour, byId: d.byId, all: d.X?.assessed ?? [] });
+  live.current = { tab, hour, byId: d.byId, all: d.X?.assessed ?? [] };
   const ids = useRef(new Map<string, number>()); // crossing id -> numeric feature id in the current data
   const prevTab = useRef(tab);
   const swapTimer = useRef(0);
@@ -93,12 +94,12 @@ export function MapView() {
           if (!f) return;
           m.getCanvas().style.cursor = "pointer";
           if (hov !== f.id) { if (hov !== null) to(hov, 0); hov = f.id; to(f.id, 1); }
-          const p = f.properties, h = live.current.hour, tier = levelTier(p.lv, h), parts = String(p.name).split(/ over /i);
+          const p = f.properties, h = live.current.hour, tier = levelTier(p.lv, h), x = live.current.byId.get(p.id);
           const ratio = parseInt(String(p.rt).slice(3 * h, 3 * h + 3), 10);
-          const rows: [string, string, boolean?][] = [[t("tip.crossing.id"), p.id, true], [t("tip.crossing.stream"), tidyName(parts.length > 1 ? parts[1] : t("tip.crossing.notnamed")), false]];
-          if (live.current.tab === "water") rows.push([t("tip.crossing.flow"), Number.isNaN(ratio) ? t("tip.crossing.novalue") : `${(ratio / 100).toFixed(2)}×`, true]);
-          rows.push([t("tip.crossing.people"), Number(p.ppl).toLocaleString("en-US"), true], [t("tip.crossing.tier"), tier < 0 ? t("tip.crossing.tier.novalue") : TIERS[tier].label, false]);
-          tip.show(tidyName(parts[0] ?? p.name), rows, e.point.x, e.point.y);
+          const rows: [string, string, boolean?][] = [[t("tip.crossing.tier"), tier < 0 ? t("tip.crossing.tier.novalue") : TIERS[tier].label, false]];
+          if (live.current.tab === "water") rows.push([t("tip.crossing.flow"), Number.isNaN(ratio) ? t("tip.crossing.novalue") : waterShort(ratio / 100), false]);
+          rows.push([t("tip.crossing.people"), Number(p.ppl).toLocaleString("en-US"), true]);
+          tip.show(x ? crossingLine(crossingName(x, live.current.all)) : String(p.name), rows, e.point.x, e.point.y);
         });
         m.on("mouseleave", "x-bubble", leave);
         m.on("click", "x-bubble", (e: ML) => { const p = e.features?.[0]?.properties; if (p) { d.setSelectedId(p.id); setSnap("half"); } });
@@ -106,7 +107,8 @@ export function MapView() {
         m.on("mousemove", "x-cluster", (e: ML) => {
           const p = e.features?.[0]?.properties; if (!p) return;
           m.getCanvas().style.cursor = "pointer";
-          tip.show(t("tip.cluster.title", { n: p.point_count }), [[t("tip.crossing.people"), t("tip.cluster.people", { n: Number(p.pp).toLocaleString("en-US") }), true], [t("tip.cluster.worst"), (() => { const worst = p[`mx${Math.min(live.current.hour, 17)}`]; return worst >= 0 ? TIERS[worst].label : t("tip.crossing.tier.novalue"); })(), false]], e.point.x, e.point.y);
+          const worst = p[`mx${Math.min(live.current.hour, 17)}`];
+          tip.show(t("tip.cluster.title", { n: p.point_count, worst: worst >= 0 ? TIERS[worst].label : t("tip.crossing.tier.novalue") }), [[t("tip.crossing.people"), t("tip.cluster.people", { n: Number(p.pp).toLocaleString("en-US") }), true]], e.point.x, e.point.y);
         });
         m.on("mouseleave", "x-cluster", leave);
         m.on("click", "x-cluster", async (e: ML) => {
@@ -117,7 +119,7 @@ export function MapView() {
 
         m.on("mousemove", "xu", (e: ML) => {
           m.getCanvas().style.cursor = "default";
-          tip.show(t("tip.unassessed.title"), [[t("tip.crossing.id"), e.features[0].properties.id, true], [t("tip.unassessed.status"), t("tip.unassessed.status.value"), false], [t("tip.open"), t("tip.unassessed.open.value"), false]], e.point.x, e.point.y);
+          tip.show(t("tip.unassessed.title"), [[t("tip.unassessed.status"), t("tip.unassessed.status.value"), false], [t("tip.open"), t("tip.unassessed.open.value"), false]], e.point.x, e.point.y);
         });
         m.on("mouseleave", "xu", leave);
         const svcTip = (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "default"; tip.show(p.name, [[t("tip.service.type"), p.kindLabel, false], [t("tip.open"), t("tip.service.open.value"), false]], e.point.x, e.point.y); };
