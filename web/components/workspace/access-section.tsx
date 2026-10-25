@@ -26,8 +26,8 @@ export function AccessSection() {
         <div className="flex items-center gap-1.5 rounded-full border border-ink/12 bg-white p-1 pl-3.5 shadow-sm focus-within:border-blue focus-within:ring-4 focus-within:ring-blue/15">
           <Search size={16} className="shrink-0 text-blue" aria-hidden />
           <input id="ws-addr" type="search" value={r.query} onChange={(e) => r.setQuery(e.target.value)} placeholder={t("access.address.placeholder")} autoComplete="street-address"
-            className="min-h-10 w-full min-w-0 bg-transparent text-sm focus-visible:outline-none" />
-          <button type="submit" disabled={r.busy} className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full bg-blue px-4 text-sm font-semibold text-white hover:bg-[#244d86] disabled:opacity-70">
+            className="min-h-11 w-full min-w-0 bg-transparent text-sm focus-visible:outline-none" />
+          <button type="submit" disabled={r.busy} className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-blue px-4 text-sm font-semibold text-white hover:bg-[#244d86] disabled:opacity-70">
             {r.busy && <LoaderCircle size={14} className="animate-spin" aria-hidden />} {t("access.address.go")}
           </button>
         </div>
@@ -47,14 +47,14 @@ export function AccessSection() {
           <p className="mt-2 flex items-start gap-2 text-sm"><MapPin size={15} className="mt-0.5 shrink-0 text-blue" aria-hidden />
             <span className="min-w-0 break-words"><b className="font-semibold">{t("access.starting")}</b> {r.origin.label}</span></p>
           <div className="mt-2 flex flex-wrap gap-2 print:hidden">
-            <button type="button" onClick={r.share} className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-ink/15 bg-white px-3.5 text-xs font-semibold hover:border-blue">
+            <button type="button" onClick={r.share} className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-ink/15 bg-white px-3.5 text-xs font-semibold hover:border-blue">
               <Link2 size={13} aria-hidden /> {r.copied ? t("access.copied") : t("access.copy")}
             </button>
-            <button type="button" onClick={() => window.print()} className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-ink/15 bg-white px-3.5 text-xs font-semibold hover:border-blue">
+            <button type="button" onClick={() => window.print()} className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-ink/15 bg-white px-3.5 text-xs font-semibold hover:border-blue">
               <Printer size={13} aria-hidden /> {t("access.print")}
             </button>
             <a href={`/emergency?${new URLSearchParams({ lat: r.origin.lat.toFixed(5), lon: r.origin.lon.toFixed(5), label: r.origin.label })}`}
-              className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-alert/40 bg-softred px-3.5 text-xs font-semibold text-alert hover:border-alert">
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-alert/40 bg-softred px-3.5 text-xs font-semibold text-alert hover:border-alert">
               <Siren size={13} aria-hidden /> {t("access.emergency")}
             </a>
           </div>

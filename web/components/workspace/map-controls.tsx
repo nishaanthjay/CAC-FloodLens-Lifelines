@@ -22,7 +22,7 @@ export function MapControls() {
     { id: "coastal", label: t("topbar.layer.coastal.label"), sub: t("topbar.layer.coastal.sub") },
     { id: "both", label: t("topbar.layer.both.label"), sub: t("topbar.layer.both.sub") },
   ];
-  const btn = "grid h-10 w-10 place-items-center text-ink/80 transition-colors hover:bg-ink/5 hover:text-ink";
+  const btn = "grid h-11 w-11 place-items-center text-ink/80 transition-colors hover:bg-ink/5 hover:text-ink";
   return (
     <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.24, ease: "easeOut" }}
       ref={box} className={`absolute right-3 bottom-[calc(var(--sheet-h,0px)+96px)] z-20 lg:bottom-3 ${rightOpen ? "lg:right-[384px]" : "lg:right-3"} ${snap === "full" ? "max-lg:hidden" : ""}`}>

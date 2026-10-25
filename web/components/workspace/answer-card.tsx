@@ -9,8 +9,8 @@ import { t, tn } from "@/content/copy";
 
 const byTime = (a: Service, b: Service) => (a.timeS ?? Infinity) - (b.timeS ?? Infinity) || a.straightKm - b.straightKm;
 
-/** After an address: one answer first (can you reach an ER, and how), then the nearest ER, the nearest fire station and a backup route, one row each. */
-export function AnswerCard() {
+/** The answer for the nearest ER and fire station: the big sentence, its second line, and the options behind it. null until an address is set. */
+export function useAnswer() {
   const r = useRouting();
   const { mode } = useWS();
   const live = mode !== "replay";
@@ -24,7 +24,6 @@ export function AnswerCard() {
   const fireOpts = fire ? optsOf(fire.id) : [], firePrimary = fireOpts.find((x) => x.o.kind === "fastest");
   const backup = primary ? erOpts.find((x) => x.o.id !== primary.o.id) : undefined;
 
-  // The big sentence.
   let head: string, sub: string | null = null, state: 0 | 1 | 2 = 0;
   if (!primary || !best) {
     const trip = r.trips[er.id];
@@ -37,8 +36,17 @@ export function AnswerCard() {
     else if (best.s.state < 2) { head = t("answer.head.closed.backup", { time: routeMins(best.o.timeS) }); sub = t("answer.sub.closed"); }
     else { head = t("answer.head.closed.all"); sub = t("answer.sub.closed.all"); }
   }
+  return { r, live, er, fire, primary, best, firePrimary, backup, head, sub, state };
+}
 
-  const Row = ({ svc, opt, title, sub: line }: { svc?: Service; opt?: (typeof erOpts)[number]; title: string; sub?: string }) => (
+/** After an address: one answer first (can you reach an ER, and how), then the nearest ER, the nearest fire station and a backup route, one row each. */
+export function AnswerCard() {
+  const a = useAnswer();
+  if (!a) return null;
+  const { r, live, er, fire, primary, firePrimary, backup, head, sub, state } = a;
+  type Opt = NonNullable<typeof primary>;
+
+  const Row = ({ svc, opt, title, sub: line }: { svc?: Service; opt?: Opt; title: string; sub?: string }) => (
     <li>
       <button type="button" disabled={!opt} onClick={() => opt && r.setFocusId(opt.o.id)} aria-pressed={!!opt && r.focus === opt.o.id}
         className={`grid min-h-14 w-full grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-ink/[0.03] disabled:cursor-default ${opt && r.focus === opt.o.id ? "bg-blue/8" : ""}`}>

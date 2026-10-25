@@ -42,7 +42,7 @@ export function Segmented<T extends string>({ value, onChange, options, label, s
     <div ref={ref} role="radiogroup" aria-label={label} className={`inline-flex rounded-full bg-ink/[0.06] p-0.5 ${className}`}>
       {options.map((o, i) => (
         <button key={o.id} type="button" role="radio" aria-checked={value === o.id} tabIndex={value === o.id ? 0 : -1} onClick={() => onChange(o.id)} onKeyDown={(e) => key(e, i)}
-          className={`whitespace-nowrap rounded-full font-medium transition-colors duration-200 ${size === "sm" ? "min-h-8 px-3 text-[13px]" : "min-h-9 px-4 text-[13px]"} ${value === o.id ? "bg-ink font-semibold text-white shadow-sm" : "text-muted hover:text-ink"}`}>
+          className={`whitespace-nowrap rounded-full font-medium transition-colors duration-200 ${size === "sm" ? "min-h-11 px-3 text-[13px]" : "min-h-11 px-4 text-[13px]"} ${value === o.id ? "bg-ink font-semibold text-white shadow-sm" : "text-muted hover:text-ink"}`}>
           {o.label}
         </button>
       ))}
@@ -74,7 +74,7 @@ export function MenuChip<T extends string>({ label, value, valueText, options, o
   return (
     <div ref={box} className={`relative ${className}`} onKeyDown={nav}>
       <button type="button" aria-haspopup="menu" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}
-        className="ws-glass flex min-h-10 items-center gap-2 rounded-xl px-3 text-left transition-colors hover:bg-white">
+        className="ws-glass flex min-h-11 items-center gap-2 rounded-xl px-3 text-left transition-colors hover:bg-white">
         <span className="ws-label">{label}</span>
         {badge}
         <span className="whitespace-nowrap text-[13px] font-semibold text-ink">{valueText}</span>

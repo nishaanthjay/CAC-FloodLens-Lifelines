@@ -51,7 +51,7 @@ export function WorkspaceState({ children }: { children: ReactNode }) {
   const [hours, setHours] = useState(18);
   const [playing, setPlaying] = useState(false);
   const [rightOpen, setRightOpen] = useState(true);
-  const [snap, setSnap] = useState<Snap>("half");
+  const [snap, setSnap] = useState<Snap>("peek"); // phones: the sheet opens low and shows just the answer or the stat
   const [menuOpen, setMenuOpen] = useState(false);
   const [unit, setUnit] = useState<"people" | "blocks">("people");
   const [facilities, setFacilities] = useState(true);

@@ -36,17 +36,17 @@ export function TimePill({ caption, disabled }: { caption?: string; disabled?: b
       <div className="ws-glass rounded-3xl px-3 pb-1.5 pt-2.5" role="group" aria-label={t("timepill.group")}>
         <div className="flex items-center gap-2.5">
           <button type="button" onClick={() => { used(); setPlaying(!playing); }} disabled={disabled || hours < 2} aria-label={playing ? t("timepill.pause") : t("timepill.play")}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-ink text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-40">
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-40">
             {playing ? <Pause size={15} fill="currentColor" aria-hidden /> : <Play size={15} fill="currentColor" aria-hidden className="translate-x-px" />}
           </button>
           <button type="button" onClick={() => { setPlaying(false); setHour(0); }} disabled={disabled} aria-label={t("timepill.jump")}
-            className={`min-h-8 shrink-0 rounded-full border px-3 text-xs font-semibold transition-colors disabled:opacity-40 ${hour === 0 ? "border-ink bg-ink/5 text-ink" : "border-ink/15 text-ink/75 hover:border-ink/40"}`}>{t("timepill.now")}</button>
+            className={`min-h-11 shrink-0 rounded-full border px-3 text-xs font-semibold transition-colors disabled:opacity-40 ${hour === 0 ? "border-ink bg-ink/5 text-ink" : "border-ink/15 text-ink/75 hover:border-ink/40"}`}>{t("timepill.now")}</button>
           <div ref={track} className="relative mx-1.5 h-9 flex-1 touch-none select-none" onPointerDown={(e) => { if (disabled) return; e.currentTarget.setPointerCapture(e.pointerId); setPlaying(false); from(e); }} onPointerMove={(e) => e.buttons && !disabled && from(e)}>
             <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-ink/12" />
             <div className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-ink/70" style={{ width: `${pos(hour)}%` }} />
             {Array.from({ length: hours }, (_, i) => <span key={i} aria-hidden className={`absolute top-1/2 w-px -translate-x-1/2 -translate-y-1/2 ${i % 3 === 0 ? "h-3 bg-ink/45" : "h-2 bg-ink/25"}`} style={{ left: `${pos(i)}%` }} />)}
             <div role="slider" tabIndex={disabled ? -1 : 0} aria-label={t("timepill.slider")} aria-valuemin={0} aria-valuemax={last} aria-valuenow={hour} aria-valuetext={caption ? t("timepill.valuetext.caption", { hour, caption }) : t("common.hour", { hour })} aria-disabled={disabled}
-              onKeyDown={key} className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-ink bg-white shadow-md transition-[left] duration-150 ease-out active:cursor-grabbing motion-reduce:transition-none" style={{ left: `${pos(hour)}%` }} />
+              onKeyDown={key} className="absolute top-1/2 h-5 w-5 after:absolute after:-inset-3.5 after:content-[''] -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-ink bg-white shadow-md transition-[left] duration-150 ease-out active:cursor-grabbing motion-reduce:transition-none" style={{ left: `${pos(hour)}%` }} />
           </div>
           <span className="w-[46px] shrink-0 text-right tabular-nums text-sm font-semibold tabular-nums" aria-live="off">{hours < 2 ? t("timepill.now") : t("common.hour", { hour })}</span>
         </div>

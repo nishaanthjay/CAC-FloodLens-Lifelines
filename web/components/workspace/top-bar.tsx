@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import { ListOrdered, MapPinned, Waves, type LucideIcon } from "lucide-react";
 import { MenuChip } from "@/components/workspace/ui";
 import { TABS, useWS, type Mode } from "@/components/workspace/store";
 import { useData } from "@/components/workspace/data";
@@ -8,6 +9,8 @@ import { t } from "@/content/copy";
 
 export const MODE_BADGE: Record<Mode, string> = { replay: t("topbar.mode.replay.badge"), nowcast: t("topbar.mode.nowcast.badge"), forecast: t("topbar.mode.forecast.badge") };
 const MODE_TEXT: Record<Mode, string> = { replay: t("topbar.mode.replay.value"), nowcast: t("topbar.mode.nowcast.value"), forecast: t("topbar.mode.forecast.value") };
+
+const TAB_ICON: Record<string, LucideIcon> = { water: Waves, access: MapPinned, consequence: ListOrdered };
 
 function TabBar({ short = false }: { short?: boolean }) {
   const { tab, setTab } = useWS();
@@ -19,12 +22,12 @@ function TabBar({ short = false }: { short?: boolean }) {
     (ref.current?.querySelectorAll("button")[j] as HTMLElement | undefined)?.focus();
   };
   return (
-    <div ref={ref} role="tablist" aria-label={t("tabs.label")} className="ws-glass inline-flex shrink-0 rounded-full p-1">
+    <div ref={ref} role="tablist" aria-label={t("tabs.label")} className={`ws-glass rounded-full p-1 ${short ? "grid w-full grid-cols-3" : "inline-flex shrink-0"}`}>
       {TABS.map((tb, i) => (
         <button key={tb.id} type="button" role="tab" id={`tab-${tb.id}`} aria-selected={tab === tb.id} aria-controls="ws-panel" tabIndex={tab === tb.id ? 0 : -1}
           onClick={() => setTab(tb.id)} onKeyDown={(e) => key(e, i)}
-          className={`min-h-9 whitespace-nowrap rounded-full px-4 text-[13px] font-medium transition-colors duration-200 ${tab === tb.id ? "bg-ink font-semibold text-white" : "text-muted hover:text-ink"}`}>
-          {short ? tb.short : tb.label}
+          className={`${short ? "flex min-h-11 items-center justify-center gap-1.5 px-2" : "min-h-9 px-4"} whitespace-nowrap rounded-full text-[13px] font-medium transition-colors duration-200 ${tab === tb.id ? "bg-ink font-semibold text-white" : "text-muted hover:text-ink"}`}>
+          {short && (() => { const Ic = TAB_ICON[tb.id]; return <Ic size={16} aria-hidden />; })()}{short ? tb.short : tb.label}
         </button>
       ))}
     </div>

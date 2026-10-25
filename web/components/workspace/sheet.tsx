@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Menu } from "lucide-react";
+import { useAnswer } from "@/components/workspace/answer-card";
+import { useDerived } from "@/components/workspace/derived";
 import { LeftContent } from "@/components/workspace/left-panel";
 import { RightContent } from "@/components/workspace/right-panel";
 import { MODE_BADGE } from "@/components/workspace/top-bar";
@@ -8,7 +10,21 @@ import { useWS, type Snap } from "@/components/workspace/store";
 import { t } from "@/content/copy";
 
 const ORDER: Snap[] = ["peek", "half", "full"];
-const snapPx = (s: Snap, vh: number) => (s === "peek" ? 148 : s === "half" ? Math.round(vh * 0.52) : vh - 64);
+const snapPx = (s: Snap, vh: number) => (s === "peek" ? 172 : s === "half" ? Math.round(vh * 0.52) : vh - 64);
+
+/** What the low sheet shows: the answer for the address (Access tab) or the headline number (the other tabs). */
+function PeekSummary() {
+  const { tab, setSnap } = useWS();
+  const a = useAnswer(), v = useDerived();
+  const text = tab === "access" ? (a ? a.head : null) : v.insight?.stat ?? null;
+  return (
+    <div className="pt-1">
+      {text ? <p className="line-clamp-3 text-base font-semibold leading-snug text-ink">{text}</p>
+        : tab === "access" ? <button type="button" onClick={() => { setSnap("half"); window.setTimeout(() => document.getElementById("ws-addr")?.focus(), 450); }} className="min-h-11 rounded-full bg-blue px-5 text-sm font-semibold text-white">{t("sheet.peek.address")}</button> : null}
+      <p className="mt-1 text-[13px] text-muted">{t("sheet.peek.hint")}</p>
+    </div>
+  );
+}
 
 /** Mobile: both panels in one bottom sheet with three snap points (peek, half, full). Drag the handle, or press Enter on it to step through them. */
 export function Sheet() {
@@ -48,8 +64,12 @@ export function Sheet() {
         <button type="button" onClick={() => setMenuOpen(true)} aria-label={t("sheet.menu")} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-ink/5"><Menu size={19} aria-hidden /></button>
       </div>
       <div className={`ws-scroll min-h-0 flex-1 px-4 pb-8 ${snap === "peek" && drag === null ? "overflow-hidden" : "overflow-y-auto"}`}>
-        <LeftContent />
-        <div className="mt-5 border-t border-ink/10 pt-4"><RightContent /></div>
+        {snap === "peek" && drag === null ? <PeekSummary /> : (
+          <>
+            <LeftContent />
+            <div className="mt-5 border-t border-ink/10 pt-4"><RightContent /></div>
+          </>
+        )}
       </div>
     </section>
   );

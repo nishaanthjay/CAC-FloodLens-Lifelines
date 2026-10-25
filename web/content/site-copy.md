@@ -221,6 +221,12 @@ Not for emergency use · call 911
 ## sheet.menu
 Open menu
 
+## sheet.peek.hint
+Drag the handle up for details
+
+## sheet.peek.address
+Check an address
+
 # Plain words: risk levels, water, names
 
 ## tier.normal
