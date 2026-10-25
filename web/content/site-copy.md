@@ -14,31 +14,28 @@ Every piece of user-facing text on the site lives here. Change the text under a 
 ## site.skip
 Skip to content
 
-## site.brand.first
-FloodLens
-
 ## site.brand.second
 Lifelines
 
 ## site.name
-FloodLens Lifelines
+Lifelines
 
 <!-- the browser-tab title of an inner page; %s is replaced by that page's own title, for example "About and limits" -->
 ## site.title.template
-%s · FloodLens Lifelines
+%s · Lifelines
 
 ## site.share.title
-FloodLens Lifelines: can you still get to help?
+Lifelines: can you still get to help?
 
 <!-- keep meaning: says it is not a forecast and not for emergency use -->
 ## site.description
 If the roads flood, can your neighborhood still reach a hospital or fire station? Flood scenarios for Cape Fear, NC. Not a forecast, not for emergency use.
 
 ## site.og.alt
-FloodLens Lifelines: can you still get to help when the roads flood?
+Lifelines: can you still get to help when the roads flood?
 
 ## site.og.kicker
-FLOODLENS LIFELINES · CAPE FEAR, NC
+LIFELINES · CAPE FEAR, NC
 
 ## site.og.headline
 Can you still get to help?
@@ -62,7 +59,7 @@ Call 911 in an emergency
 Unvalidated river-flow forecast preview · Florence 2018 replay kept separate · call 911 in an emergency
 
 ## masthead.home.label
-FloodLens Lifelines home
+Lifelines home
 
 ## masthead.nav.primary
 Primary
@@ -168,10 +165,10 @@ All
 A full-screen map of how flooding could change road access to hospitals and fire stations across Cape Fear, NC. Replay, nowcast and forecast preview. Not for emergency use.
 
 ## workspace.heading
-FloodLens Lifelines map workspace: how flooding could change road access to help in Cape Fear
+Lifelines map workspace: how flooding could change road access to help in Cape Fear
 
 ## workspace.print.title
-FloodLens Lifelines: address check
+Lifelines: address check
 
 ## workspace.print.live
 Now and forecast preview (unvalidated NWM river flow).
@@ -187,7 +184,7 @@ Not for emergency use. Call 911 in an emergency. lifelines-nc.vercel.app
 Primary
 
 ## rail.logo
-FloodLens Lifelines: about
+Lifelines: about
 
 ## rail.map
 Map
@@ -1527,12 +1524,12 @@ Open route analysis
 
 # About page: About and limits
 
-<!-- the browser-tab title; it appears before "· FloodLens Lifelines" -->
+<!-- the browser-tab title; it appears before "· Lifelines" -->
 ## about.title
 About and limits
 
 ## about.meta.description
-What FloodLens Lifelines does, how it was tested, and what it does not claim.
+What Lifelines does, how it was tested, and what it does not claim.
 
 <!-- keep meaning: not for emergency use; call 911; a student pilot, not a warning service -->
 ## about.notice
@@ -1543,7 +1540,7 @@ What it does
 
 <!-- keep meaning: counts of crossings, segments, hospitals and fire stations; unassessed crossings are flagged, never treated as open -->
 ## about.does.body
-Most flood tools answer “is this road underwater?” FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis center or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast, and also a the Florence replay for testing.
+Most flood tools answer “is this road underwater?” Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis center or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast, and also a the Florence replay for testing.
 
 ## about.modes.title
 Three modes:
@@ -1633,7 +1630,7 @@ The model picks out the crossings that matter. The 11 matched crossings rank abo
 
 <!-- keep meaning: flood points are known flood spots, not confirmed closures; one county, 11 crossings, river crossings only -->
 ## about.case.p4
-The flood-point map is dated 11 September 2018, before landfall, so the points are known flood spots. The islands map is dated 9 October 2018. Full report: [reports/phase2_bcso_islands.md](https://github.com/nishaanthjay/CAC-FloodLens-Lifelines/blob/main/reports/phase2_bcso_islands.md).
+The flood-point map is dated 11 September 2018, before landfall, so the points are known flood spots. The islands map is dated 9 October 2018. Full report: [reports/phase2_bcso_islands.md](https://github.com/nishaanthjay/CAC-Lifelines-Lifelines/blob/main/reports/phase2_bcso_islands.md).
 
 ## about.claim.title
 What we do not claim
@@ -1675,7 +1672,7 @@ No account and no user data stored. Addresses you type go to OpenStreetMap Nomin
 # About page: opening animation (plays once per visit on wide screens)
 
 ## intro.aria
-FloodLens Lifelines introduction
+Lifelines introduction
 
 ## intro.skip
 Skip intro

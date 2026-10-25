@@ -1,4 +1,4 @@
-# FloodLens Lifelines - Data card
+# Lifelines - Data card
 
 One row per **gauge-hour** for NC USGS stream gauges, 2015-01-01 00:00 to 2023-01-31 23:00 UTC (the NWM v3.0 retrospective ends 2023-02-01). 236 usable gauges, ~16.7M rows, partitioned by `usgs_id` in `data/derived/ml_full_table/` (parquet). Read it with `pd.read_parquet(path)` (the partition column comes back as a column).
 

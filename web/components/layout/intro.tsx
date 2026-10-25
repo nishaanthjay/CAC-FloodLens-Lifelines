@@ -390,9 +390,6 @@ function TitleCard() {
         <div>
           <p className="font-display text-[clamp(3rem,11vw,8.5rem)] font-black leading-[0.95] tracking-[-0.04em]">
             <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
-              <m.span className="inline-block" {...line(7.6)}>{t("site.brand.first")}</m.span>
-            </span>{" "}
-            <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
               <m.span className="inline-block text-yellow" {...line(7.75)}>{t("site.brand.second")}</m.span>
             </span>
           </p>

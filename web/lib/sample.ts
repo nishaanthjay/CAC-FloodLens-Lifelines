@@ -1,6 +1,6 @@
 import { et, mi } from "./format";
 
-// SAMPLE / PREVIEW data from the FloodLens pipeline (lifeline/export/sample, copied by `npm run sample:sync`).
+// SAMPLE / PREVIEW data from the Lifelines pipeline (lifeline/export/sample, copied by `npm run sample:sync`).
 // Real values come from the Florence 2018 hindcast replay; values marked synthetic are placeholders.
 
 export const dataRoot = () => "/data/sample/";

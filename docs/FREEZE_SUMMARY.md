@@ -1,6 +1,6 @@
 # Freeze summary - technical-freeze-1
 
-Written 2026-10-13. Scope: the technical state of the FloodLens Lifelines pilot (Cape Fear: New Hanover, Brunswick, Pender) as committed locally with tag `technical-freeze-1`. Nothing was pushed (the repo has no remote). The only numbers in the claims tables below are copied verbatim from `docs/claims.md`; the checks in section 5 recompute them from files.
+Written 2026-10-13. Scope: the technical state of the Lifelines pilot (Cape Fear: New Hanover, Brunswick, Pender) as committed locally with tag `technical-freeze-1`. Nothing was pushed (the repo has no remote). The only numbers in the claims tables below are copied verbatim from `docs/claims.md`; the checks in section 5 recompute them from files.
 
 ## 1. Final claims (copied from `docs/claims.md`, section 1)
 Labels: hindcast = NWM v3.0 retrospective; operational replay = NWM operational analysis; scenario = recurrence-flow level, not a probability. **C10 is marked "not recommended as a headline claim" in `docs/claims.md`.** The claims we do NOT make are in `docs/claims.md` section 2 and apply to everything here.

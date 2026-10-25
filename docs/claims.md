@@ -1,4 +1,4 @@
-# FloodLens Lifelines - claims register (T8)
+# Lifelines - claims register (T8)
 
 Written 2026-10-11. Every number below was read from the file named beside it (re-read from the repo, not from memory). Labels: **hindcast** = NWM v3.0 retrospective (free-running, no data assimilation); **operational replay** = NWM operational analysis files, with data assimilation; **scenario** = a recurrence-flow level (RL2...RL50), not a probability. Nothing here is a forecast result. All validation tests were pre-registered in `docs/validation_protocol.md` (Amendments 1-4) before running, and run once.
 
@@ -22,7 +22,7 @@ Written 2026-10-11. Every number below was read from the file named beside it (r
 ---
 ## 2. CLAIMS WE DO NOT MAKE (and why)
 
-1. **"FloodLens predicts which roads will close."** The crossing-level tests are weak or failed: phase-1 ranking of reported vs unreported crossings (p = 0.58 / 0.78; no alternative rule better than p = 0.14, `data/phase2/t2a_rule_comparison.csv`), E1 (NCDOT list vs unlisted, p = 0.085), T12 and T13 (below). The one pass (C5) is a pooled ranking result with precision about 5%, not a closure predictor.
+1. **"Lifelines predicts which roads will close."** The crossing-level tests are weak or failed: phase-1 ranking of reported vs unreported crossings (p = 0.58 / 0.78; no alternative rule better than p = 0.14, `data/phase2/t2a_rule_comparison.csv`), E1 (NCDOT list vs unlisted, p = 0.085), T12 and T13 (below). The one pass (C5) is a pooled ranking result with precision about 5%, not a closure predictor.
 2. **Forecast skill.** Every validation test is a hindcast or an operational-analysis replay. The one forecast replay (v1.2 short-range, starting 2018-09-17) cannot show onset (217 of 250 crossings already above q2 at its first hour) and was not scored for skill. No lead-time claim.
 3. **"Closure labels are validated."** Labels are my suggested decisions on 120 candidates (74 accept / 15 uncertain), **not reviewed by the project owner**; coordinates are rounded to about 1 km; the Florence label file has not been confirmed (`data/phase2/t10/report_candidates.csv`). No claim "validated against Florence closures": E1 failed, E2 passed but cannot discriminate (saturation).
 4. **Any "safe", "no risk", "protected" or "will stay open" statement** about a road, block or address. The closure scenarios see river flow only (no surge, tide, pluvial/drainage flooding, deck height, scour, debris; the separate coastal NOWCAST is not combined with them); a crossing that is not flagged is "not flagged in this scenario", never an assurance.

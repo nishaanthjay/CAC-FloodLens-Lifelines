@@ -9,7 +9,7 @@ out = []
 for key, ds in (("dem1m", "Digital Elevation Model (DEM) 1 meter"), ("ned13", "National Elevation Dataset (NED) 1/3 arc-second Current")):
     off = 0
     while True:
-        r = requests.get(API, params=dict(datasets=ds, bbox=bb, max=200, offset=off, outputFormat="JSON"), headers={"User-Agent": "FloodLens-student"}, timeout=120).json()
+        r = requests.get(API, params=dict(datasets=ds, bbox=bb, max=200, offset=off, outputFormat="JSON"), headers={"User-Agent": "Lifelines-student"}, timeout=120).json()
         its = r.get("items", [])
         for i in its:
             b = i["boundingBox"]; g = box(b["minX"], b["minY"], b["maxX"], b["maxY"])

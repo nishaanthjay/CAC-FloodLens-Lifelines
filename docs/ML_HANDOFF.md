@@ -1,4 +1,4 @@
-# ML handoff - FloodLens gauge nowcast (`ml_full_table_v2`)
+# ML handoff - Lifelines gauge nowcast (`ml_full_table_v2`)
 
 For the ML teammate. Written 2026-10-12. Do not edit or push to anyone else's repo from this; copy the table and `src/pipeline/03_gauge_ml/ml_example_v2.py` into your own work. Every number below comes from `data/phase2/ml_example_v2_results.csv` (made by `src/pipeline/03_gauge_ml/ml_example_v2.py`, log `data/phase2/ml_example_v2.log`) unless another file is named.
 

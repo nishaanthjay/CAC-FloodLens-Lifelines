@@ -29,7 +29,7 @@ export function Masthead() {
               <Droplets size={18} strokeWidth={1.8} aria-hidden />
             </span>
             <span className="font-ui text-[15px] font-semibold tracking-tight">
-              {t("site.brand.first")} <span className="text-blue">{t("site.brand.second")}</span>
+              <span className="text-blue">{t("site.brand.second")}</span>
             </span>
           </a>
 

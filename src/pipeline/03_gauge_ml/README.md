@@ -1,4 +1,4 @@
-# FloodLens Lifelines - ML data pipeline (Steps 1-7)
+# Lifelines - ML data pipeline (Steps 1-7)
 
 Run from the repo root in order, e.g. `python src/pipeline/03_gauge_ml/01_gauges.py` (script names below are relative to this folder). Needs `USGS_API_KEY` in the environment (never printed). Python: pandas, numpy, pyarrow, xarray, zarr, s3fs, requests, geopandas, scikit-learn.
 Every network step caches to `data/raw/` and resumes on rerun.

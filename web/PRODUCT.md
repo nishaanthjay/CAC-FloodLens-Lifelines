@@ -12,7 +12,7 @@ Residents and critical-facility teams in the Cape Fear region checking whether f
 
 ## Product Purpose
 
-FloodLens Lifelines explores how flooding may interrupt road access to hospitals and fire stations. Its purpose is to help people understand possible access disruption over time.
+Lifelines explores how flooding may interrupt road access to hospitals and fire stations. Its purpose is to help people understand possible access disruption over time.
 
 ## Positioning
 

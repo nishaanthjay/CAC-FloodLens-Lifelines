@@ -1,8 +1,8 @@
-# FloodLens Lifelines Design System
+# Lifelines Design System
 
 ## Product surface
 
-FloodLens Lifelines is a Cape Fear civic technology experience for exploring how floods may interrupt road access to hospitals and fire stations. The interface must preserve uncertainty and must never use green or color alone to imply that a road is safe.
+Lifelines is a Cape Fear civic technology experience for exploring how floods may interrupt road access to hospitals and fire stations. The interface must preserve uncertainty and must never use green or color alone to imply that a road is safe.
 
 ## Visual direction
 

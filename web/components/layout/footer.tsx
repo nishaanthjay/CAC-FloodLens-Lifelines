@@ -16,7 +16,7 @@ export function Footer() {
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-blue text-white">
               <Droplets size={19} aria-hidden />
             </span>
-            {t("site.brand.first")} <span className="text-blue">{t("site.brand.second")}</span>
+            <span className="text-blue">{t("site.brand.second")}</span>
           </a>
           <p className="mt-3 max-w-[30ch] font-body text-sm leading-relaxed text-muted">
             {t("footer.tagline")}

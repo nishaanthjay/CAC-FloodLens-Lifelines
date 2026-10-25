@@ -2,7 +2,7 @@
 import os, sys, re, json, time, requests
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common_geo import ROOT
-H = {"User-Agent": "FloodLens-student-research/1.0"}
+H = {"User-Agent": "Lifelines-student-research/1.0"}
 d1 = f"{ROOT}/data/raw_new/iem_lsr_nc"; d2 = f"{ROOT}/data/raw_new/ncei_storm_events"; os.makedirs(d1, exist_ok=True); os.makedirs(d2, exist_ok=True)
 for y in range(2005, 2027):
     p = f"{d1}/lsr_NC_{y}.geojson"

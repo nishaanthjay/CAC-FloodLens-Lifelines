@@ -4,7 +4,7 @@ Polygons are kept as served (no generalisation). FEMA zones are a COMPARISON lay
 import json, time, requests, numpy as np, pandas as pd, geopandas as gpd
 URL = "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28/query"; OUT = "data/phase2/fema_nfhl.parquet"
 FIELDS = "OBJECTID,DFIRM_ID,FLD_AR_ID,FLD_ZONE,ZONE_SUBTY,SFHA_TF,STATIC_BFE,V_DATUM"
-S = requests.Session(); S.headers["User-Agent"] = "FloodLens-research (student project)"
+S = requests.Session(); S.headers["User-Agent"] = "Lifelines-research (student project)"
 def get(u, **kw):
     for k in range(8):
         try: time.sleep(1.0); return S.get(u, timeout=180, **kw)

@@ -1,6 +1,6 @@
 """Paged ArcGIS REST query helper. Never overwrites outputs."""
 import json, time, requests, geopandas as gpd, pandas as pd
-S = requests.Session(); S.headers["User-Agent"] = "FloodLens-student-research/1.0"
+S = requests.Session(); S.headers["User-Agent"] = "Lifelines-student-research/1.0"
 def _get(url, params, post=False):
     for k in range(6):
         try:

@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common_geo import areas, ROOT
 BASE = "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/%d"
 NAMES = {28: "flood_hazard_zones", 1: "lomrs", 16: "base_flood_elevations", 14: "cross_sections"}
-S = requests.Session(); S.headers["User-Agent"] = "FloodLens-research (student project)"
+S = requests.Session(); S.headers["User-Agent"] = "Lifelines-research (student project)"
 AR = areas(); FAILED = []
 
 

@@ -1,4 +1,4 @@
-# FloodLens Lifelines - Phase 1 report (Cape Fear pilot: New Hanover, Brunswick, Pender)
+# Lifelines - Phase 1 report (Cape Fear pilot: New Hanover, Brunswick, Pender)
 
 Run 2026-10-10. Code `src/phase1/`; outputs `data/phase1/` (first pass) and `data/phase1b/` (this pass). `ml_full_table` untouched. All times UTC. Nothing here is validated against observed closures.
 **Every closure result is a SCENARIO** (flow above a recurrence level on the reach), not a probability and not a calibrated closure model. Every table names its crossing set:

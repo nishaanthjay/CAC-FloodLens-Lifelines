@@ -1,4 +1,4 @@
-# FloodLens Lifelines: SAMPLE / PREVIEW export
+# Lifelines: SAMPLE / PREVIEW export
 
 **Sample data, not for emergency use.** This folder shows how pipeline results could look on the website. It is not validated output. The project's kill tests have not passed, and no forecast skill, new hydrologic model, or validation against Florence closures is claimed (see `docs/claims.md` sections 2 and 3). Wording stays probabilistic: a location "may lose access", with an "X% chance". A low chance is never an assurance, because the hazard is river flow only.
 

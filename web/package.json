@@ -1,5 +1,5 @@
 {
-  "name": "floodlens-lifelines-web",
+  "name": "lifelines-web",
   "private": true,
   "scripts": {
     "dev": "node scripts/copy-maplibre-worker.mjs && node scripts/build-copy.mjs && next dev",

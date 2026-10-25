@@ -1,4 +1,4 @@
-# FloodLens Lifelines - Data card addendum: `ml_full_table_v2`
+# Lifelines - Data card addendum: `ml_full_table_v2`
 
 Same rows, split rules and old columns as `reports/DATA_CARD.md` (Florence = TEST, 7-day buffer, 34 unseen gauges, cv_fold by event_id, all statistics from trainval only). Partitioned by `usgs_id` in `data/derived/ml_full_table_v2/`. **66 new columns. These are NOWCAST features (they use observed stage), not forecast features.**
 

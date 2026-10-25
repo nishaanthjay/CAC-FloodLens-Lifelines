@@ -1,4 +1,4 @@
-# FloodLens Lifelines - data export (Cape Fear pilot: New Hanover, Brunswick, Pender)
+# Lifelines - data export (Cape Fear pilot: New Hanover, Brunswick, Pender)
 
 Built by `src/pipeline/04_export/export_data.py`; checked by `src/pipeline/04_export/export_checks.py`; provenance (row counts, inputs, sha256) in `manifest.json`. Study area: three NC counties plus a 40 km graph buffer. **Everything here is a scenario or a structural estimate, not a prediction of any road or address being open or closed.** Closure results use NWM channel streamflow only (no surge, tide, pluvial flooding, deck height or scour). Do not describe any road, block or address as protected from flooding or as free of flood risk; absence of a flag means "not assessed" or "not triggered in this scenario", nothing more.
 

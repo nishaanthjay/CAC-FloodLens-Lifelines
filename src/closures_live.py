@@ -10,7 +10,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent; OUT = ROOT / "data/closures_live"; LOG = OUT / "logs"; LOG.mkdir(parents=True, exist_ok=True)
 if sys.stdout is None: sys.stdout = sys.stderr = open(LOG / "closures_live.log", "a", buffering=1)
 URL = "https://services.arcgis.com/NuWFvHYDMVmmxMeM/ArcGIS/rest/services/NCDOT_TIMS_Incidents/FeatureServer/0/query"
-UA = {"User-Agent": "FloodLens-student-archiver/1.0 (non-commercial; hourly)"}
+UA = {"User-Agent": "Lifelines-student-archiver/1.0 (non-commercial; hourly)"}
 def get(params):
     for k in range(5):
         try:

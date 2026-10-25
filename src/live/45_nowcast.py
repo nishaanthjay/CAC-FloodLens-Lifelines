@@ -15,7 +15,7 @@ CATS = ("no_flooding", "action", "minor", "moderate", "major")   # NWPS floodCat
 
 def get(url, params=None):
     if params: url += "?" + urllib.parse.urlencode(params)
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"Accept": "application/json", "User-Agent": "floodlens_lifelines"}), timeout=30) as r: return json.load(r)
+    with urllib.request.urlopen(urllib.request.Request(url, headers={"Accept": "application/json", "User-Agent": "lifelines"}), timeout=30) as r: return json.load(r)
 
 
 def usgs_ids(raw):   # config stores ids without leading zeros: 8-digit site numbers (2106500 -> 02106500); longer ids are 15-digit-style, tried zero-padded to 10 then 15

@@ -9,7 +9,7 @@ API = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
 STALE = dt.timedelta(hours=3)   # observations older than this are flagged stale
 STATIONS = {"8658120": dict(name="Wilmington", obs=True, riverine=True), "8658163": dict(name="Wrightsville Beach", obs=True, riverine=False), "8659084": dict(name="Southport", obs=False, riverine=False)}
 def _get(params):
-    q = dict(params, units="metric", time_zone="gmt", format="json", application="floodlens_lifelines")
+    q = dict(params, units="metric", time_zone="gmt", format="json", application="lifelines")
     with urllib.request.urlopen(API + "?" + urllib.parse.urlencode(q), timeout=30) as r: j = json.load(r)
     if "error" in j: raise RuntimeError(j["error"].get("message", str(j["error"])))
     return j

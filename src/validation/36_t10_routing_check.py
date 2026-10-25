@@ -8,7 +8,7 @@ hn = [int(n) for n in fac["hospital_ED_acute"]["nodes"]]; assert set(hn) == set(
 D = np.vstack([E.solve(net, set(), [n], 0)[0] for n in hn]); onode = org.node.values; T = D[:, onode]; best = T.argmin(0); tt = T.min(0) / 60; ok = np.isfinite(tt)
 rng = np.random.default_rng(20261011); pick = []
 for c in ["Brunswick", "New Hanover", "Pender"]: pick += list(rng.choice(np.where(ok & (org.county.values == c))[0], 50, replace=False))
-rows = []; S = requests.Session(); S.headers["User-Agent"] = "FloodLens-student-validation/1.0 (non-commercial; Congressional App Challenge)"
+rows = []; S = requests.Session(); S.headers["User-Agent"] = "Lifelines-student-validation/1.0 (non-commercial; Congressional App Challenge)"
 for i in pick:
     h = H[H.node.astype(int) == hn[best[i]]].iloc[0]; o = org.iloc[i]
     url = f"https://router.project-osrm.org/route/v1/driving/{o.lon:.6f},{o.lat:.6f};{h.lon:.6f},{h.lat:.6f}?overview=false"
