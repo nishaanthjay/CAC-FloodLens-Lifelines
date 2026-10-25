@@ -10,7 +10,7 @@ export function TierTag({ tier, className = "" }: { tier: Tier | number; classNa
   const t = typeof tier === "number" ? TIERS[tier] : tier;
   const A = ARROW[t.arrow];
   return (
-    <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md px-1.5 py-0.5 font-ui text-xs font-medium text-ink ${className}`}
+    <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium text-ink ${className}`}
       style={{ background: `${t.fill}33`, boxShadow: `inset 0 0 0 ${t.id >= 3 ? 1.5 : 1}px ${t.stroke}`, borderLeft: t.id === 4 ? `4px solid ${t.stroke}` : undefined }}>
       <A size={12} strokeWidth={2.4} aria-hidden style={{ color: t.stroke }} />{t.label}
     </span>
@@ -42,7 +42,7 @@ export function Segmented<T extends string>({ value, onChange, options, label, s
     <div ref={ref} role="radiogroup" aria-label={label} className={`inline-flex rounded-full bg-ink/[0.06] p-0.5 ${className}`}>
       {options.map((o, i) => (
         <button key={o.id} type="button" role="radio" aria-checked={value === o.id} tabIndex={value === o.id ? 0 : -1} onClick={() => onChange(o.id)} onKeyDown={(e) => key(e, i)}
-          className={`whitespace-nowrap rounded-full font-ui font-semibold uppercase tracking-[0.06em] transition-colors duration-200 ${size === "sm" ? "min-h-8 px-3 text-[11px]" : "min-h-9 px-4 text-xs"} ${value === o.id ? "bg-ink text-white shadow-sm" : "text-ink/70 hover:text-ink"}`}>
+          className={`whitespace-nowrap rounded-full font-medium transition-colors duration-200 ${size === "sm" ? "min-h-8 px-3 text-[13px]" : "min-h-9 px-4 text-[13px]"} ${value === o.id ? "bg-ink font-semibold text-white shadow-sm" : "text-muted hover:text-ink"}`}>
           {o.label}
         </button>
       ))}
@@ -74,7 +74,7 @@ export function MenuChip<T extends string>({ label, value, valueText, options, o
   return (
     <div ref={box} className={`relative ${className}`} onKeyDown={nav}>
       <button type="button" aria-haspopup="menu" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}
-        className="ws-glass flex min-h-10 items-center gap-2 rounded-xl px-3 text-left font-ui transition-colors hover:bg-white">
+        className="ws-glass flex min-h-10 items-center gap-2 rounded-xl px-3 text-left transition-colors hover:bg-white">
         <span className="ws-label">{label}</span>
         {badge}
         <span className="whitespace-nowrap text-[13px] font-semibold text-ink">{valueText}</span>
@@ -84,7 +84,7 @@ export function MenuChip<T extends string>({ label, value, valueText, options, o
         <div id={id} role="menu" aria-label={label} className="ws-glass absolute left-0 top-full z-50 mt-1.5 min-w-full rounded-xl p-1 [animation:rise-sm_0.18s_ease-out]">
           {options.map((o) => (
             <button key={o.id} type="button" role="menuitemradio" aria-checked={o.id === value} onClick={() => { onChange(o.id); setOpen(false); }}
-              className="flex min-h-10 w-full items-start gap-2 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-left font-ui hover:bg-ink/5">
+              className="flex min-h-10 w-full items-start gap-2 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-left hover:bg-ink/5">
               <Check size={14} aria-hidden className={`mt-0.5 shrink-0 text-blue ${o.id === value ? "" : "invisible"}`} />
               <span><span className="block text-[13px] font-semibold text-ink">{o.label}</span>{o.sub && <span className="block text-xs text-muted">{o.sub}</span>}</span>
             </button>

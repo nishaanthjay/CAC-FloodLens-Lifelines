@@ -18,14 +18,14 @@ export function Footer() {
             </span>
             <span className="text-blue">{t("site.brand.second")}</span>
           </a>
-          <p className="mt-3 max-w-[30ch] font-body text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-[30ch] text-sm leading-relaxed text-muted">
             {t("footer.tagline")}
           </p>
         </div>
         {cols.map(([title, links]) => (
           <div key={title}>
-            <h2 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">{title}</h2>
-            <ul className="mt-2 font-ui text-sm">
+            <h2 className="text-xs font-medium text-muted">{title}</h2>
+            <ul className="mt-2 text-sm">
               {links.map(([text, href]) => (
                 <li key={text}><a href={href} className="inline-flex min-h-11 items-center text-ink/75 underline-offset-4 hover:text-blue hover:underline">{text}</a></li>
               ))}
@@ -33,11 +33,11 @@ export function Footer() {
           </div>
         ))}
         <div>
-          <h2 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">{t("footer.privacy.title")}</h2>
-          <p className="mt-3 font-ui text-sm leading-relaxed text-ink/75">{t("footer.privacy.body")}</p>
+          <h2 className="text-xs font-medium text-muted">{t("footer.privacy.title")}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-ink/75">{t("footer.privacy.body")}</p>
         </div>
       </div>
-      <p className="mt-10 border-t border-ink/10 pt-5 font-ui text-xs leading-relaxed text-muted">
+      <p className="mt-10 border-t border-ink/10 pt-5 text-xs leading-relaxed text-muted">
         {t("footer.place")} <span className="px-1.5">|</span> {t("footer.credit")}
       </p>
     </div>

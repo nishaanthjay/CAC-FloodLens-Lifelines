@@ -7,7 +7,7 @@ export default {
       colors: {
         paper: "#F9F9F7",
         ink: "#111111",
-        muted: "#666666",
+        muted: "#5F6368",
         divider: "#E3E5E8",
         alert: "#CC0000",
         blue: "#2D5DA1",
@@ -22,10 +22,9 @@ export default {
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "serif"],
-        body: ["var(--font-body)", "Georgia", "serif"],
-        ui: ["var(--font-ui)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
+      fontSize: { xs: ["0.8125rem", { lineHeight: "1.25rem" }] }, // 13px: nothing in the UI is smaller
       boxShadow: {
         panel: "0 10px 30px -20px rgb(17 17 17 / 0.32)",
         float: "0 24px 64px -28px rgb(17 17 17 / 0.3)",

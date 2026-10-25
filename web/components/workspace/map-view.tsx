@@ -171,7 +171,7 @@ export function MapView() {
     <div className="absolute inset-0 z-0">
       <div ref={box} className="h-full w-full" role="region" aria-label={t("map.region")} />
       {!ready && !error && (
-        <p role="status" className="ws-glass absolute left-1/2 top-1/2 z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full px-4 py-2 font-ui text-xs font-semibold text-ink/80 max-lg:top-[40%]">
+        <p role="status" className="ws-glass absolute left-1/2 top-1/2 z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-ink/80 max-lg:top-[40%]">
           <LoaderCircle size={14} className="animate-spin" aria-hidden /> {t("map.loading")}
         </p>
       )}

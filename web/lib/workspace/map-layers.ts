@@ -64,14 +64,14 @@ export function addLayers(map: ML) {
   map.addLayer({ id: "x-cluster-halo", type: "circle", source: "xs", filter: ["has", "point_count"], paint: { "circle-radius": ["+", 8, ["*", 1.15, cr]], "circle-opacity": HALO_OPACITY, "circle-blur": 0.35 } }, before);
   map.addLayer({ id: "x-cluster", type: "circle", source: "xs", filter: ["has", "point_count"], paint: { "circle-radius": cr, "circle-stroke-width": 2 } }, before);
   map.addLayer({ id: "x-cluster-n", type: "symbol", source: "xs", filter: ["has", "point_count"], layout: {
-    "text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-allow-overlap": true }, paint: { "text-color": "#111111" } }, before);
+    "text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Bold"], "text-size": 13, "text-allow-overlap": true }, paint: { "text-color": "#111111" } }, before);
 
   const fl = ["==", ["get", "big"], 1];
   map.addLayer({ id: "svc-disc", type: "symbol", source: "svc", filter: fl, layout: { "icon-image": "ws-disc", "icon-size": zoomIcon, "icon-allow-overlap": true, "symbol-sort-key": ["get", "z"] },
     paint: { "icon-color": "#FFFFFF", "icon-halo-color": "rgba(17,17,17,0.32)", "icon-halo-width": 1.4, "icon-halo-blur": 1.2 } });
   map.addLayer({ id: "svc-glyph", type: "symbol", source: "svc", filter: fl, layout: { "icon-image": ["concat", "ws-", ["get", "ico"]], "icon-size": zoomIcon, "icon-allow-overlap": true, "symbol-sort-key": ["get", "z"] },
     paint: { "icon-color": ["get", "fill"] } });
-  map.addLayer({ id: "svc-label", type: "symbol", source: "svc", filter: fl, minzoom: 11, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 11, "text-anchor": "top", "text-offset": [0, 1.2],
+  map.addLayer({ id: "svc-label", type: "symbol", source: "svc", filter: fl, minzoom: 11, layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"], "text-size": 13, "text-anchor": "top", "text-offset": [0, 1.2],
     "text-max-width": 9, "text-optional": true, "text-allow-overlap": false }, paint: { "text-color": "#2A2F36", "text-halo-color": "rgba(255,255,255,0.9)", "text-halo-width": 1.3 } });
 }
 

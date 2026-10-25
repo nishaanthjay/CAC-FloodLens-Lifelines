@@ -10,12 +10,12 @@ export function Cta() {
         <h2 className="relative mx-auto max-w-3xl font-display text-4xl font-black leading-[1.05] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
           {t("cta.title")}
         </h2>
-        <p className="relative mx-auto mt-7 max-w-xl font-body text-lg text-white/80">
+        <p className="relative mx-auto mt-7 max-w-xl text-lg text-white/80">
           {t("cta.body")}
         </p>
         <a
           href="/?tab=access"
-          className="relative mt-11 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-7 font-ui text-sm font-semibold text-blue transition duration-200 hover:-translate-y-0.5 hover:shadow-lift focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
+          className="relative mt-11 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-7 text-sm font-semibold text-blue transition duration-200 hover:-translate-y-0.5 hover:shadow-lift focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
         >
           {t("cta.button")}
           <ArrowRight size={16} aria-hidden />

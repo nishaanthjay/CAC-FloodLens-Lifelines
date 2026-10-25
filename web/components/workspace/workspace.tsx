@@ -31,7 +31,7 @@ function PrintSheet() {
   if (!r.origin || !r.ranked.length || !d.X) return null;
   const live = mode !== "replay";
   return (
-    <div className="hidden bg-white px-6 py-4 font-ui text-black print:block">
+    <div className="hidden bg-white px-6 py-4 text-black print:block">
       <h1 className="font-display text-3xl font-bold">{t("workspace.print.title")}</h1>
       <p className="mt-2 text-xs font-semibold text-alert">{live ? t("workspace.print.live") : t("workspace.print.replay")} {t("workspace.print.warning")}</p>
       <p className="mt-3 text-sm"><b>{t("access.starting")}</b> {r.origin.label}</p>
@@ -49,7 +49,7 @@ function Shell() {
   const desktop = useDesktop();
   return (
     <>
-    <main id="content" className="fixed inset-0 print:hidden overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
+    <main id="content" className="fixed inset-0 print:hidden overflow-hidden bg-[#E9EEF4] text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
       <h1 className="sr-only">{t("workspace.heading")}</h1>
       <Rail />
       <TopBar />

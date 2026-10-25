@@ -12,7 +12,7 @@ export default function Status() {
       <Masthead />
       <main id="content" className="mx-auto min-h-[75vh] max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
         <h1 className="font-display text-5xl font-black leading-tight tracking-[-0.03em]">{t("status.title")}</h1>
-        <p className="mt-4 font-body text-lg leading-relaxed text-ink/75">
+        <p className="mt-4 text-lg leading-relaxed text-ink/75">
           {t("status.intro")}
         </p>
         <StatusTable />

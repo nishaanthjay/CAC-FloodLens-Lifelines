@@ -10,5 +10,5 @@ export function RouteRedirect() {
     q.set("mode", q.get("mode") === "replay" ? "replay" : "forecast");
     window.location.replace(`/?${q}${window.location.hash}`);
   }, []);
-  return <p className="p-6 font-ui text-sm text-muted">{t("redirect.text")} <a className="text-blue underline" href="/?tab=access">{t("redirect.continue")}</a></p>;
+  return <p className="p-6 text-sm text-muted">{t("redirect.text")} <a className="text-blue underline" href="/?tab=access">{t("redirect.continue")}</a></p>;
 }

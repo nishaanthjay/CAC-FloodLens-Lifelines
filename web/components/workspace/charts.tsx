@@ -53,7 +53,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
   series: Series[]; hour: number; onHour: (h: number) => void; unitLabel: string; ariaLabel: string; hourLabel?: (h: number) => string; emptyText?: string;
 }) {
   const uid = useId().replace(/:/g, "");
-  const W = 320, H = 176, L = 34, R = 8, T = 16, B = 20;
+  const W = 320, H = 190, L = 42, R = 10, T = 22, B = 28; // 13px labels at the chart's ~1:1 scale
   const n = series[0]?.values.length ?? 0;
   const tot = Array.from({ length: n }, (_, i) => series.reduce((a, s) => a + s.values[i], 0));
   const empty = Math.max(0, ...tot) === 0;
@@ -83,15 +83,15 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
       <Patterns uid={uid} />
       {(empty ? [0] : [0, 0.5, 1]).map((f) => { const v = f * nice; return (
         <g key={f}><line x1={L} x2={W - R} y1={y(v)} y2={y(v)} stroke="rgb(17 17 17 / .1)" strokeDasharray={v ? "2 3" : undefined} />
-          <text x={L - 5} y={y(v) + 3} textAnchor="end" className="fill-muted font-mono" fontSize="8.5">{fmt(v)}</text></g>); })}
+          <text x={L - 5} y={y(v) + 3} textAnchor="end" className="fill-muted tabular-nums" fontSize="12.5">{fmt(v)}</text></g>); })}
       {bands.map((d, k) => (
         <g key={series[k].id}><path d={d} fill={series[k].fill} />{series[k].pattern !== "plain" && <path d={d} fill={`url(#${uid}-${series[k].pattern})`} />}
           <path d={d} fill="none" stroke="#fff" strokeWidth=".8" /></g>))}
       {[...new Set([0, Math.round((n - 1) / 2), n - 1])].map((i) => ( // a set: with one or two steps the ticks would repeat and share a key
-        <text key={i} x={x(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"} className="fill-muted font-mono" fontSize="8.5">{hourLabel(i)}</text>))}
-      {empty && emptyText && <text x={(L + W - R) / 2} y={(T + H - B) / 2} textAnchor="middle" className="fill-ink/70 font-ui" fontSize="9.5">{emptyText}</text>}
+        <text key={i} x={x(i)} y={H - 8} textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"} className="fill-muted tabular-nums" fontSize="12.5">{hourLabel(i)}</text>))}
+      {empty && emptyText && <text x={(L + W - R) / 2} y={(T + H - B) / 2 - 6} textAnchor="middle" className="fill-ink/80" fontSize="12.5">{emptyText.split(". ").map((line, i, a) => <tspan key={i} x={(L + W - R) / 2} dy={i ? 17 : 0}>{i < a.length - 1 && !line.endsWith(".") ? `${line}.` : line}</tspan>)}</text>}
       <line x1={x(hour)} x2={x(hour)} y1={T - 2} y2={H - B} stroke="#111" strokeWidth="1.2" />
-      <text x={Math.min(Math.max(x(hour), L + 12), W - R - 12)} y={T - 3} textAnchor="middle" className="fill-ink font-mono" fontSize="8.5" fontWeight="600">{hourLabel(hour)}</text>
+      <text x={Math.min(Math.max(x(hour), L + 12), W - R - 12)} y={T - 3} textAnchor="middle" className="fill-ink tabular-nums" fontSize="12.5" fontWeight="600">{hourLabel(hour)}</text>
       <circle cx={x(hour)} cy={y(tot[hour] ?? 0)} r="3.2" fill="#fff" stroke="#111" strokeWidth="1.4" />
     </svg>
   );
@@ -100,9 +100,9 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
 export function Legend({ items }: { items: { id: string; label: string; fill: string; pattern: AccessState["pattern"]; value?: string }[] }) {
   const uid = useId().replace(/:/g, "");
   return (
-    <ul className="mt-2 grid gap-y-1 font-ui text-xs text-ink/85">
+    <ul className="mt-2 grid gap-y-1 text-xs text-ink/85">
       {items.map((s) => (
-        <li key={s.id} className="flex items-center gap-2"><Swatch fill={s.fill} pattern={s.pattern} uid={uid} /><span className="min-w-0 flex-1">{s.label}</span>{s.value && <span className="font-mono tabular-nums">{s.value}</span>}</li>
+        <li key={s.id} className="flex items-center gap-2"><Swatch fill={s.fill} pattern={s.pattern} uid={uid} /><span className="min-w-0 flex-1">{s.label}</span>{s.value && <span className="tabular-nums">{s.value}</span>}</li>
       ))}
     </ul>
   );
@@ -118,12 +118,12 @@ export function Bars({ rows, unitLabel }: { rows: BarRow[]; unitLabel: string })
       {rows.map((r) => {
         const p = (r.value / total) * 100;
         return (
-          <li key={r.key} className="grid grid-cols-[88px_1fr_auto] items-center gap-2 font-ui text-xs">
+          <li key={r.key} className="grid grid-cols-[88px_1fr_auto] items-center gap-2 text-xs">
             <span className="font-medium leading-tight text-ink">{r.label}</span>
             <span className="h-3 overflow-hidden rounded-full bg-ink/[0.07]" aria-hidden>
               <span className="block h-full rounded-full" style={{ width: `${Math.max(p, r.value ? 2 : 0)}%`, background: r.fill, boxShadow: `inset 0 0 0 ${Math.min(r.strokeW, 2.5)}px ${r.stroke}` }} />
             </span>
-            <span className="min-w-[70px] text-right font-mono tabular-nums text-ink"><b className="font-semibold">{p < 10 && p > 0 ? p.toFixed(1) : Math.round(p)}%</b> <span className="text-muted">{r.value.toLocaleString("en-US")}</span><span className="sr-only"> {unitLabel}</span></span>
+            <span className="min-w-[70px] text-right tabular-nums text-ink"><b className="font-semibold">{p < 10 && p > 0 ? p.toFixed(1) : Math.round(p)}%</b> <span className="text-muted">{r.value.toLocaleString("en-US")}</span><span className="sr-only"> {unitLabel}</span></span>
           </li>
         );
       })}

@@ -42,8 +42,8 @@ export function Sheet() {
         <button type="button" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onKeyDown={key}
           aria-label={t("sheet.resize", { snap })} className="group -mx-4 flex min-h-11 flex-1 touch-none items-center gap-3 px-4">
           <span aria-hidden className="mx-0 h-1.5 w-10 shrink-0 rounded-full bg-ink/25 transition-colors group-hover:bg-ink/40" />
-          <span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-white">{MODE_BADGE[mode]}</span>
-          <span className="truncate font-ui text-[11px] font-medium text-ink/75">{t("sheet.notice")}</span>
+          <span className="rounded bg-ink px-1.5 py-0.5 text-[13px] font-semibold uppercase tracking-[0.02em] text-white">{MODE_BADGE[mode]}</span>
+          <span className="min-w-0 text-[13px] font-medium text-ink/75">{t("sheet.notice")}</span>
         </button>
         <button type="button" onClick={() => setMenuOpen(true)} aria-label={t("sheet.menu")} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-ink/5"><Menu size={19} aria-hidden /></button>
       </div>

@@ -36,7 +36,7 @@ export function AddressSearch() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("hero.address.placeholder")}
               autoComplete="street-address"
-              className="min-h-12 w-full bg-transparent font-ui text-base text-ink placeholder:text-muted focus-visible:outline-none"
+              className="min-h-12 w-full bg-transparent text-base text-ink placeholder:text-muted focus-visible:outline-none"
             />
           </div>
           <Button type="submit" className="min-h-12 gap-2 rounded-full px-7 sm:w-auto">
@@ -45,14 +45,14 @@ export function AddressSearch() {
           </Button>
         </div>
       </form>
-      <p className="mx-auto mt-4 max-w-md text-center font-ui text-xs leading-relaxed text-muted">
+      <p className="mx-auto mt-4 max-w-md text-center text-xs leading-relaxed text-muted">
         {t("hero.address.hint", { example: ADDRESS_EXAMPLE })}
       </p>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-ui text-sm">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
         <button type="button" onClick={trySample} className="min-h-11 font-semibold text-ink underline underline-offset-4 hover:text-blue">{t("hero.address.sample")}</button>
         <a href="/emergency" className="inline-flex min-h-11 items-center rounded-full border border-alert/40 bg-softred px-5 font-semibold text-alert hover:border-alert">{t("hero.address.emergency")}</a>
       </div>
-      <p className="mx-auto mt-6 max-w-md font-ui text-xs leading-relaxed text-muted">
+      <p className="mx-auto mt-6 max-w-md text-xs leading-relaxed text-muted">
         {t("hero.address.privacy")}
       </p>
     </div>

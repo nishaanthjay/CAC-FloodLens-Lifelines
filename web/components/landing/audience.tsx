@@ -22,7 +22,7 @@ export function Audience() {
           <h2 className="font-display text-4xl font-bold leading-tight tracking-[-0.03em] sm:text-6xl">
             {t("audience.title")}
           </h2>
-          <p className="mt-5 max-w-md font-body text-lg leading-relaxed text-ink/70">
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-ink/70">
             {t("audience.sub")}
           </p>
         </div>
@@ -32,7 +32,7 @@ export function Audience() {
             <article key={title} className="reveal border-t-2 border-ink pt-6">
               <Icon size={24} strokeWidth={1.8} className="text-blue" aria-hidden />
               <h3 className="mt-5 font-display text-2xl font-bold sm:text-3xl">{title}</h3>
-              <p className="mt-4 font-body text-base leading-relaxed text-ink/70">{body}</p>
+              <p className="mt-4 text-base leading-relaxed text-ink/70">{body}</p>
             </article>
           ))}
         </div>

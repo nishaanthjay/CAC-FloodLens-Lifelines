@@ -18,12 +18,12 @@ function Row({ file, label, limit, now }: { file: string; label: string; limit: 
   const stale = age === null || age > limit;
   return (
     <tr className="border-t border-ink/10">
-      <th scope="row" className="py-3 pr-4 text-left font-ui text-sm font-semibold">{label}</th>
-      <td className="py-3 pr-4 font-mono text-xs">{error ?? (data ? et(data.generated_at) : t("status.loading"))}</td>
-      <td className="py-3 pr-4 font-ui text-sm">{error ? t("status.unavailable") : data ? hoursText(age) : ""}</td>
+      <th scope="row" className="py-3 pr-4 text-left text-sm font-semibold">{label}</th>
+      <td className="py-3 pr-4 tabular-nums text-xs">{error ?? (data ? et(data.generated_at) : t("status.loading"))}</td>
+      <td className="py-3 pr-4 text-sm">{error ? t("status.unavailable") : data ? hoursText(age) : ""}</td>
       <td className="py-3">
         {(data || error) && (
-          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold border-ink/20 bg-soft-blue text-ink`}>
+          <span className={`whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs font-semibold border-ink/20 bg-soft-blue text-ink`}>
             {stale ? t("status.stale", { limit }) : t("status.fresh")}
           </span>
         )}
@@ -52,12 +52,12 @@ function ArchiveRow({ now }: { now: number }) {
   const stale = age === null || age > 3;
   return (
     <tr className="border-t border-ink/10">
-      <th scope="row" className="py-3 pr-4 text-left font-ui text-sm font-semibold">{t("status.layer.archive")}</th>
-      <td className="py-3 pr-4 font-mono text-xs">{err ?? (m ? et(m.fetched.slice(0, 16) + "Z") : t("status.loading"))}</td>
-      <td className="py-3 pr-4 font-ui text-sm">{err ? t("status.unavailable") : m ? t("status.archive.age", { age: hoursText(age), n: m.n }) : ""}</td>
+      <th scope="row" className="py-3 pr-4 text-left text-sm font-semibold">{t("status.layer.archive")}</th>
+      <td className="py-3 pr-4 tabular-nums text-xs">{err ?? (m ? et(m.fetched.slice(0, 16) + "Z") : t("status.loading"))}</td>
+      <td className="py-3 pr-4 text-sm">{err ? t("status.unavailable") : m ? t("status.archive.age", { age: hoursText(age), n: m.n }) : ""}</td>
       <td className="py-3">
         {(m || err) && (
-          <span className={`rounded-full border px-2.5 py-0.5 font-ui text-xs font-semibold border-ink/20 bg-soft-blue text-ink`}>
+          <span className={`whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs font-semibold border-ink/20 bg-soft-blue text-ink`}>
             {stale ? t("status.stale", { limit: 3 }) : t("status.fresh")}
           </span>
         )}
@@ -71,12 +71,12 @@ export function StatusTable() {
   useEffect(() => setNow(Date.now()), []);
   return (
     <div className="mt-8 overflow-x-auto">
-      <table className="w-full min-w-[34rem]">
+      <table className="w-full">
         <caption className="sr-only">{t("status.table.caption")}</caption>
-        <thead><tr className="text-left font-ui text-xs uppercase tracking-[0.12em] text-muted"><th className="pb-2">{t("status.table.layer")}</th><th className="pb-2">{t("status.table.updated")}</th><th className="pb-2">{t("status.table.age")}</th><th className="pb-2">{t("status.table.status")}</th></tr></thead>
+        <thead><tr className="text-left text-xs font-medium text-muted"><th className="pb-2">{t("status.table.layer")}</th><th className="pb-2">{t("status.table.updated")}</th><th className="pb-2">{t("status.table.age")}</th><th className="pb-2">{t("status.table.status")}</th></tr></thead>
         <tbody>{now > 0 && <>{LAYERS.map(([f, l, h]) => <Row key={f} file={f} label={l} limit={h} now={now} />)}<ArchiveRow now={now} /></>}</tbody>
       </table>
-      <p className="mt-6 font-ui text-xs text-muted">{t("status.note.lead")} <a className="text-blue underline underline-offset-4" href="https://github.com/nishaanthjay/lifelines-nvm-archive">{t("status.note.link")}</a> {t("status.note.tail")}</p>
+      <p className="mt-6 text-xs text-muted">{t("status.note.lead")} <a className="text-blue underline underline-offset-4" href="https://github.com/nishaanthjay/lifelines-nvm-archive">{t("status.note.link")}</a> {t("status.note.tail")}</p>
     </div>
   );
 }

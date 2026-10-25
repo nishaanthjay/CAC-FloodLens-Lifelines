@@ -24,8 +24,8 @@ export function Rail() {
       </a>
       {NAV.map((n) => {
         const on = n.tab === tab, I = n.icon;
-        const cls = `group relative grid h-10 w-10 place-items-center rounded-xl transition-colors ${on ? "bg-blue/12 text-blue" : "text-ink/65 hover:bg-ink/5 hover:text-ink"}`;
-        const tip = <span role="presentation" aria-hidden className="pointer-events-none absolute left-full top-1/2 z-40 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-[#1F2329] px-2 py-1 font-ui text-xs font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">{n.label}</span>;
+        const cls = `group relative grid h-10 w-10 place-items-center rounded-xl transition-colors ${on ? "bg-blue/12 text-blue" : "text-ink/70 hover:bg-ink/5 hover:text-ink"}`;
+        const tip = <span role="presentation" aria-hidden className="pointer-events-none absolute left-full top-1/2 z-40 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-[#1F2329] px-2 py-1 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">{n.label}</span>;
         const mark = on && <span aria-hidden className="absolute -left-2 h-5 w-1 rounded-full bg-blue" />;
         return n.href
           ? <a key={n.id} href={n.href} aria-label={n.label} className={cls}>{mark}<I size={19} strokeWidth={1.8} />{tip}</a>
@@ -57,7 +57,7 @@ export function MenuSheet() {
         <ul>
           {NAV.map((n) => {
             const I = n.icon, on = n.tab === tab;
-            const cls = `flex min-h-12 w-full items-center gap-3 rounded-xl px-3 font-ui text-[15px] font-medium ${on ? "bg-blue/10 text-blue" : "text-ink hover:bg-ink/5"}`;
+            const cls = `flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-[15px] font-medium ${on ? "bg-blue/10 text-blue" : "text-ink hover:bg-ink/5"}`;
             return <li key={n.id}>{n.href
               ? <a href={n.href} className={cls}><I size={19} strokeWidth={1.8} aria-hidden />{n.label}</a>
               : <button type="button" className={cls} onClick={() => { setTab(n.tab!); setMenuOpen(false); }}><I size={19} strokeWidth={1.8} aria-hidden />{n.label}</button>}</li>;

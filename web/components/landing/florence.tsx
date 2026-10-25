@@ -15,23 +15,23 @@ export function Florence() {
           <h2 className="font-display text-4xl font-bold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
             {t("florence.title")}
           </h2>
-          <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 font-ui text-xs font-semibold text-yellow">
+          <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-semibold text-yellow">
             <History size={14} aria-hidden />
             {t("florence.pill")}
           </p>
-          <p className="mt-5 max-w-md font-body text-lg leading-relaxed text-white/75">
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-white/75">
             {t("florence.body")}
           </p>
           <dl className="mt-8 divide-y divide-white/10 border-y border-white/10">
             {facts.map(([label, value]) => (
               <div key={label} className="grid gap-1 py-4 sm:grid-cols-[7rem_1fr] sm:gap-4">
-                <dt className="font-mono text-xs uppercase tracking-[0.16em] text-white/50">{label}</dt>
-                <dd className="font-ui text-sm text-white/90">{value}</dd>
+                <dt className="text-xs font-medium text-white/65">{label}</dt>
+                <dd className="text-sm text-white/90">{value}</dd>
               </div>
             ))}
           </dl>
-          <p className="mt-4 font-ui text-xs text-white/50">{t("florence.source")}</p>
-          <a href="/?mode=replay" className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 font-ui text-sm font-semibold text-[#0E2440] transition hover:-translate-y-0.5 hover:shadow-lift">
+          <p className="mt-4 text-xs text-white/65">{t("florence.source")}</p>
+          <a href="/?mode=replay" className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#0E2440] transition hover:-translate-y-0.5 hover:shadow-lift">
             {t("florence.cta")} <ArrowDown size={16} aria-hidden />
           </a>
         </div>
@@ -51,12 +51,12 @@ export function Florence() {
               <circle r="34" fill="none" stroke="#FF8A8A" strokeWidth="3" />
               <circle r="12" fill="#CC0000" stroke="#fff" strokeWidth="4" />
             </g>
-            <g transform={`translate(${wilmington[0]} ${wilmington[1]})`} fontFamily="var(--font-ui)" fontWeight="600">
+            <g transform={`translate(${wilmington[0]} ${wilmington[1]})`} fontFamily="var(--)" fontWeight="600">
               <circle r="9" fill="#FFF9C4" />
               <text x="-18" y="6" textAnchor="end" fontSize="26" fill="#fff">{t("florence.map.city")}</text>
             </g>
           </svg>
-          <figcaption className="mt-3 font-ui text-xs text-white/50">
+          <figcaption className="mt-3 text-xs text-white/65">
             {t("florence.map.caption")}
           </figcaption>
         </figure>

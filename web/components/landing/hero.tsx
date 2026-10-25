@@ -41,14 +41,14 @@ export function Hero() {
       <Backdrop />
       <div className="pointer-events-none absolute left-1/2 top-0 h-[34rem] w-[60rem] -translate-x-1/2 rounded-full bg-blue/10 blur-3xl drift" aria-hidden />
       <div className="relative mx-auto max-w-screen-xl px-4 pb-24 pt-20 text-center sm:px-6 sm:pb-32 sm:pt-28">
-        <p className="enter mx-auto inline-flex items-center gap-2 rounded-full border border-blue/20 bg-white/70 px-3.5 py-2 font-ui text-sm font-medium text-blue">
+        <p className="enter mx-auto inline-flex items-center gap-2 rounded-full border border-blue/20 bg-white/70 px-3.5 py-2 text-sm font-medium text-blue">
           <MapPin size={15} strokeWidth={1.8} aria-hidden />
           {t("hero.place")}
         </p>
         <h1 className="enter mx-auto mt-9 [--d:90ms] max-w-4xl font-display text-[clamp(2.75rem,8vw,6rem)] font-black leading-[1.02] tracking-[-0.04em] text-balance">
           {t("hero.title.lead")} <Highlight>{t("hero.title.highlight")}</Highlight>
         </h1>
-        <p className="enter mx-auto mt-8 max-w-xl [--d:180ms] font-body text-lg leading-relaxed text-ink/70 sm:text-xl">
+        <p className="enter mx-auto mt-8 max-w-xl [--d:180ms] text-lg leading-relaxed text-ink/70 sm:text-xl">
           {t("hero.sub")}
         </p>
 
@@ -58,7 +58,7 @@ export function Hero() {
           {facts.map(({ value, label }) => (
             <div key={value} className="px-1 py-5 sm:px-8 sm:py-7 sm:text-center">
               <dt className="font-display text-xl font-bold leading-tight">{value}</dt>
-              <dd className="mt-1.5 font-ui text-xs leading-snug text-muted">{label}</dd>
+              <dd className="mt-1.5 text-xs leading-snug text-muted">{label}</dd>
             </div>
           ))}
         </dl>

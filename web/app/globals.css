@@ -11,7 +11,7 @@
   --color-yellow: #FFF9C4;
   --color-soft-blue: #E8F0FA;
   --color-soft-red: #F7E1E1;
-  --color-muted: #666666;
+  --color-muted: #5F6368;
   --glass: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(17, 17, 17, 0.08);
   --glass-shadow: 0 8px 32px rgba(17, 17, 17, 0.08);
@@ -24,8 +24,10 @@
   }
 
   body {
-    @apply bg-paper font-body text-ink antialiased;
+    @apply bg-paper font-sans text-ink antialiased;
     min-width: 320px;
+    font-size: 15px;
+    line-height: 1.55;
   }
 
   h1, h2, h3 {
@@ -49,7 +51,7 @@
 
 @layer utilities {
   .label {
-    @apply font-ui text-xs font-semibold uppercase tracking-[0.12em];
+    @apply text-[13px] font-medium text-muted;
   }
 
   .glass {
@@ -67,7 +69,7 @@
     box-shadow: var(--glass-shadow);
   }
   .ws-label {
-    @apply font-ui text-[11px] font-semibold uppercase tracking-[0.08em] text-muted;
+    @apply text-[13px] font-medium text-muted;
   }
   .ws-scroll {
     scrollbar-width: thin;
@@ -185,21 +187,21 @@
   width: 32px; height: 32px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); transform-origin: 50% 50%;
   background: var(--color-blue); border: 2.5px solid #fff; box-shadow: 0 3px 8px rgb(17 17 17 / 0.35); display: grid; place-items: center; margin-top: 2px;
 }
-.ws-pin > span { transform: rotate(45deg); color: #fff; font: 700 14px/1 var(--font-ui), system-ui, sans-serif; }
+.ws-pin > span { transform: rotate(45deg); color: #fff; font: 600 14px/1 var(--font-sans), system-ui, sans-serif; }
 .ws-closed { position: relative; display: grid; place-items: center; width: 30px; height: 30px; }
 .ws-closed-ring {
   position: relative; z-index: 1; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 9999px; background: #fff; border: 3px solid var(--color-red);
   box-shadow: 0 0 0 4px rgb(204 0 0 / 0.22);
 }
-.ws-closed-ring > b { color: var(--color-red); font: 800 15px/1 var(--font-ui), system-ui, sans-serif; margin-top: -1px; }
+.ws-closed-ring > b { color: var(--color-red); font: 600 15px/1 var(--font-sans), system-ui, sans-serif; margin-top: -1px; }
 .ws-closed-pulse { position: absolute; inset: 0; border-radius: 9999px; border: 2px solid var(--color-red); animation: ws-pulse 1.6s ease-out 3 both; }
 .ws-closed-label {
   position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 2px; white-space: nowrap; pointer-events: none;
-  background: rgb(31 35 41 / 0.95); color: #fff; border-radius: 6px; padding: 2px 6px; font: 600 10px/1.3 var(--font-ui), system-ui, sans-serif;
+  background: rgb(31 35 41 / 0.95); color: #fff; border-radius: 6px; padding: 2px 6px; font: 600 13px/1.3 var(--font-sans), system-ui, sans-serif;
 }
 .ws-chip {
   white-space: nowrap; background: #FFE2B0; color: #4A2B05; border: 1.5px solid #9C5F12; border-radius: 9999px; padding: 3px 10px;
-  font: 700 11px/1.3 var(--font-ui), system-ui, sans-serif; box-shadow: 0 2px 6px rgb(17 17 17 / 0.25);
+  font: 600 13px/1.3 var(--font-sans), system-ui, sans-serif; box-shadow: 0 2px 6px rgb(17 17 17 / 0.25);
 }
 .ws-chip-alt { background: #fff; color: #2C3A4F; border-color: #5B6B82; cursor: pointer; font-weight: 600; }
 .ws-chip-alt:hover, .ws-chip-alt:focus-visible { background: #EEF2F7; outline: 2px solid #5B6B82; outline-offset: 1px; }

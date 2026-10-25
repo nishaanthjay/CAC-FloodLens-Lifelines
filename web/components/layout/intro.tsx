@@ -243,7 +243,7 @@ function Markers({ cam }: { cam: Camera }) {
       ))}
 
       <Marker cam={cam} at={route.hospital}>
-        <m.span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 font-ui text-[13px] font-semibold text-ink" {...fade(6.6)}>
+        <m.span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 text-[13px] font-semibold text-ink" {...fade(6.6)}>
           {t("intro.marker.hospital")}
         </m.span>
       </Marker>
@@ -251,7 +251,7 @@ function Markers({ cam }: { cam: Camera }) {
         <m.span className="relative block h-[18px] w-[18px] rounded-full border-[3.5px] border-[#0E2440] bg-yellow" {...pop(5.5)}>
           <Ring delay={5.5} size={52} repeat={3} />
         </m.span>
-        <m.span className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 font-ui text-[13px] font-semibold text-ink" {...fade(5.7)}>
+        <m.span className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 text-[13px] font-semibold text-ink" {...fade(5.7)}>
           {t("intro.marker.address")}
         </m.span>
       </Marker>
@@ -264,7 +264,7 @@ function Markers({ cam }: { cam: Camera }) {
             </svg>
           </span>
         </m.span>
-        <m.span className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-alert md:bottom-auto md:top-6 px-3 py-1 font-ui text-[13px] font-semibold text-white" {...fade(7)}>
+        <m.span className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-alert md:bottom-auto md:top-6 px-3 py-1 text-[13px] font-semibold text-white" {...fade(7)}>
           {t("intro.marker.crossing")}
         </m.span>
       </Marker>
@@ -320,20 +320,20 @@ function Hud() {
   return (
     <div aria-hidden>
       <m.div className="i-frame absolute inset-[14px] sm:inset-6" {...fade(0.1)} />
-      <m.div className="absolute left-6 top-6 flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.2em] text-white/80 sm:left-10 sm:top-10" {...fade(0.2)}>
+      <m.div className="absolute left-6 top-6 flex items-center gap-2.5 tabular-nums text-xs uppercase tracking-[0.2em] text-white/80 sm:left-10 sm:top-10" {...fade(0.2)}>
         <span className="grid h-7 w-7 place-items-center rounded-lg bg-white text-blue">
           <Droplets size={15} strokeWidth={2} aria-hidden />
         </span>
         {t("site.name")}
       </m.div>
-      <m.div className="absolute right-6 top-7 hidden text-right font-mono text-xs uppercase leading-relaxed tracking-[0.2em] text-white/85 sm:right-10 sm:top-10 sm:block" {...fade(0.4)}>
+      <m.div className="absolute right-6 top-7 hidden text-right tabular-nums text-xs uppercase leading-relaxed tracking-[0.2em] text-white/85 sm:right-10 sm:top-10 sm:block" {...fade(0.4)}>
         {t("intro.hud.coords")}
         <br />
         {t("intro.hud.counties")}
       </m.div>
 
       <div className="absolute bottom-24 left-6 w-[min(22rem,calc(100%-3rem))] sm:bottom-10 sm:left-10">
-        <div className="relative h-6 font-ui text-sm font-medium text-white">
+        <div className="relative h-6 text-sm font-medium text-white">
           {steps.map((step, i) => {
             const last = i === steps.length - 1;
             return (
@@ -355,7 +355,7 @@ function Hud() {
           })}
         </div>
         <m.div className="mt-3" {...fade(3.7)}>
-          <div className="flex items-baseline justify-between font-mono text-xs uppercase tracking-[0.2em] text-white/85">
+          <div className="flex items-baseline justify-between tabular-nums text-xs uppercase tracking-[0.2em] text-white/85">
             <span>{t("intro.hud.forecast")}</span>
             <m.span className="text-sm font-semibold tabular-nums text-yellow [contain:layout_paint]">{label}</m.span>
           </div>
@@ -393,7 +393,7 @@ function TitleCard() {
               <m.span className="inline-block text-yellow" {...line(7.75)}>{t("site.brand.second")}</m.span>
             </span>
           </p>
-          <m.p className="mt-6 font-body text-lg text-white/80 sm:text-2xl" {...fade(8.1)}>
+          <m.p className="mt-6 text-lg text-white/80 sm:text-2xl" {...fade(8.1)}>
             {t("intro.tagline")}
           </m.p>
         </div>
@@ -488,7 +488,7 @@ export function Intro() {
         <m.button
           type="button"
           onClick={finish}
-          className="absolute bottom-6 right-6 min-h-11 rounded-full border border-white/25 bg-[#0A1C33]/70 px-5 font-ui text-sm font-medium text-white transition-colors hover:bg-white/20 sm:bottom-10 sm:right-10"
+          className="absolute bottom-6 right-6 min-h-11 rounded-full border border-white/25 bg-[#0A1C33]/70 px-5 text-sm font-medium text-white transition-colors hover:bg-white/20 sm:bottom-10 sm:right-10"
           {...fade(0.6)}
         >
           {t("intro.skip")}

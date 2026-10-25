@@ -40,7 +40,7 @@ export function addRouteLayers(map: ML) {
   map.addLayer({ id: "svc-sel-ring", type: "circle", source: "svc", filter: sel([]), paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 8, 15, 15, 30], "circle-color": "rgba(45,93,161,0.14)", "circle-stroke-color": BLUE, "circle-stroke-width": 2.5 } });
   map.addLayer({ id: "svc-sel-disc", type: "symbol", source: "svc", filter: sel([]), layout: { "icon-image": "ws-disc", "icon-size": big, "icon-allow-overlap": true }, paint: { "icon-color": "#FFFFFF", "icon-halo-color": "rgba(17,17,17,0.35)", "icon-halo-width": 1.4, "icon-halo-blur": 1.2 } });
   map.addLayer({ id: "svc-sel-glyph", type: "symbol", source: "svc", filter: sel([]), layout: { "icon-image": ["concat", "ws-", ["get", "ico"]], "icon-size": big, "icon-allow-overlap": true }, paint: { "icon-color": ["get", "fill"] } });
-  map.addLayer({ id: "svc-sel-label", type: "symbol", source: "svc", filter: sel([]), layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-anchor": "top", "text-offset": [0, 1.9], "text-max-width": 10, "text-optional": true },
+  map.addLayer({ id: "svc-sel-label", type: "symbol", source: "svc", filter: sel([]), layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Bold"], "text-size": 13, "text-anchor": "top", "text-offset": [0, 1.9], "text-max-width": 10, "text-optional": true },
     paint: { "text-color": "#111111", "text-halo-color": "rgba(255,255,255,0.95)", "text-halo-width": 1.6 } });
 }
 

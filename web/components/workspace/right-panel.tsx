@@ -32,16 +32,16 @@ function Gauges({ gauges, now }: { gauges: Gauge[]; now: number }) {
     <>
       <Section label={t("rp.gauges.section")} className="mt-3"><Bars rows={rows} unitLabel={t("rp.gauges.unit")} /></Section>
       <Section label={t("rp.gauges.list")} className="mt-3">
-        <ul className="divide-y divide-ink/8 font-ui text-xs">
+        <ul className="divide-y divide-ink/8 text-xs">
           {list.map((g) => (
             <li key={g.lid} className="py-1.5">
               <p className="font-medium text-ink">{g.name ?? g.lid}</p>
               <p className="text-ink/75">{CAT[g.nws.flood_category]?.label ?? g.nws.flood_category}{g.nws.stage_ft_nws_datum !== null ? ` · ${t("rp.gauge.stage", { ft: g.nws.stage_ft_nws_datum })}` : ""}
-                <span className="font-mono text-muted"> · {g.nws.stage_time ? hoursText(ageH(g.nws.stage_time, now)) : t("rp.gauge.notime")}</span></p>
+                <span className="tabular-nums text-muted"> · {g.nws.stage_time ? hoursText(ageH(g.nws.stage_time, now)) : t("rp.gauge.notime")}</span></p>
             </li>
           ))}
         </ul>
-        <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{t("rp.gauges.note")}</p>
+        <p className="mt-1.5 text-[13px] leading-snug text-muted">{t("rp.gauges.note")}</p>
       </Section>
     </>
   );
@@ -54,18 +54,18 @@ function Coastal() {
     <Section label={t("rp.coastal.section")} className="mt-3">
       {d.co.error ? <ErrorCard title={t("rp.coastal.error")} text={d.co.error} /> : !c ? <Skeleton className="h-24" /> : (
         <>
-          <ul className="divide-y divide-ink/8 font-ui text-xs">
+          <ul className="divide-y divide-ink/8 text-xs">
             {c.stations.map((s) => (
               <li key={s.id} className="py-1.5">
-                <p className="font-medium text-ink">{s.name} <span className="font-mono text-[10px] text-muted">{s.id}</span></p>
+                <p className="font-medium text-ink">{s.name} <span className="tabular-nums text-[13px] text-muted">{s.id}</span></p>
                 <p className="text-ink/75">{!s.has_observations ? t("rp.coastal.predonly") : s.latest_residual_m === null ? t("rp.coastal.noresidual")
                   : `${s.latest_residual_m >= 0 ? t("rp.coastal.above", { m: Math.abs(s.latest_residual_m).toFixed(2) }) : t("rp.coastal.below", { m: Math.abs(s.latest_residual_m).toFixed(2) })}${s.stale ? ` ${t("rp.coastal.older")}` : ""}`}
-                  {s.latest_observed_time && <span className="font-mono text-muted"> · {utc(s.latest_observed_time)}</span>}</p>
-                {s.riverine_influence && <p className="text-[11px] text-muted">{t("rp.coastal.river")}</p>}
+                  {s.latest_observed_time && <span className="tabular-nums text-muted"> · {utc(s.latest_observed_time)}</span>}</p>
+                {s.riverine_influence && <p className="text-[13px] text-muted">{t("rp.coastal.river")}</p>}
               </li>
             ))}
           </ul>
-          <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{t("rp.coastal.note")}</p>
+          <p className="mt-1.5 text-[13px] leading-snug text-muted">{t("rp.coastal.note")}</p>
         </>
       )}
     </Section>
@@ -105,7 +105,7 @@ export function RightContent() {
     <div>
       <div className="flex items-center justify-between gap-2">
         <h2 className="font-display text-[22px] font-bold leading-tight tracking-[-0.02em]">{t("rp.title")}</h2>
-        <span className="rounded-full bg-ink/[0.07] px-2.5 py-1 font-mono text-[11px] font-semibold text-ink" aria-live="polite">{count}</span>
+        <span className="rounded-full bg-ink/[0.07] px-2.5 py-1 tabular-nums text-[13px] font-semibold text-ink" aria-live="polite">{count}</span>
       </div>
       {d.error ? <ErrorCard title={t("rp.error.nodata")} text={d.error} /> : !ready ? <div className="mt-3 space-y-3" role="status" aria-busy="true" aria-label={t("rp.loading")}><Skeleton className="h-40" /><Skeleton className="h-24" /></div> : mode === "nowcast" ? (
         d.nc.error ? <ErrorCard title={t("rp.error.gauges")} text={d.nc.error} /> : !d.nc.data ? <div className="mt-3 space-y-3"><Skeleton className="h-28" /><Skeleton className="h-28" /></div> : <><Gauges gauges={v.gauges} now={d.now} /><Coastal /></>
@@ -115,17 +115,17 @@ export function RightContent() {
             <Section label={aTitle} className="mt-3">
               <StackedArea series={series} hour={v.h} onHour={setHour} unitLabel={unit === "people" ? t("rp.unit.people") : mode === "replay" ? t("rp.unit.blocks") : t("rp.unit.crossings")} ariaLabel={t("rp.area.aria", { title: aTitle })} emptyText={t("rp.area.empty")} />
               <Legend items={legend} />
-              <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{aNote}</p>
+              <p className="mt-1.5 text-[13px] leading-snug text-muted">{aNote}</p>
               <div className="mt-2 flex items-center justify-between gap-2 border-t border-ink/8 pt-2">
                 <span className="ws-label">{t("rp.distributed")}</span>
                 <Segmented size="sm" label={t("rp.distributed")} value={unit} onChange={setUnit} options={opts} />
               </div>
             </Section>
           ) : <Skeleton className="mt-3 h-40" />}
-          <Section label={t("rp.tiers.title")} className="mt-3" aside={<span className="font-mono text-[11px] text-muted">{t("common.hour", { hour: v.h })}</span>}>
+          <Section label={t("rp.tiers.title")} className="mt-3" aside={<span className="tabular-nums text-[13px] text-muted">{t("common.hour", { hour: v.h })}</span>}>
             <Bars rows={[4, 3, 2, 1, 0].map((k) => tierBar(k, v.tiers!.count[k]))} unitLabel={t("rp.unit.crossings")} />
-            {v.tiers!.unknown > 0 && <p className="mt-2 font-ui text-[11px] leading-snug text-ink/80">{t("rp.tiers.unknown", { n: n(v.tiers!.unknown) })}</p>}
-            <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{t("rp.tiers.unassessed", { n: n(d.X!.not_assessed.length) })}</p>
+            {v.tiers!.unknown > 0 && <p className="mt-2 text-[13px] leading-snug text-ink/80">{t("rp.tiers.unknown", { n: n(v.tiers!.unknown) })}</p>}
+            <p className="mt-1.5 text-[13px] leading-snug text-muted">{t("rp.tiers.unassessed", { n: n(d.X!.not_assessed.length) })}</p>
           </Section>
         </>
       )}

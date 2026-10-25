@@ -21,7 +21,7 @@ function TabBar() {
       {TABS.map((t, i) => (
         <button key={t.id} type="button" role="tab" id={`tab-${t.id}`} aria-selected={tab === t.id} aria-controls="ws-panel" tabIndex={tab === t.id ? 0 : -1}
           onClick={() => setTab(t.id)} onKeyDown={(e) => key(e, i)}
-          className={`min-h-9 whitespace-nowrap rounded-full px-4 font-ui text-xs font-semibold uppercase tracking-[0.06em] transition-colors duration-200 ${tab === t.id ? "bg-ink text-white" : "text-ink/70 hover:text-ink"}`}>
+          className={`min-h-9 whitespace-nowrap rounded-full px-4 text-[13px] font-medium transition-colors duration-200 ${tab === t.id ? "bg-ink font-semibold text-white" : "text-muted hover:text-ink"}`}>
           {t.label}
         </button>
       ))}
@@ -34,7 +34,7 @@ export function TopBar() {
   const chips = (
     <>
       <MenuChip<Mode> label={t("topbar.mode.label")} value={mode} valueText={MODE_TEXT[mode]} onChange={setMode}
-        badge={<span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-white">{MODE_BADGE[mode]}</span>}
+        badge={<span className="rounded bg-ink px-1.5 py-0.5 text-[13px] font-semibold uppercase tracking-[0.02em] text-white">{MODE_BADGE[mode]}</span>}
         options={[{ id: "replay", label: t("topbar.mode.replay.label"), sub: t("topbar.mode.replay.sub") }, { id: "nowcast", label: t("topbar.mode.nowcast.label"), sub: t("topbar.mode.nowcast.sub") }, { id: "forecast", label: t("topbar.mode.forecast.label"), sub: t("topbar.mode.forecast.sub") }]} />
       <MenuChip<LayerSel> label={t("topbar.layer.label")} value={layer} valueText={layer === "rivers" ? t("topbar.layer.rivers.label") : layer === "coastal" ? t("topbar.layer.coastal.label") : t("topbar.layer.both.label")} onChange={setLayer}
         options={[{ id: "rivers", label: t("topbar.layer.rivers.label"), sub: t("topbar.layer.rivers.sub") }, { id: "coastal", label: t("topbar.layer.coastal.label"), sub: t("topbar.layer.coastal.sub") }, { id: "both", label: t("topbar.layer.both.label"), sub: t("topbar.layer.both.sub") }]} />
