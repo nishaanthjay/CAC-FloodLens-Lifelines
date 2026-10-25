@@ -63,7 +63,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
   const y = (v: number) => T + (1 - v / nice) * (H - T - B);
   const cum: number[][] = []; // upper edge of each band
   series.forEach((s, k) => cum.push(s.values.map((v, i) => v + (k ? cum[k - 1][i] : 0))));
-  const bands = series.map((_, k) => {
+  const bands = n < 2 ? [] : series.map((_, k) => { // one step has no area to draw (the curve helper needs two points)
     const top = cum[k].map((v, i) => [x(i), y(v)] as [number, number]);
     const bot = (k ? cum[k - 1] : cum[0].map(() => 0)).map((v, i) => [x(i), y(v)] as [number, number]).reverse();
     return `${smooth(top)}L${bot[0][0].toFixed(1)},${bot[0][1].toFixed(1)}${smooth(bot).replace(/^M[^C]*/, "")}Z`;
@@ -87,7 +87,7 @@ export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLa
       {bands.map((d, k) => (
         <g key={series[k].id}><path d={d} fill={series[k].fill} />{series[k].pattern !== "plain" && <path d={d} fill={`url(#${uid}-${series[k].pattern})`} />}
           <path d={d} fill="none" stroke="#fff" strokeWidth=".8" /></g>))}
-      {[0, Math.round((n - 1) / 2), n - 1].map((i) => (
+      {[...new Set([0, Math.round((n - 1) / 2), n - 1])].map((i) => ( // a set: with one or two steps the ticks would repeat and share a key
         <text key={i} x={x(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"} className="fill-muted font-mono" fontSize="8.5">{hourLabel(i)}</text>))}
       {empty && emptyText && <text x={(L + W - R) / 2} y={(T + H - B) / 2} textAnchor="middle" className="fill-ink/70 font-ui" fontSize="9.5">{emptyText}</text>}
       <line x1={x(hour)} x2={x(hour)} y1={T - 2} y2={H - B} stroke="#111" strokeWidth="1.2" />
