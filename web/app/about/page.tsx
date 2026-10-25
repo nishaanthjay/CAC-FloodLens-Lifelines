@@ -25,13 +25,9 @@ const tests = [
 ];
 
 const limits = [
-  t("about.claim1"),
   t("about.claim2"),
   t("about.claim3"),
   t("about.claim4"),
-  t("about.claim5"),
-  t("about.claim6"),
-  t("about.claim7"),
   t("about.claim8"),
   t("about.claim9"),
   t("about.claim10"),

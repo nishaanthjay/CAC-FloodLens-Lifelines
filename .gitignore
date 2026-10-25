@@ -29,3 +29,20 @@ data/**/*.parquet
 data/**/*.npy
 data/**/*.zip
 data/phase1/raw/nwm_chunks/
+
+# AI tooling (local only)
+.claude/
+.impeccable/
+.impeccable-live/
+.impeccable-live.json
+.cursor/
+.agents/
+.gemini/
+.copilot/
+.lyra-cli/
+.obsidian-copilot/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.cursorrules
+skills-lock.json

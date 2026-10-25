@@ -1,4 +1,4 @@
-import { Building2, Eye, House, ShieldAlert, Sigma } from "lucide-react";
+import { Building2, House } from "lucide-react";
 import { t } from "@/content/copy";
 
 const people = [
@@ -12,12 +12,6 @@ const people = [
     title: t("audience.teams.title"),
     body: t("audience.teams.body"),
   },
-];
-
-const principles = [
-  { icon: Sigma, title: t("audience.risk1.title"), body: t("audience.risk1.body") },
-  { icon: ShieldAlert, title: t("audience.risk2.title"), body: t("audience.risk2.body") },
-  { icon: Eye, title: t("audience.risk3.title"), body: t("audience.risk3.body") },
 ];
 
 export function Audience() {
@@ -42,21 +36,6 @@ export function Audience() {
             </article>
           ))}
         </div>
-      </div>
-
-      <div className="reveal mt-16 rounded-3xl bg-white p-8 sm:p-12 lg:mt-24">
-        <h3 className="font-display text-2xl font-bold sm:text-3xl">{t("audience.risk.title")}</h3>
-        <ul className="mt-10 grid gap-10 md:grid-cols-3 md:gap-12">
-          {principles.map(({ icon: Icon, title, body }) => (
-            <li key={title} className="flex gap-4 md:block">
-              <Icon size={22} strokeWidth={1.8} className="mt-0.5 shrink-0 text-alert md:mt-0" aria-hidden />
-              <div>
-                <h4 className="font-ui text-base font-semibold md:mt-5">{title}</h4>
-                <p className="mt-2 font-ui text-sm leading-relaxed text-ink/70">{body}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

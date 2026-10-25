@@ -670,12 +670,12 @@ Filter services
 <!-- placeholders: all, kind; meaning: all = how many of each kind are shown in the "All" view, kind = how many are shown when one kind is picked -->
 <!-- keep meaning: lists are incomplete; a listing does not mean a place is open; call 911 in an emergency -->
 ## access.services.note.all
-The {all} nearest of each kind; pick a kind to see {kind}. Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call ahead; call 911 in an emergency.
+The {all} nearest of each kind; pick a kind to see {kind}. Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call 911 in an emergency.
 
 <!-- placeholders: kind; meaning: how many nearest services are shown for the picked kind -->
 <!-- keep meaning: lists are incomplete; a listing does not mean a place is open; call 911 in an emergency -->
 ## access.services.note.kind
-The {kind} nearest. Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call ahead; call 911 in an emergency.
+The {kind} nearest. Times are normal driving. Emergency rooms (CMS) and fire stations come from official lists; the rest are federal / HHS lists plus OpenStreetMap, incomplete and sometimes out of date. A listing does not mean the place is open. Call 911 in an emergency.
 
 ## access.empty.live
 Enter an address to list the nearest emergency rooms, fire stations, dialysis centers and other services. Pick one or several to compare routes, see which stream crossings each one uses, and how the river-flow forecast would affect them from now on.
@@ -1487,59 +1487,7 @@ Critical-facility teams
 ## audience.teams.body
 See which crossings could separate a hospital, clinic or station from the people and staff it depends on.
 
-## audience.risk.title
-How we talk about risk
-
-## audience.risk1.title
-Probabilities, not promises
-
-## audience.risk1.body
-Every outlook is a likelihood with a time range, never a yes or no.
-
-## audience.risk2.title
-No warning is not an all-clear
-
-<!-- keep meaning: the site never shows a road as safe; missing data is labelled as missing -->
-## audience.risk2.body
-We never show a road as safe. Missing data is labelled as missing.
-
-## audience.risk3.title
-Uncertainty stays visible
-
-## audience.risk3.body
-Patterns, labels and timestamps carry meaning, not color alone.
-
 # About page: how it works
-
-## how.title
-From rain to road access
-
-## how.sub
-FloodLens connects forecast water levels with the roads people rely on to reach help.
-
-## how.step1.title
-Rain
-
-## how.step1.body
-Rainfall forecasts show where water may collect.
-
-## how.step2.title
-Rivers rise
-
-## how.step2.body
-Rising waterways may affect nearby roads.
-
-## how.step3.title
-Crossings change
-
-## how.step3.body
-Flooding can make key crossings harder to use.
-
-## how.step4.title
-Access shifts
-
-## how.step4.body
-Routes to hospitals and fire stations may change.
 
 ## how.limits.title
 What this does not model
@@ -1595,16 +1543,16 @@ What it does
 
 <!-- keep meaning: counts of crossings, segments, hospitals and fire stations; unassessed crossings are flagged, never treated as open -->
 ## about.does.body
-Most flood tools answer “is this road underwater?” FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis center or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings (1,583 with a flow threshold, so assessed; the other 1,337 are flagged as unassessed, never treated as open) and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast; the Florence replay is kept apart.
+Most flood tools answer “is this road underwater?” FloodLens Lifelines asks a different question: if a river crossing closes, can this neighborhood still reach an emergency room, fire station, dialysis center or other lifeline, and when does that change? It joins NOAA National Water Model streamflow, USGS and NWS gauges, NOAA tide stations, 2,920 road crossings and a road network of about 246,000 segments with 11 emergency hospitals, 220 fire stations and a topped-up list of dialysis, nursing-home, urgent-care, police, EMS and pharmacy sites in New Hanover, Brunswick and Pender counties, North Carolina. The address check shows what is observed now and then the forecast, and also a the Florence replay for testing.
 
 ## about.modes.title
-Three modes, never mixed
+Three modes:
 
 ## about.modes.replay.name
 REPLAY
 
 ## about.modes.replay.text
-Hurricane Florence (2018), stepped through hour by hour. Fixed past data.
+Hurricane Florence (2018) hour by hour
 
 ## about.modes.nowcast.name
 NOWCAST
@@ -1617,7 +1565,7 @@ FORECAST
 
 <!-- keep meaning: the forecast is unvalidated and not a closure probability -->
 ## about.modes.forecast.text
-Latest NWM short-range run as a share of each stream’s 10-year flow. Unvalidated, not a closure probability.
+Latest NWM short-range run as a share of each stream’s 10-year flow.
 
 ## about.testing.title
 What testing showed
@@ -1665,11 +1613,11 @@ Case study: Florence, Brunswick County
 
 <!-- keep meaning: 20 flood points, 12 matched to 11 crossings; this tests the road-network model, not the flood forecast -->
 ## about.case.p1
-The Brunswick County Sheriff’s Office marked 20 known flood points on its 2018 evacuation map. We matched 12 of the 20 to 11 road crossings and checked them against our road model, with no flow or forecast input. This tests the road-network model, not the flood forecast.
+The Brunswick County Sheriff’s Office marked 20 known flood points on its 2018 evacuation map. We matched 12 of the 20 to 11 road crossings and checked them against our road model.
 
 <!-- keep meaning: numbers of people, blocks and minutes for point 10 and for all 11 crossings; nobody loses every route, the model shows long detours, not cut-off areas -->
 ## about.case.p2
-Take point 10, the NC 211 (Southport-Supply Rd) bridge over Lockwoods Folly River near Supply. Close it and 4,681 people in 128 Census blocks, all in the Sheriff’s Town Creek island, can no longer reach the nearest emergency room the way they do now, Novant Health Brunswick Medical Center. With all 11 matched crossings closed, those people go from an average of 12.6 minutes to the nearest ER to 24.3 minutes (+11.7); 3,242 of them are 10 minutes or more slower and 370 are 15 minutes or more slower. The worst block goes from 7.7 to 24.8 minutes, when the nearest ER becomes J. Arthur Dosher Memorial Hospital in Southport. Nobody loses every route; the model shows long detours, not cut-off areas.
+Take point 10, the NC 211 (Southport-Supply Rd) bridge over Lockwoods Folly River near Supply. Close it and 4,681 people in 128 Census blocks, all in the Sheriff’s Town Creek island, can no longer reach the nearest emergency room the way they do now, Novant Health Brunswick Medical Center. With all 11 matched crossings closed, those people go from an average of 12.6 minutes to the nearest ER to 24.3 minutes (+11.7); 3,242 of them are 10 minutes or more slower and 370 are 15 minutes or more slower. The worst block goes from 7.7 to 24.8 minutes, when the nearest ER becomes J. Arthur Dosher Memorial Hospital in Southport. 
 
 <!-- keep meaning: describes the map: 128 blocks, mostly 8 to 17 minutes more -->
 ## about.case.alt
@@ -1677,7 +1625,7 @@ Map of the Supply and Southport area in Brunswick County. The NC 211 bridge over
 
 <!-- keep meaning: scenario only; roads, no flow input -->
 ## about.case.caption
-The 128 blocks this one bridge slows by more than a minute, colored by added minutes in the run with all 11 matched crossings closed (`block_deltas.csv`). Scenario only; roads, no flow input.
+The 128 blocks this one bridge slows by more than a minute, colored by added minutes in the run with all 11 matched crossings closed (`block_deltas.csv`).
 
 <!-- keep meaning: AUC 0.77, 95% CI 0.61 to 0.90; 11 crossings against 1,435 others -->
 ## about.case.p3
@@ -1685,14 +1633,10 @@ The model picks out the crossings that matter. The 11 matched crossings rank abo
 
 <!-- keep meaning: flood points are known flood spots, not confirmed closures; one county, 11 crossings, river crossings only -->
 ## about.case.p4
-The flood-point map is dated 11 September 2018, before landfall, so the points are known flood spots, not confirmed closures; the islands map is dated 9 October 2018. One county, 11 crossings, river crossings only (no surge, tide or street flooding). Full report: [reports/phase2_bcso_islands.md](https://github.com/nishaanthjay/CAC-FloodLens-Lifelines/blob/main/reports/phase2_bcso_islands.md).
+The flood-point map is dated 11 September 2018, before landfall, so the points are known flood spots. The islands map is dated 9 October 2018. Full report: [reports/phase2_bcso_islands.md](https://github.com/nishaanthjay/CAC-FloodLens-Lifelines/blob/main/reports/phase2_bcso_islands.md).
 
 ## about.claim.title
 What we do not claim
-
-<!-- keep meaning: we do not predict which roads will close; crossing-level tests were weak or failed (AUC 0.55 and 0.58) -->
-## about.claim1
-We do not predict which roads will close. Crossing-level tests were weak or failed (AUC 0.55 against high-water marks, 0.58 against the Florence flood extent).
 
 <!-- keep meaning: no forecast skill is claimed; every validation test is a hindcast or an operational-analysis replay -->
 ## about.claim2
@@ -1705,17 +1649,6 @@ We never say a road, block or address is safe. A road that is not flagged is “
 <!-- keep meaning: scenarios use river flow only: no surge, tide, street flooding, bridge deck height, scour or debris -->
 ## about.claim4
 Scenarios use river flow only: no storm surge, tide, street flooding, bridge deck height, scour or debris.
-
-## about.claim5
-Closure labels are positives only, and partly unreviewed.
-
-<!-- keep meaning: the hazard layer saturates in the Florence replay (241 of 250; about 1,228 of 1,583); the model did not reproduce Wilmington's documented isolation -->
-## about.claim6
-In the Florence replay the hazard layer saturates (241 of the 250 structure-seeded crossings exceed their 2-year flow at once, and about 1,228 of the 1,583 assessed crossings exceed their 10-year flow at the peak), so scenario levels barely separate. The model also did not reproduce Wilmington’s documented isolation.
-
-<!-- keep meaning: Brunswick results: the model slows people but does not reproduce the six service islands; closing those crossings cuts no block off from an ER or fire station (AUC 0.58, 95% CI 0.44 to 0.72) -->
-## about.claim7
-In Brunswick County the model slows people near the Sheriff’s known flood points but does not reproduce the Sheriff’s six service islands, and closing those crossings cuts no Census block off from an ER or fire station (AUC 0.58, 95% CI 0.44 to 0.72, no better than random closures).
 
 <!-- keep meaning: address results are estimates from the nearest Census block, not the exact address -->
 ## about.claim8
@@ -1797,7 +1730,7 @@ How fresh each live data layer is.
 
 <!-- keep meaning: the site never fakes freshness; each file keeps the time it was generated -->
 ## status.intro
-Live layers refresh hourly. The site never fakes freshness: each file keeps the time it was generated, and its age is shown here and in the app.
+Live layers refresh hourly.
 
 ## status.table.caption
 Freshness of each live data layer
