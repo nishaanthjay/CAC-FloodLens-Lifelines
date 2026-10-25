@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Workspace } from "@/components/workspace/workspace";
+import { t } from "@/content/copy";
 
 export const metadata: Metadata = {
-  title: { absolute: "FloodLens Lifelines: can you still get to help?" },
-  description: "A full-screen map of how flooding could change road access to hospitals and fire stations across Cape Fear, NC. Replay, nowcast and forecast preview. Not for emergency use.",
+  title: { absolute: t("site.share.title") },
+  description: t("workspace.meta.description"),
 };
 
 export default function Page() {

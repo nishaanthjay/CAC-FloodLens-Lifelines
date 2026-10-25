@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { m } from "framer-motion";
 import { Pause, Play } from "lucide-react";
 import { useWS } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
 /** Bottom-centre time control: play/pause, H+0 to H+n ticks, a draggable thumb, the hour in mono, and a Now chip. */
 export function TimePill({ caption, disabled }: { caption?: string; disabled?: boolean }) {
@@ -25,25 +26,25 @@ export function TimePill({ caption, disabled }: { caption?: string; disabled?: b
   return (
     <div className={`pointer-events-none absolute inset-x-3 bottom-[calc(var(--sheet-h,0px)+8px)] z-20 lg:bottom-3 lg:left-[460px] ${rightOpen ? "lg:right-[436px]" : "lg:right-[64px]"} ${snap === "full" ? "max-lg:hidden" : ""}`}>
     <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.16, ease: "easeOut" }} className="pointer-events-auto mx-auto max-w-[520px]">
-      <div className="ws-glass rounded-3xl px-3 pb-1.5 pt-2.5" role="group" aria-label="Time control">
+      <div className="ws-glass rounded-3xl px-3 pb-1.5 pt-2.5" role="group" aria-label={t("timepill.group")}>
         <div className="flex items-center gap-2.5">
-          <button type="button" onClick={() => setPlaying(!playing)} disabled={disabled || hours < 2} aria-label={playing ? "Pause" : "Play one hour every 0.7 seconds"}
+          <button type="button" onClick={() => setPlaying(!playing)} disabled={disabled || hours < 2} aria-label={playing ? t("timepill.pause") : t("timepill.play")}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-ink text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-40">
             {playing ? <Pause size={15} fill="currentColor" aria-hidden /> : <Play size={15} fill="currentColor" aria-hidden className="translate-x-px" />}
           </button>
-          <button type="button" onClick={() => { setPlaying(false); setHour(0); }} disabled={disabled} aria-label="Jump to now, hour 0"
-            className={`min-h-8 shrink-0 rounded-full border px-3 font-ui text-xs font-semibold transition-colors disabled:opacity-40 ${hour === 0 ? "border-ink bg-ink/5 text-ink" : "border-ink/15 text-ink/75 hover:border-ink/40"}`}>Now</button>
+          <button type="button" onClick={() => { setPlaying(false); setHour(0); }} disabled={disabled} aria-label={t("timepill.jump")}
+            className={`min-h-8 shrink-0 rounded-full border px-3 font-ui text-xs font-semibold transition-colors disabled:opacity-40 ${hour === 0 ? "border-ink bg-ink/5 text-ink" : "border-ink/15 text-ink/75 hover:border-ink/40"}`}>{t("timepill.now")}</button>
           <div ref={track} className="relative mx-1.5 h-9 flex-1 touch-none select-none" onPointerDown={(e) => { if (disabled) return; e.currentTarget.setPointerCapture(e.pointerId); setPlaying(false); from(e); }} onPointerMove={(e) => e.buttons && !disabled && from(e)}>
             <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-ink/12" />
             <div className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-ink/70" style={{ width: `${pos(hour)}%` }} />
             {Array.from({ length: hours }, (_, i) => <span key={i} aria-hidden className={`absolute top-1/2 w-px -translate-x-1/2 -translate-y-1/2 ${i % 3 === 0 ? "h-3 bg-ink/45" : "h-2 bg-ink/25"}`} style={{ left: `${pos(i)}%` }} />)}
-            <div role="slider" tabIndex={disabled ? -1 : 0} aria-label="Hour of the scenario" aria-valuemin={0} aria-valuemax={last} aria-valuenow={hour} aria-valuetext={`H+${hour}${caption ? `, ${caption}` : ""}`} aria-disabled={disabled}
+            <div role="slider" tabIndex={disabled ? -1 : 0} aria-label={t("timepill.slider")} aria-valuemin={0} aria-valuemax={last} aria-valuenow={hour} aria-valuetext={caption ? t("timepill.valuetext.caption", { hour, caption }) : t("common.hour", { hour })} aria-disabled={disabled}
               onKeyDown={key} className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border-2 border-ink bg-white shadow-md transition-[left] duration-150 ease-out active:cursor-grabbing motion-reduce:transition-none" style={{ left: `${pos(hour)}%` }} />
           </div>
-          <span className="w-[46px] shrink-0 text-right font-mono text-sm font-semibold tabular-nums" aria-live="off">{hours < 2 ? "Now" : `H+${hour}`}</span>
+          <span className="w-[46px] shrink-0 text-right font-mono text-sm font-semibold tabular-nums" aria-live="off">{hours < 2 ? t("timepill.now") : t("common.hour", { hour })}</span>
         </div>
         <div aria-hidden className="relative ml-[92px] mr-[62px] mt-0.5 h-4 font-mono text-[10px] text-muted max-sm:ml-[84px] max-sm:mr-[56px]">
-          {hours > 1 && labels.map((h) => <span key={h} className="absolute -translate-x-1/2" style={{ left: `${pos(h)}%` }}>H+{h}</span>)}
+          {hours > 1 && labels.map((h) => <span key={h} className="absolute -translate-x-1/2" style={{ left: `${pos(h)}%` }}>{t("common.hour", { hour: h })}</span>)}
         </div>
         {caption && <p className="pb-1 text-center font-mono text-[11px] text-ink/70">{caption}</p>}
       </div>

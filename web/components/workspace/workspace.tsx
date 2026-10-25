@@ -13,6 +13,7 @@ import { WorkspaceData, useData } from "@/components/workspace/data";
 import { WorkspaceState, useWS } from "@/components/workspace/store";
 import { TimePill } from "@/components/workspace/time-pill";
 import { TopBar } from "@/components/workspace/top-bar";
+import { t } from "@/content/copy";
 
 function useDesktop() {
   const [d, setD] = useState<boolean | null>(null);
@@ -31,9 +32,9 @@ function PrintSheet() {
   const live = mode !== "replay";
   return (
     <div className="hidden bg-white px-6 py-4 font-ui text-black print:block">
-      <h1 className="font-display text-3xl font-bold">FloodLens Lifelines: address check</h1>
-      <p className="mt-2 text-xs font-semibold text-alert">{live ? "Now and forecast preview (unvalidated NWM river flow)." : "Florence 2018 replay scenario. Not a forecast."} Not for emergency use. Call 911 in an emergency. lifelines-nc.vercel.app</p>
-      <p className="mt-3 text-sm"><b>Starting at</b> {r.origin.label}</p>
+      <h1 className="font-display text-3xl font-bold">{t("workspace.print.title")}</h1>
+      <p className="mt-2 text-xs font-semibold text-alert">{live ? t("workspace.print.live") : t("workspace.print.replay")} {t("workspace.print.warning")}</p>
+      <p className="mt-3 text-sm"><b>{t("access.starting")}</b> {r.origin.label}</p>
       <div className="mt-4">
         <RouteAnalysis groups={r.groups} focusId={r.focus} onFocus={r.setFocusId} hour={r.hh} hours={d.X.hours} timeText={d.timeText} live={live}
           names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} nAssessed={d.X.assessed.length} replayStart={d.start} />
@@ -49,7 +50,7 @@ function Shell() {
   return (
     <>
     <main id="content" className="fixed inset-0 print:hidden overflow-hidden bg-[#E9EEF4] font-ui text-ink" style={{ "--sheet-h": `${desktop === false ? sheetPx : 0}px` } as React.CSSProperties}>
-      <h1 className="sr-only">FloodLens Lifelines map workspace: how flooding could change road access to help in Cape Fear</h1>
+      <h1 className="sr-only">{t("workspace.heading")}</h1>
       <Rail />
       <TopBar />
       {desktop === true && <><LeftPanel /><RightPanel /></>}

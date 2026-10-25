@@ -1,6 +1,7 @@
 "use client";
 import { useId, useRef } from "react";
 import type { AccessState } from "@/lib/workspace/tiers";
+import { t } from "@/content/copy";
 
 /** Monotone cubic path through (x, y) points: smooth, and never overshoots the data (a stacked band must not cross its neighbour). */
 function smooth(pts: [number, number][]): string {
@@ -48,7 +49,7 @@ export function Swatch({ fill, pattern, uid, size = 12 }: { fill: string; patter
 const fmt = (v: number) => (v >= 1000 ? `${+(v / 1000).toFixed(v >= 10000 ? 0 : 1)}k` : `${Math.round(v)}`);
 
 /** Hand-written stacked area chart: smooth curves, a vertical marker at the current hour; click or drag to move it, arrow keys when focused. */
-export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLabel = (h) => `H+${h}`, emptyText }: {
+export function StackedArea({ series, hour, onHour, unitLabel, ariaLabel, hourLabel = (h) => t("common.hour", { hour: h }), emptyText }: {
   series: Series[]; hour: number; onHour: (h: number) => void; unitLabel: string; ariaLabel: string; hourLabel?: (h: number) => string; emptyText?: string;
 }) {
   const uid = useId().replace(/:/g, "");

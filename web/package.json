@@ -2,10 +2,11 @@
   "name": "floodlens-lifelines-web",
   "private": true,
   "scripts": {
-    "dev": "node scripts/copy-maplibre-worker.mjs && next dev",
-    "prebuild": "node scripts/copy-maplibre-worker.mjs",
+    "dev": "node scripts/copy-maplibre-worker.mjs && node scripts/build-copy.mjs && next dev",
+    "prebuild": "node scripts/copy-maplibre-worker.mjs && node scripts/build-copy.mjs",
     "build": "next build",
     "start": "next start",
+    "copy": "node scripts/build-copy.mjs",
     "sample:sync": "node -e \"require('fs').cpSync('../export/sample','public/data/sample',{recursive:true,filter:s=>!/\\.(py|html|md)$/.test(s)})\"",
     "check:route": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/route-check.mjs",
     "check:workspace": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/workspace-check.mjs"

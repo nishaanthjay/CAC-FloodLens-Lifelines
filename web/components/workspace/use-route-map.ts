@@ -11,10 +11,11 @@ import { TIERS } from "@/lib/workspace/tiers";
 import { createTooltip } from "@/lib/workspace/tooltip";
 import { useRouting } from "@/components/workspace/routing";
 import { useWS } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
 type Feat = { type: "Feature"; properties: Record<string, unknown>; geometry: { type: "LineString" | "Point"; coordinates: unknown } };
 const fc = (features: Feat[]) => ({ type: "FeatureCollection", features });
-const STATE_TEXT = ["No crossing flagged", "At risk", "Crossing flagged"];
+const STATE_TEXT = [t("routemap.state.none"), t("routemap.state.risk"), t("routemap.state.flagged")];
 const ROUTE_LINES = ["route-alt", "route-base-casing", "route-base", "route-scen-casing", "route-scen", "route-detour-casing", "route-detour", "route-flow"];
 
 /** Everything the Access tab draws, derived from the routing state and the selected hour. */
@@ -29,8 +30,8 @@ function useModel() {
     const crossingPoint = (c: OnRoute) => {
       const lv = c.x ? parseInt(c.x.level[hh] ?? "-", 10) : NaN;
       const cls = !c.x ? -2 : tierOfLevel(lv);
-      rx.set(c.id, { type: "Feature", properties: { id: c.id, cls, name: c.x ? tidyName(c.x.name) : "Stream crossing (not assessed)",
-        status: !c.x ? "Not assessed by the model: not assumed open" : cls < 0 ? "No flow value for this step: not assumed open" : cls >= 3 ? "Closed in scenario (above 10-year flow)" : `${TIERS[cls].label}: ${TIERS[cls].note}` },
+      rx.set(c.id, { type: "Feature", properties: { id: c.id, cls, name: c.x ? tidyName(c.x.name) : t("routemap.crossing.unassessed"),
+        status: !c.x ? t("routemap.status.unassessed") : cls < 0 ? t("routemap.status.novalue") : cls >= 3 ? t("routemap.status.closed") : `${TIERS[cls].label}: ${TIERS[cls].note}` },
         geometry: { type: "Point", coordinates: [c.lon, c.lat] } });
     };
     for (const id of r.selected) {
@@ -52,7 +53,7 @@ function useModel() {
         const runs = detourRuns(base.shape, scen.o.shape);
         for (const run of runs) detours.push({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: run } });
         const longest = runs.sort((a, b) => length(b) - length(a))[0];
-        if (longest) { const m = Math.round((scen.o.timeS - base.timeS) / 60); chips.push({ at: midpoint(longest), text: m >= 1 ? `+${m} min detour` : "Rerouted" }); }
+        if (longest) { const m = Math.round((scen.o.timeS - base.timeS) / 60); chips.push({ at: midpoint(longest), text: m >= 1 ? t("routemap.chip.detour", { m }) : t("routemap.chip.rerouted") }); }
       }
     }
     return { routes, detours, rx: [...rx.values()], closed: [...closed.values()].sort((a, b) => a.km - b.km), chips, shapes };
@@ -77,10 +78,10 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
     const m = map.current;
     const tip = createTooltip(m.getContainer());
     const leave = () => { m.getCanvas().style.cursor = ""; tip.hide(); };
-    m.on("mousemove", "route-x", (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "default"; tip.show(p.name, [["Status", p.status, false]], e.point.x, e.point.y); });
+    m.on("mousemove", "route-x", (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "default"; tip.show(p.name, [[t("tip.route.status"), p.status, false]], e.point.x, e.point.y); });
     m.on("mouseleave", "route-x", leave);
     for (const id of ["route-scen", "route-base", "route-alt"]) {
-      m.on("mousemove", id, (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "pointer"; tip.show(p.label, [["Route", id === "route-base" ? "Normal route (no closures)" : id === "route-alt" ? "Alternative" : "Scenario route", false], ["Status", p.status, false]], e.point.x, e.point.y); });
+      m.on("mousemove", id, (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "pointer"; tip.show(p.label, [[t("tip.route.name"), id === "route-base" ? t("tip.route.base") : id === "route-alt" ? t("tip.route.alt") : t("tip.route.scen"), false], [t("tip.route.status"), p.status, false]], e.point.x, e.point.y); });
       m.on("mouseleave", id, leave);
       m.on("click", id, (e: ML) => { const p = e.features?.[0]?.properties; if (p) live.current.setFocus(p.id); });
     }
@@ -122,7 +123,7 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
     markers.current.origin?.remove(); markers.current.origin = null;
     if (r.origin) {
       const el = document.createElement("div");
-      el.className = "ws-pin-wrap"; el.setAttribute("role", "img"); el.setAttribute("aria-label", `Starting point: ${r.origin.label}`);
+      el.className = "ws-pin-wrap"; el.setAttribute("role", "img"); el.setAttribute("aria-label", t("routemap.pin.label", { label: r.origin.label }));
       el.innerHTML = `<div class="ws-pin"><span>${esc(initial(r.origin.label))}</span></div>`;
       markers.current.origin = new ml.Marker({ element: el, anchor: "bottom" }).setLngLat([r.origin.lon, r.origin.lat]).addTo(m);
     }
@@ -135,8 +136,8 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
     if (!active) return;
     model.closed.slice(0, 12).forEach((c, i) => {
       const el = document.createElement("div");
-      el.className = "ws-closed"; el.setAttribute("role", "img"); el.setAttribute("aria-label", `Closed in scenario: ${c.name}`); el.title = `${c.name}: closed in scenario`;
-      el.innerHTML = `<span class="ws-closed-pulse"></span><span class="ws-closed-ring"><b>×</b></span>${i === 0 ? `<span class="ws-closed-label">Closed in scenario</span>` : ""}`;
+      el.className = "ws-closed"; el.setAttribute("role", "img"); el.setAttribute("aria-label", t("routemap.closed.label", { name: c.name })); el.title = t("routemap.closed.title", { name: c.name });
+      el.innerHTML = `<span class="ws-closed-pulse"></span><span class="ws-closed-ring"><b>×</b></span>${i === 0 ? `<span class="ws-closed-label">${t("routemap.closed.marker")}</span>` : ""}`;
       markers.current.extra.push(new ml.Marker({ element: el, anchor: "center" }).setLngLat([c.lon, c.lat]).addTo(m));
     });
     for (const c of model.chips) {

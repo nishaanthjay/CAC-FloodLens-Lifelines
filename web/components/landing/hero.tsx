@@ -2,11 +2,12 @@ import { MapPin } from "lucide-react";
 import { Highlight } from "@/components/ui/annotations";
 import { AddressSearch } from "@/components/landing/address-search";
 import { coastMain, hospitals, islands, ocean, riversMajor, roadsMajor, roadsMinor } from "@/lib/cape-fear";
+import { t } from "@/content/copy";
 
 const facts = [
-  { value: "Now + 18 hours", label: "Nowcast, then forecast preview. The Florence replay is kept separate" },
-  { value: "3 counties", label: "New Hanover, Brunswick, Pender" },
-  { value: "9 kinds of help", label: "Emergency rooms, fire, EMS, police, dialysis, urgent care, nursing homes, pharmacies" },
+  { value: t("hero.fact1.value"), label: t("hero.fact1.label") },
+  { value: t("hero.fact2.value"), label: t("hero.fact2.label") },
+  { value: t("hero.fact3.value"), label: t("hero.fact3.label") },
 ];
 
 /** Faint real map of the region behind the hero; the center is masked clear for the headline. */
@@ -42,13 +43,13 @@ export function Hero() {
       <div className="relative mx-auto max-w-screen-xl px-4 pb-24 pt-20 text-center sm:px-6 sm:pb-32 sm:pt-28">
         <p className="enter mx-auto inline-flex items-center gap-2 rounded-full border border-blue/20 bg-white/70 px-3.5 py-2 font-ui text-sm font-medium text-blue">
           <MapPin size={15} strokeWidth={1.8} aria-hidden />
-          Cape Fear, North Carolina
+          {t("hero.place")}
         </p>
         <h1 className="enter mx-auto mt-9 [--d:90ms] max-w-4xl font-display text-[clamp(2.75rem,8vw,6rem)] font-black leading-[1.02] tracking-[-0.04em] text-balance">
-          Can you still <Highlight>get to help?</Highlight>
+          {t("hero.title.lead")} <Highlight>{t("hero.title.highlight")}</Highlight>
         </h1>
         <p className="enter mx-auto mt-8 max-w-xl [--d:180ms] font-body text-lg leading-relaxed text-ink/70 sm:text-xl">
-          See whether flooding could cut your route to the ER, fire station, or dialysis center — now, and over the next 18 hours.
+          {t("hero.sub")}
         </p>
 
         <AddressSearch />

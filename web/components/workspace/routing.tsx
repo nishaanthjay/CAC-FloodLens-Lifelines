@@ -9,6 +9,7 @@ import { matrix, onTiming, openRoute, route, SLOW_MS, type Trip } from "@/lib/va
 import type { Group } from "@/components/route/route-analysis";
 import { useData } from "@/components/workspace/data";
 import { useWS } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
 export type Service = { id: string; k: Kind; kind: string; kindLabel: string; fill: string; name: string; sub: string; lat: number; lon: number; straightKm: number; timeS?: number | null; km?: number; phone?: string; addr?: string; src: string };
 export type Origin = { lat: number; lon: number; label: string };
@@ -17,7 +18,7 @@ type Ranked = { o: RouteOption; s: HourStatus }[];
 
 export const PER_KIND = 5; // nearest services of each kind that get drive times (9 kinds x 5 stays under the router's 50-target limit)
 export const SHOW_ALL = 3; // per kind in the "All" view
-export const FILTERS: ["all" | Kind, string][] = [["all", "All"], ...KINDS.map((k) => [k.id, k.label] as ["all" | Kind, string])];
+export const FILTERS: ["all" | Kind, string][] = [["all", t("common.all")], ...KINDS.map((k) => [k.id, k.label] as ["all" | Kind, string])];
 
 type Ctx = {
   query: string; setQuery: (q: string) => void; search: (q: string) => void; busy: boolean; msg: string | null;
@@ -76,7 +77,7 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
   // Starting point from the link: ?lat&lon&label (sample place) or #q (address, kept in the URL fragment so it never reaches our server).
   useEffect(() => {
     const lat = params.get("lat"), lon = params.get("lon"), q = new URLSearchParams(window.location.hash.slice(1)).get("q");
-    if (lat && lon) setOrigin({ lat: +lat, lon: +lon, label: params.get("label") ?? "Selected place" });
+    if (lat && lon) setOrigin({ lat: +lat, lon: +lon, label: params.get("label") ?? t("access.place.default") });
     else if (q && !origin) { setQuery(q); setTab("access"); search(q); }
     if (q) history.replaceState(null, "", window.location.pathname + window.location.search);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -104,7 +105,7 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
         const timed = list.map((s, i) => ({ ...s, timeS: m[i]?.timeS ?? null, km: m[i]?.km }));
         setServices(timed); pick(timed);
       })
-      .catch((e: Error) => { if (tk === token.current) { setMsg(`Drive times are unavailable right now (${e.message}), so services are listed by straight-line distance.`); pick(list); } });
+      .catch((e: Error) => { if (tk === token.current) { setMsg(t("routing.error.drivetimes", { error: e.message })); pick(list); } });
   }, [origin, base]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Florence cross-check against the model's own road network: replay only, from the block lookup the replay already loaded.
@@ -124,8 +125,8 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
       const s = services.find((x) => x.id === id)!;
       setTrips((r) => ({ ...r, [id]: "loading" }));
       route([origin.lon, origin.lat], [s.lon, s.lat], [], 2)
-        .then((t) => { if (tk === token.current) setTrips((r) => ({ ...r, [id]: t.length ? t : "no road route found" })); })
-        .catch((e: Error) => { if (tk === token.current) { asked.current.delete(id); setTrips((r) => ({ ...r, [id]: e.message.includes("did not answer") ? e.message : "the routing service is unavailable right now" })); } });
+        .then((list) => { if (tk === token.current) setTrips((r) => ({ ...r, [id]: list.length ? list : t("routing.noroad") })); })
+        .catch((e: Error) => { if (tk === token.current) { asked.current.delete(id); setTrips((r) => ({ ...r, [id]: e.message.includes("did not answer") ? e.message : t("routing.unavailable") })); } });
     }
   }, [selected, origin, base, services]);
 
@@ -134,10 +135,10 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
     const r: Record<string, RouteOption[] | string> = {};
     if (!X) return r;
     for (const id of selected) {
-      const t = trips[id], s = services.find((x) => x.id === id);
-      if (Array.isArray(t) && s) r[id] = t.map((tr, i) => ({ id: `${id}-${i}`, serviceId: id, label: `${s.name}${i ? ` (alternative ${i})` : ""}`, via: tr.via, kind: i ? "alternate" as const : "fastest" as const,
+      const trip = trips[id], s = services.find((x) => x.id === id);
+      if (Array.isArray(trip) && s) r[id] = trip.map((tr, i) => ({ id: `${id}-${i}`, serviceId: id, label: i ? t("routing.label.alternative", { name: s.name, n: i }) : s.name, via: tr.via, kind: i ? "alternate" as const : "fastest" as const,
         timeS: tr.timeS, km: tr.km, shape: tr.shape, on: crossingsOnRoute(tr.shape, X) }));
-      else if (typeof t === "string") r[id] = t;
+      else if (typeof trip === "string") r[id] = trip;
     }
     return r;
   }, [selected, trips, services, X]);
@@ -146,7 +147,7 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!origin || !base || !X) return;
     const tk = token.current;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       for (const id of selected) {
         const opts = routes[id];
         if (!Array.isArray(opts) || !opts.every((o) => routeAtHour(o.on, hh).blocked.length)) continue;
@@ -158,13 +159,13 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
         openRoute([origin.lon, origin.lat], [s.lon, s.lat], X, hh)
           .then(({ trip, reason }) => {
             if (tk !== token.current) return;
-            setDetours((dd) => ({ ...dd, [key]: trip ? { id: `${id}-d${hh}`, serviceId: id, label: `${s.name} (detour)`, via: trip.via, kind: "detour",
+            setDetours((dd) => ({ ...dd, [key]: trip ? { id: `${id}-d${hh}`, serviceId: id, label: t("routing.label.detour", { name: s.name }), via: trip.via, kind: "detour",
               timeS: trip.timeS, km: trip.km, shape: trip.shape, on: trip.on } : reason! }));
           })
           .catch((e: Error) => { if (tk === token.current) { asked.current.delete(key); setDetours((dd) => ({ ...dd, [key]: e.message })); } });
       }
     }, 350);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [hh, selected, routes, origin, base, services, X, xKey]);
 
   const names = useMemo(() => Object.fromEntries(services.map((s) => [s.id, s.name])), [services]);
@@ -186,7 +187,7 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
   const noRoute = selected.flatMap((id) => {
     const r = routes[id], dd = detours[`${id}|${xKey}|${hh}`];
     if (typeof r === "string") return [{ name: names[id], reason: r }];
-    if (typeof dd === "string" && dd !== "loading") return [{ name: names[id], reason: `no detour found (${dd})` }];
+    if (typeof dd === "string" && dd !== "loading") return [{ name: names[id], reason: t("routing.nodetour", { reason: dd }) }];
     return [];
   });
   const loading = selected.some((id) => trips[id] === "loading" || detours[`${id}|${xKey}|${hh}`] === "loading");
@@ -209,7 +210,7 @@ export function RoutingProvider({ children }: { children: ReactNode }) {
     const q = new URLSearchParams({ tab: "access", mode, lat: origin.lat.toFixed(5), lon: origin.lon.toFixed(5), label: origin.label });
     if (!live) q.set("hour", String(hh));
     const u = `${window.location.origin}/?${q}`;
-    try { await navigator.clipboard.writeText(u); setCopied(true); setTimeout(() => setCopied(false), 2500); } catch { setMsg(`Copy this link: ${u}`); }
+    try { await navigator.clipboard.writeText(u); setCopied(true); setTimeout(() => setCopied(false), 2500); } catch { setMsg(t("routing.error.copy", { url: u })); }
   }
 
   const v: Ctx = { query, setQuery, search, busy, msg, origin, net, slowWait, loading, services, shown, filter, setFilter, selected, toggle, trips, groups, ranked, focus, setFocusId,

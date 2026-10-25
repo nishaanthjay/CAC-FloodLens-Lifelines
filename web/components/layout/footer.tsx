@@ -1,8 +1,9 @@
 import { Droplets } from "lucide-react";
+import { t } from "@/content/copy";
 
 const cols = [
-  ["Explore", [["Florence replay", "/?mode=replay"], ["Address check", "/?tab=access"], ["What breaks first", "/?tab=consequence"]]],
-  ["About", [["How it works", "/about#how"], ["About and limits", "/about#limits"], ["Data status", "/status"]]],
+  [t("footer.explore.title"), [[t("footer.explore.replay"), "/?mode=replay"], [t("footer.explore.address"), "/?tab=access"], [t("footer.explore.breaks"), "/?tab=consequence"]]],
+  [t("footer.about.title"), [[t("footer.about.how"), "/about#how"], [t("footer.about.limits"), "/about#limits"], [t("footer.about.status"), "/status"]]],
 ] as const;
 
 export function Footer() {
@@ -15,10 +16,10 @@ export function Footer() {
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-blue text-white">
               <Droplets size={19} aria-hidden />
             </span>
-            FloodLens <span className="text-blue">Lifelines</span>
+            {t("site.brand.first")} <span className="text-blue">{t("site.brand.second")}</span>
           </a>
           <p className="mt-3 max-w-[30ch] font-body text-sm leading-relaxed text-muted">
-            Exploring how flooding may change access to help across Cape Fear.
+            {t("footer.tagline")}
           </p>
         </div>
         {cols.map(([title, links]) => (
@@ -32,12 +33,12 @@ export function Footer() {
           </div>
         ))}
         <div>
-          <h2 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">Privacy</h2>
-          <p className="mt-3 font-ui text-sm leading-relaxed text-ink/75">No user data is stored. Address searches go to OpenStreetMap Nominatim; cookie-free page-view counts are collected.</p>
+          <h2 className="font-ui text-xs font-semibold uppercase tracking-[0.12em] text-muted">{t("footer.privacy.title")}</h2>
+          <p className="mt-3 font-ui text-sm leading-relaxed text-ink/75">{t("footer.privacy.body")}</p>
         </div>
       </div>
       <p className="mt-10 border-t border-ink/10 pt-5 font-ui text-xs leading-relaxed text-muted">
-        Cape Fear, North Carolina <span className="px-1.5">|</span> Built for the Congressional App Challenge
+        {t("footer.place")} <span className="px-1.5">|</span> {t("footer.credit")}
       </p>
     </div>
     </footer>

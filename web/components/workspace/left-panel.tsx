@@ -10,21 +10,22 @@ import { useDerived, usePick } from "@/components/workspace/derived";
 import { useRouting } from "@/components/workspace/routing";
 import { useWS, type Mode, type Tab } from "@/components/workspace/store";
 import { tierOfCrossing } from "@/lib/workspace/stats";
+import { t } from "@/content/copy";
 
 export type Tile = { icon: LucideIcon; value: string; label: string };
 export type Row = { id: string; name: string; tier: number; value: string };
 
-const TITLE: Record<Tab, string> = { water: "Water Summary", access: "Access Summary", consequence: "Consequence Summary" };
+const TITLE: Record<Tab, string> = { water: t("leftpanel.title.water"), access: t("leftpanel.title.access"), consequence: t("leftpanel.title.consequence") };
 
 export function Provenance({ mode, prov }: { mode: Mode; prov: Prov }) {
   return (
     <div className="mt-2 font-ui text-xs text-muted">
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-white">{MODE_BADGE[mode]}</span>
-        {prov.stale && <span className="rounded border border-alert/50 bg-softred px-1.5 py-0.5 text-[10px] font-semibold text-[#8E0000]">STALE</span>}
-        <span className="font-mono text-[11px] text-ink/75">Generated {prov.generated}</span>
+        {prov.stale && <span className="rounded border border-alert/50 bg-softred px-1.5 py-0.5 text-[10px] font-semibold text-[#8E0000]">{t("leftpanel.stale")}</span>}
+        <span className="font-mono text-[11px] text-ink/75">{t("leftpanel.generated", { generated: prov.generated })}</span>
       </p>
-      <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-ink/75" title={prov.source}>Source: {prov.source}</p>
+      <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-ink/75" title={prov.source}>{t("leftpanel.source", { source: prov.source })}</p>
       <p className="mt-1 text-[11px] leading-snug text-ink/75">{prov.note}</p>
     </div>
   );
@@ -48,8 +49,8 @@ export function CrossingTable({ rows, onPick, selected, valueLabel, caption }: {
   return (
     <div className="overflow-hidden rounded-xl border border-ink/8 bg-white/70">
       <table className="w-full border-collapse font-ui text-xs">
-        <caption className="sr-only">{caption} Select a row to fly the map to that crossing.</caption>
-        <thead><tr className="border-b border-ink/8 text-left text-[11px] text-muted"><th scope="col" className="px-2.5 py-1.5 font-semibold">Crossing</th><th scope="col" className="py-1.5 font-semibold">Risk</th><th scope="col" className="px-2.5 py-1.5 text-right font-semibold">{valueLabel}</th></tr></thead>
+        <caption className="sr-only">{caption} {t("leftpanel.table.select")}</caption>
+        <thead><tr className="border-b border-ink/8 text-left text-[11px] text-muted"><th scope="col" className="px-2.5 py-1.5 font-semibold">{t("leftpanel.table.crossing")}</th><th scope="col" className="py-1.5 font-semibold">{t("leftpanel.table.risk")}</th><th scope="col" className="px-2.5 py-1.5 text-right font-semibold">{valueLabel}</th></tr></thead>
         <tbody>
           {rows.map((r) => (
             <tr key={r.id} className={`border-b border-ink/5 last:border-0 ${selected === r.id ? "bg-blue/10" : "hover:bg-ink/[0.04]"}`}>
@@ -71,7 +72,7 @@ export function CrossingTable({ rows, onPick, selected, valueLabel, caption }: {
 
 export function LeftSkeleton() {
   return (
-    <div aria-busy="true" aria-label="Loading summary" role="status" className="mt-3 space-y-3">
+    <div aria-busy="true" aria-label={t("leftpanel.loading")} role="status" className="mt-3 space-y-3">
       <Skeleton className="h-3 w-2/3" /><Skeleton className="h-3 w-1/2" />
       <Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-11/12" /><Skeleton className="h-4 w-4/5" />
       <div className="grid grid-cols-3 gap-2"><Skeleton className="h-20" /><Skeleton className="h-20" /><Skeleton className="h-20" /></div>
@@ -85,7 +86,7 @@ export function ErrorCard({ title, text }: { title: string; text: string }) {
     <div role="alert" className="mt-3 flex gap-2 rounded-xl border border-alert/30 bg-softred p-3 font-ui text-xs leading-snug">
       <AlertTriangle size={16} aria-hidden className="mt-0.5 shrink-0 text-alert" />
       <div><p className="font-semibold text-[#8E0000]">{title}</p><p className="mt-0.5 text-ink/80">{text}</p>
-        <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-9 rounded-full border border-ink/20 bg-white px-3 font-semibold hover:border-ink/40">Reload</button></div>
+        <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-9 rounded-full border border-ink/20 bg-white px-3 font-semibold hover:border-ink/40">{t("common.reload")}</button></div>
     </div>
   );
 }
@@ -103,17 +104,17 @@ export function LeftContent() {
   const flagged = v.tiers ? v.tiers.count[3] + v.tiers.count[4] : 0;
   const tidalFlagged = X ? X.assessed.filter((x) => x.tidal && v.keep(x) && tierOfCrossing(x, v.h) >= 3).length : 0;
   const tiles: Tile[] = [
-    { icon: Waves, value: String(flagged), label: "Crossings above 10-year flow" },
+    { icon: Waves, value: String(flagged), label: t("leftpanel.tile.flagged") },
     mode === "replay" || mode === "forecast"
-      ? { icon: Anchor, value: String(tidalFlagged), label: "Tidal crossings flagged" }
-      : { icon: Gauge, value: d.nc.data ? `${v.gaugesUp} of ${v.gauges.length}` : "…", label: "Gauges at action stage" },
-    { icon: Info, value: X ? X.not_assessed.length.toLocaleString("en-US") : "…", label: "Not assessed: not assumed open" },
+      ? { icon: Anchor, value: String(tidalFlagged), label: t("leftpanel.tile.tidal") }
+      : { icon: Gauge, value: d.nc.data ? t("common.of", { a: v.gaugesUp, b: v.gauges.length }) : t("common.pending"), label: t("leftpanel.tile.gauges") },
+    { icon: Info, value: X ? X.not_assessed.length.toLocaleString("en-US") : t("common.pending"), label: t("leftpanel.tile.unassessed") },
   ];
-  if (mode === "forecast") tiles[2] = { icon: Gauge, value: d.nc.data ? `${v.gaugesUp} of ${v.gauges.length}` : "…", label: "Gauges at action stage (now)" };
+  if (mode === "forecast") tiles[2] = { icon: Gauge, value: d.nc.data ? t("common.of", { a: v.gaugesUp, b: v.gauges.length }) : t("common.pending"), label: t("leftpanel.tile.gauges.now") };
   const byFlow = tab === "water";
-  const rows: Row[] = v.rows.map((r) => ({ id: r.id, name: r.name, tier: r.tier, value: byFlow ? (r.ratio === null ? "n/a" : `${r.ratio.toFixed(2)}×`) : r.people.toLocaleString("en-US") }));
+  const rows: Row[] = v.rows.map((r) => ({ id: r.id, name: r.name, tier: r.tier, value: byFlow ? (r.ratio === null ? t("leftpanel.table.na") : `${r.ratio.toFixed(2)}×`) : r.people.toLocaleString("en-US") }));
   const caveats = mode === "replay" ? [d.base?.meta.event.note, d.base?.meta.stamp, ...(d.base?.meta.known_gaps ?? [])]
-    : mode === "nowcast" ? [...(d.nc.data?.caveats ?? []), ...(d.nc.data?.errors ?? []).map((e) => `Data error: ${e}`)]
+    : mode === "nowcast" ? [...(d.nc.data?.caveats ?? []), ...(d.nc.data?.errors ?? []).map((e) => t("leftpanel.caveat.error", { error: e }))]
     : [...(d.fc.data?.caveats ?? []), d.fc.data?.fallback.used ? d.fc.data.fallback.note : ""];
   const list = caveats.filter((c): c is string => !!c);
   const loading = !d.base || !X;
@@ -122,29 +123,29 @@ export function LeftContent() {
     <AnimatePresence mode="wait" initial={false}>
       <m.div key={tab} id="ws-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.16 }}>
         <h2 className="font-display text-[26px] font-bold leading-tight tracking-[-0.02em] text-ink">{TITLE[tab]}</h2>
-        {d.error ? <ErrorCard title="The data failed to load" text={`${d.error}. The map still works, but nothing here is computed. Try reloading.`} />
+        {d.error ? <ErrorCard title={t("leftpanel.error.title")} text={t("leftpanel.error.text", { error: d.error })} />
           : loading || !d.prov ? <LeftSkeleton /> : (
           <>
             <Provenance mode={mode} prov={d.prov} />
             {tab === "access" && <AccessSection />}
             <div className="mt-3"><CrossingCard /></div>
             {!routed && (v.insight ? <p className="font-body text-[13.5px] leading-relaxed text-ink/90">{v.insight}</p> : <Skeleton className="h-16" />)}
-            {!routed && <><Section label="Top hazards" className="mt-3"><Tiles tiles={tiles} /></Section>
-            <Section label={byFlow ? "Top 10 crossings by flow" : "Top 10 crossings by consequence"} className="mt-3">
-              {rows.length ? <CrossingTable rows={rows} onPick={pick} selected={d.selectedId} valueLabel={byFlow ? "vs 10-yr" : "People"}
-                caption={byFlow ? "Crossings with the highest flow compared with their 10-year flow at this hour." : "Crossings ranked by the people behind them, flagged crossings first."} />
-                : <p className="rounded-xl border border-ink/8 bg-white/70 p-3 font-ui text-xs text-ink/75">{mode === "replay" ? "No crossing to list for this layer." : "No crossing has a model value for this step, so none can be ranked. They are not assumed open."}</p>}
-              <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{byFlow ? "" : "Flagged = above the 10-year flow, which closes the crossing in this scenario. People are the people who lose a route or are slowed by more than a minute if this crossing alone closes."}</p>
+            {!routed && <><Section label={t("leftpanel.section.hazards")} className="mt-3"><Tiles tiles={tiles} /></Section>
+            <Section label={byFlow ? t("leftpanel.section.top.flow") : t("leftpanel.section.top.people")} className="mt-3">
+              {rows.length ? <CrossingTable rows={rows} onPick={pick} selected={d.selectedId} valueLabel={byFlow ? t("leftpanel.table.vs10") : t("leftpanel.table.people")}
+                caption={byFlow ? t("leftpanel.table.caption.flow") : t("leftpanel.table.caption.people")} />
+                : <p className="rounded-xl border border-ink/8 bg-white/70 p-3 font-ui text-xs text-ink/75">{mode === "replay" ? t("leftpanel.table.empty.replay") : t("leftpanel.table.empty.live")}</p>}
+              <p className="mt-1.5 font-ui text-[11px] leading-snug text-muted">{byFlow ? "" : t("leftpanel.table.note.people")}</p>
             </Section></>}
-            <Section label="About this view" className="mt-3">
+            <Section label={t("leftpanel.section.about")} className="mt-3">
               <label className="flex items-start gap-2.5 font-ui text-xs leading-snug text-ink/85">
                 <input type="checkbox" checked={d.useOsm} onChange={(e) => d.setUseOsm(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[#2D5DA1]" />
-                <span>Count the {d.nOsm.toLocaleString("en-US")} OpenStreetMap-mapped crossings. They are road-stream intersections that may not be bridges, so they are less certain than the {((d.base?.X.assessed.length ?? 0) - d.nOsm).toLocaleString("en-US")} NCDOT / NBI structures.</span>
+                <span>{t("leftpanel.osm.label", { nOsm: d.nOsm.toLocaleString("en-US"), nStructures: ((d.base?.X.assessed.length ?? 0) - d.nOsm).toLocaleString("en-US") })}</span>
               </label>
-              <p className="mt-2 font-ui text-[11px] leading-snug text-muted">The Layer chip filters what is drawn and listed here. Address route checks always use every crossing.</p>
+              <p className="mt-2 font-ui text-[11px] leading-snug text-muted">{t("leftpanel.layer.note")}</p>
               {list.length > 0 && (
                 <details className="mt-2 border-t border-ink/8 pt-1">
-                  <summary className="flex min-h-10 cursor-pointer items-center font-ui text-xs font-semibold">Caveats ({list.length})</summary>
+                  <summary className="flex min-h-10 cursor-pointer items-center font-ui text-xs font-semibold">{t("leftpanel.caveats", { n: list.length })}</summary>
                   <ul className="list-disc space-y-1.5 pb-1 pl-4 font-body text-xs leading-relaxed text-ink/80">{list.map((c) => <li key={c}>{c}</li>)}</ul>
                 </details>
               )}
@@ -158,7 +159,7 @@ export function LeftContent() {
 
 export function LeftPanel() {
   return (
-    <m.aside initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.35, ease: "easeOut" }} aria-label="Summary"
+    <m.aside initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.35, ease: "easeOut" }} aria-label={t("leftpanel.aria")}
       className="ws-glass ws-scroll absolute bottom-[104px] left-[68px] top-[60px] z-20 hidden w-[380px] overflow-y-auto rounded-2xl p-4 lg:block">
       <LeftContent />
     </m.aside>

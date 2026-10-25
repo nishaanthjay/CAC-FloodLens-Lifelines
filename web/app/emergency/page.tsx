@@ -3,10 +3,11 @@ import { Suspense } from "react";
 import { Masthead } from "@/components/layout/masthead";
 import { Footer } from "@/components/layout/footer";
 import { EmergencyFinder } from "@/components/emergency/emergency-finder";
+import { t } from "@/content/copy";
 
 export const metadata: Metadata = {
-  title: "Emergency finder",
-  description: "The nearest emergency rooms, fire, EMS, police, dialysis centers, urgent care, nursing homes and pharmacies around Cape Fear, with call, directions and road check. Not for emergency use.",
+  title: t("emergency.meta.title"),
+  description: t("emergency.meta.description"),
 };
 
 export default function EmergencyPage() {

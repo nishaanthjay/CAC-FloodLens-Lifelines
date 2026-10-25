@@ -5,6 +5,7 @@ import { LeftContent } from "@/components/workspace/left-panel";
 import { RightContent } from "@/components/workspace/right-panel";
 import { MODE_BADGE } from "@/components/workspace/top-bar";
 import { useWS, type Snap } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
 const ORDER: Snap[] = ["peek", "half", "full"];
 const snapPx = (s: Snap, vh: number) => (s === "peek" ? 148 : s === "half" ? Math.round(vh * 0.52) : vh - 64);
@@ -36,15 +37,15 @@ export function Sheet() {
     else if (e.key === "ArrowDown") { e.preventDefault(); setSnap(ORDER[Math.max(0, i - 1)]); }
   };
   return (
-    <section aria-label="Summary and network insights" className={`ws-glass absolute inset-x-0 bottom-0 z-30 flex flex-col rounded-b-none rounded-t-3xl bg-white/92 lg:hidden ${drag === null ? "transition-[height] duration-300 ease-out motion-reduce:transition-none" : ""}`} style={{ height: h }}>
+    <section aria-label={t("sheet.aria")} className={`ws-glass absolute inset-x-0 bottom-0 z-30 flex flex-col rounded-b-none rounded-t-3xl bg-white/92 lg:hidden ${drag === null ? "transition-[height] duration-300 ease-out motion-reduce:transition-none" : ""}`} style={{ height: h }}>
       <div className="flex shrink-0 items-center gap-2 px-4 pb-1 pt-1.5">
         <button type="button" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onKeyDown={key}
-          aria-label={`Resize panel. Now ${snap}. Drag, or press up and down arrows.`} className="group -mx-4 flex min-h-11 flex-1 touch-none items-center gap-3 px-4">
+          aria-label={t("sheet.resize", { snap })} className="group -mx-4 flex min-h-11 flex-1 touch-none items-center gap-3 px-4">
           <span aria-hidden className="mx-0 h-1.5 w-10 shrink-0 rounded-full bg-ink/25 transition-colors group-hover:bg-ink/40" />
           <span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-white">{MODE_BADGE[mode]}</span>
-          <span className="truncate font-ui text-[11px] font-medium text-ink/75">Not for emergency use · call 911</span>
+          <span className="truncate font-ui text-[11px] font-medium text-ink/75">{t("sheet.notice")}</span>
         </button>
-        <button type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu" className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-ink/5"><Menu size={19} aria-hidden /></button>
+        <button type="button" onClick={() => setMenuOpen(true)} aria-label={t("sheet.menu")} className="grid h-11 w-11 shrink-0 place-items-center rounded-full hover:bg-ink/5"><Menu size={19} aria-hidden /></button>
       </div>
       <div className={`ws-scroll min-h-0 flex-1 px-4 pb-8 ${snap === "peek" && drag === null ? "overflow-hidden" : "overflow-y-auto"}`}>
         <LeftContent />

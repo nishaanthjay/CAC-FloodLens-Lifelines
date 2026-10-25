@@ -14,6 +14,7 @@ import { useData } from "@/components/workspace/data";
 import { ErrorCard } from "@/components/workspace/left-panel";
 import { useRouteMap } from "@/components/workspace/use-route-map";
 import { useWS } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
 const easeOut = (t: number) => 1 - (1 - t) ** 3;
 
@@ -50,7 +51,7 @@ export function MapView() {
       // Opening move: start a little wider than Cape Fear and ease in (1.2 s), unless the visitor prefers reduced motion.
       const cam = m.cameraForBounds(BOUNDS, { padding: pad.current });
       if (cam) m.jumpTo({ center: cam.center, zoom: cam.zoom - (reduced() ? 0 : 0.9) });
-      const slow = window.setTimeout(() => { if (!m.loaded()) setError("the basemap did not answer in time"); }, 20000);
+      const slow = window.setTimeout(() => { if (!m.loaded()) setError(t("map.error.timeout")); }, 20000);
       cleanups.push(() => window.clearTimeout(slow));
       if (process.env.NODE_ENV !== "production") (window as unknown as { __map: ML }).__map = m; // dev only: lets screenshot scripts drive the camera
       m.addControl(new ml.AttributionControl({ compact: true }), "bottom-left");
@@ -92,11 +93,11 @@ export function MapView() {
           if (!f) return;
           m.getCanvas().style.cursor = "pointer";
           if (hov !== f.id) { if (hov !== null) to(hov, 0); hov = f.id; to(f.id, 1); }
-          const p = f.properties, h = live.current.hour, t = levelTier(p.lv, h), parts = String(p.name).split(/ over /i);
+          const p = f.properties, h = live.current.hour, tier = levelTier(p.lv, h), parts = String(p.name).split(/ over /i);
           const ratio = parseInt(String(p.rt).slice(3 * h, 3 * h + 3), 10);
-          const rows: [string, string, boolean?][] = [["Crossing ID", p.id, true], ["Stream", tidyName(parts.length > 1 ? parts[1] : "Not named"), false]];
-          if (live.current.tab === "water") rows.push(["Flow vs 10-year", Number.isNaN(ratio) ? "no model value" : `${(ratio / 100).toFixed(2)}×`, true]);
-          rows.push(["People affected", Number(p.ppl).toLocaleString("en-US"), true], ["Tier", t < 0 ? "No model value" : TIERS[t].label, false]);
+          const rows: [string, string, boolean?][] = [[t("tip.crossing.id"), p.id, true], [t("tip.crossing.stream"), tidyName(parts.length > 1 ? parts[1] : t("tip.crossing.notnamed")), false]];
+          if (live.current.tab === "water") rows.push([t("tip.crossing.flow"), Number.isNaN(ratio) ? t("tip.crossing.novalue") : `${(ratio / 100).toFixed(2)}×`, true]);
+          rows.push([t("tip.crossing.people"), Number(p.ppl).toLocaleString("en-US"), true], [t("tip.crossing.tier"), tier < 0 ? t("tip.crossing.tier.novalue") : TIERS[tier].label, false]);
           tip.show(tidyName(parts[0] ?? p.name), rows, e.point.x, e.point.y);
         });
         m.on("mouseleave", "x-bubble", leave);
@@ -105,7 +106,7 @@ export function MapView() {
         m.on("mousemove", "x-cluster", (e: ML) => {
           const p = e.features?.[0]?.properties; if (!p) return;
           m.getCanvas().style.cursor = "pointer";
-          tip.show(`${p.point_count} crossings`, [["People affected", `${Number(p.pp).toLocaleString("en-US")} (summed)`, true], ["Worst tier now", (() => { const t = p[`mx${Math.min(live.current.hour, 17)}`]; return t >= 0 ? TIERS[t].label : "No model value"; })(), false]], e.point.x, e.point.y);
+          tip.show(t("tip.cluster.title", { n: p.point_count }), [[t("tip.crossing.people"), t("tip.cluster.people", { n: Number(p.pp).toLocaleString("en-US") }), true], [t("tip.cluster.worst"), (() => { const worst = p[`mx${Math.min(live.current.hour, 17)}`]; return worst >= 0 ? TIERS[worst].label : t("tip.crossing.tier.novalue"); })(), false]], e.point.x, e.point.y);
         });
         m.on("mouseleave", "x-cluster", leave);
         m.on("click", "x-cluster", async (e: ML) => {
@@ -116,10 +117,10 @@ export function MapView() {
 
         m.on("mousemove", "xu", (e: ML) => {
           m.getCanvas().style.cursor = "default";
-          tip.show("Stream crossing", [["Crossing ID", e.features[0].properties.id, true], ["Status", "Not assessed", false], ["Open?", "Not assumed open", false]], e.point.x, e.point.y);
+          tip.show(t("tip.unassessed.title"), [[t("tip.crossing.id"), e.features[0].properties.id, true], [t("tip.unassessed.status"), t("tip.unassessed.status.value"), false], [t("tip.open"), t("tip.unassessed.open.value"), false]], e.point.x, e.point.y);
         });
         m.on("mouseleave", "xu", leave);
-        const svcTip = (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "default"; tip.show(p.name, [["Type", p.kindLabel, false], ["Open?", "Not confirmed", false]], e.point.x, e.point.y); };
+        const svcTip = (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "default"; tip.show(p.name, [[t("tip.service.type"), p.kindLabel, false], [t("tip.open"), t("tip.service.open.value"), false]], e.point.x, e.point.y); };
         for (const id of ["svc-disc", "svc-glyph"]) { m.on("mousemove", id, svcTip); m.on("mouseleave", id, leave); }
         setReady(true);
       });
@@ -168,15 +169,15 @@ export function MapView() {
 
   return (
     <div className="absolute inset-0 z-0">
-      <div ref={box} className="h-full w-full" role="region" aria-label="Map of crossings and services in the Cape Fear region" />
+      <div ref={box} className="h-full w-full" role="region" aria-label={t("map.region")} />
       {!ready && !error && (
         <p role="status" className="ws-glass absolute left-1/2 top-1/2 z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full px-4 py-2 font-ui text-xs font-semibold text-ink/80 max-lg:top-[40%]">
-          <LoaderCircle size={14} className="animate-spin" aria-hidden /> Loading map…
+          <LoaderCircle size={14} className="animate-spin" aria-hidden /> {t("map.loading")}
         </p>
       )}
       {error && (
         <div className="absolute inset-0 z-10 grid place-items-center p-6">
-          <div className="ws-glass max-w-sm rounded-2xl p-4"><ErrorCard title="The map could not load" text={`${error}. The summary and charts do not need the map and still work. Check the connection (the basemap comes from OpenFreeMap) and reload.`} /></div>
+          <div className="ws-glass max-w-sm rounded-2xl p-4"><ErrorCard title={t("map.error.title")} text={t("map.error.text", { error })} /></div>
         </div>
       )}
     </div>

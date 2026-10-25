@@ -2,9 +2,10 @@
 import { useRef } from "react";
 import { MenuChip } from "@/components/workspace/ui";
 import { TABS, useWS, type LayerSel, type Mode } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
-export const MODE_BADGE: Record<Mode, string> = { replay: "REPLAY", nowcast: "NOWCAST", forecast: "FORECAST" };
-const MODE_TEXT: Record<Mode, string> = { replay: "Florence 2018", nowcast: "Observed now", forecast: "Preview" };
+export const MODE_BADGE: Record<Mode, string> = { replay: t("topbar.mode.replay.badge"), nowcast: t("topbar.mode.nowcast.badge"), forecast: t("topbar.mode.forecast.badge") };
+const MODE_TEXT: Record<Mode, string> = { replay: t("topbar.mode.replay.value"), nowcast: t("topbar.mode.nowcast.value"), forecast: t("topbar.mode.forecast.value") };
 
 function TabBar() {
   const { tab, setTab } = useWS();
@@ -16,7 +17,7 @@ function TabBar() {
     (ref.current?.querySelectorAll("button")[j] as HTMLElement | undefined)?.focus();
   };
   return (
-    <div ref={ref} role="tablist" aria-label="Map view" className="ws-glass inline-flex shrink-0 rounded-full p-1">
+    <div ref={ref} role="tablist" aria-label={t("tabs.label")} className="ws-glass inline-flex shrink-0 rounded-full p-1">
       {TABS.map((t, i) => (
         <button key={t.id} type="button" role="tab" id={`tab-${t.id}`} aria-selected={tab === t.id} aria-controls="ws-panel" tabIndex={tab === t.id ? 0 : -1}
           onClick={() => setTab(t.id)} onKeyDown={(e) => key(e, i)}
@@ -32,11 +33,11 @@ export function TopBar() {
   const { mode, setMode, layer, setLayer } = useWS();
   const chips = (
     <>
-      <MenuChip<Mode> label="Mode" value={mode} valueText={MODE_TEXT[mode]} onChange={setMode}
+      <MenuChip<Mode> label={t("topbar.mode.label")} value={mode} valueText={MODE_TEXT[mode]} onChange={setMode}
         badge={<span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-white">{MODE_BADGE[mode]}</span>}
-        options={[{ id: "replay", label: "Replay · Florence 2018", sub: "Past storm, fixed data" }, { id: "nowcast", label: "Nowcast", sub: "Observed gauges and tide stations" }, { id: "forecast", label: "Forecast preview", sub: "NWM short-range, unvalidated" }]} />
-      <MenuChip<LayerSel> label="Layer" value={layer} valueText={layer === "rivers" ? "Rivers" : layer === "coastal" ? "Coastal" : "Both"} onChange={setLayer}
-        options={[{ id: "rivers", label: "Rivers", sub: "Crossings on non-tidal streams" }, { id: "coastal", label: "Coastal", sub: "Tidal-influenced crossings" }, { id: "both", label: "Both", sub: "All assessed crossings" }]} />
+        options={[{ id: "replay", label: t("topbar.mode.replay.label"), sub: t("topbar.mode.replay.sub") }, { id: "nowcast", label: t("topbar.mode.nowcast.label"), sub: t("topbar.mode.nowcast.sub") }, { id: "forecast", label: t("topbar.mode.forecast.label"), sub: t("topbar.mode.forecast.sub") }]} />
+      <MenuChip<LayerSel> label={t("topbar.layer.label")} value={layer} valueText={layer === "rivers" ? t("topbar.layer.rivers.label") : layer === "coastal" ? t("topbar.layer.coastal.label") : t("topbar.layer.both.label")} onChange={setLayer}
+        options={[{ id: "rivers", label: t("topbar.layer.rivers.label"), sub: t("topbar.layer.rivers.sub") }, { id: "coastal", label: t("topbar.layer.coastal.label"), sub: t("topbar.layer.coastal.sub") }, { id: "both", label: t("topbar.layer.both.label"), sub: t("topbar.layer.both.sub") }]} />
     </>
   );
   return (

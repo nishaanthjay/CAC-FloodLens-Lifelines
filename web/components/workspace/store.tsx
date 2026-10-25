@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import { t } from "@/content/copy";
 
 export type Tab = "water" | "access" | "consequence";
 export type Mode = "replay" | "nowcast" | "forecast";
@@ -8,9 +9,9 @@ export type LayerSel = "rivers" | "coastal" | "both";
 export type Snap = "peek" | "half" | "full";
 
 export const TABS: { id: Tab; label: string }[] = [
-  { id: "water", label: "Water" },
-  { id: "access", label: "Access" },
-  { id: "consequence", label: "Consequence" },
+  { id: "water", label: t("tabs.water") },
+  { id: "access", label: t("tabs.access") },
+  { id: "consequence", label: t("tabs.consequence") },
 ];
 
 /** Handle the map registers so controls outside it (zoom buttons, table rows) can drive the camera. */

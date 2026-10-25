@@ -6,6 +6,7 @@ import { liveInsight, replayInsight } from "@/lib/workspace/insight";
 import { accessSeries, layerKeep, replaySummary, tierBreakdown, tierSeries, topCrossings } from "@/lib/workspace/stats";
 import { useData } from "@/components/workspace/data";
 import { useWS } from "@/components/workspace/store";
+import { t } from "@/content/copy";
 
 const ACTION = ["major", "moderate", "minor", "action"];
 
@@ -28,14 +29,14 @@ export function useDerived() {
   const insight = useMemo(() => {
     if (!X || !tiers) return null;
     const time = d.win?.times[h] ? utc(d.win.times[h]) : "";
-    const when = mode === "replay" ? d.timeText(h) : h === 0 ? `the modeled hour covering now${time ? `, ${time}` : ""}` : `+${h} h${time ? `, ${time}` : ""}`;
+    const when = mode === "replay" ? d.timeText(h) : h === 0 ? (time ? t("insight.when.now.at", { time }) : t("insight.when.now")) : (time ? t("insight.when.ahead.at", { h, time }) : t("insight.when.ahead", { h }));
     if (mode === "replay") return access && d.blocks ? replayInsight(replaySummary(access, d.blocks.counties, h), h, when) : null;
     const flagged = tiers.count[3] + tiers.count[4];
     return liveInsight({ step: when, above10: flagged, assessed: tiers.n, noValue: tiers.unknown, unassessed: X.not_assessed.length, people: tiers.people[3] + tiers.people[4],
-      expired: !!d.win?.expired, layerNote: layer === "rivers" ? " on non-tidal streams" : layer === "coastal" ? " that are tidal-influenced" : "" });
+      expired: !!d.win?.expired, layerNote: layer === "rivers" ? ` ${t("insight.layer.rivers")}` : layer === "coastal" ? ` ${t("insight.layer.coastal")}` : "" });
   }, [X, tiers, access, d, mode, h, layer]);
 
-  const rows = useMemo(() => top.map((r) => ({ id: r.id, name: r.name === r.id ? "Unnamed crossing" : tidyName(r.name), tier: r.tier, people: r.people, ratio: r.ratio })), [top]);
+  const rows = useMemo(() => top.map((r) => ({ id: r.id, name: r.name === r.id ? t("insight.unnamed") : tidyName(r.name), tier: r.tier, people: r.people, ratio: r.ratio })), [top]);
   return { h, keep, access, liveSeries, tiers, rows, gauges, gaugesUp, insight };
 }
 

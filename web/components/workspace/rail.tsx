@@ -3,22 +3,23 @@ import { useEffect, useRef } from "react";
 import { Activity, Droplets, Info, ListOrdered, Map as MapIcon, MapPinned, X } from "lucide-react";
 import { useWS, type Tab } from "@/components/workspace/store";
 import type { Icon } from "@/lib/workspace/tiers";
+import { t } from "@/content/copy";
 
 type Item = { id: string; label: string; icon: Icon; tab?: Tab; href?: string };
 export const NAV: Item[] = [
-  { id: "map", label: "Map", icon: MapIcon, tab: "water" },
-  { id: "address", label: "Address check", icon: MapPinned, tab: "access" },
-  { id: "breaks", label: "What breaks first", icon: ListOrdered, tab: "consequence" },
-  { id: "status", label: "Status", icon: Activity, href: "/status" },
-  { id: "about", label: "About", icon: Info, href: "/about" },
+  { id: "map", label: t("rail.map"), icon: MapIcon, tab: "water" },
+  { id: "address", label: t("rail.address"), icon: MapPinned, tab: "access" },
+  { id: "breaks", label: t("rail.breaks"), icon: ListOrdered, tab: "consequence" },
+  { id: "status", label: t("rail.status"), icon: Activity, href: "/status" },
+  { id: "about", label: t("rail.about"), icon: Info, href: "/about" },
 ];
 
 /** Slim icon rail (desktop). The three workspace items switch tabs; Status and About are pages. */
 export function Rail() {
   const { tab, setTab } = useWS();
   return (
-    <nav aria-label="Primary" className="ws-glass absolute inset-y-0 left-0 z-30 hidden w-14 flex-col items-center gap-1 rounded-none border-y-0 border-l-0 bg-white/90 py-3 lg:flex">
-      <a href="/about" aria-label="FloodLens Lifelines: about" className="mb-3 grid h-9 w-9 place-items-center rounded-[10px] bg-blue text-white">
+    <nav aria-label={t("rail.nav")} className="ws-glass absolute inset-y-0 left-0 z-30 hidden w-14 flex-col items-center gap-1 rounded-none border-y-0 border-l-0 bg-white/90 py-3 lg:flex">
+      <a href="/about" aria-label={t("rail.logo")} className="mb-3 grid h-9 w-9 place-items-center rounded-[10px] bg-blue text-white">
         <Droplets size={18} strokeWidth={1.8} aria-hidden />
       </a>
       {NAV.map((n) => {
@@ -47,12 +48,12 @@ export function MenuSheet() {
   }, [menuOpen, setMenuOpen]);
   if (!menuOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
-      <button type="button" aria-label="Close menu" className="absolute inset-0 bg-ink/30" onClick={() => setMenuOpen(false)} tabIndex={-1} />
+    <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={t("rail.menu.title")}>
+      <button type="button" aria-label={t("rail.menu.close")} className="absolute inset-0 bg-ink/30" onClick={() => setMenuOpen(false)} tabIndex={-1} />
       <div className="ws-glass absolute inset-x-0 bottom-0 rounded-t-3xl bg-white/95 px-4 pb-6 pt-3 [animation:rise-sm_0.2s_ease-out]">
         <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-ink/20" aria-hidden />
-        <div className="mb-1 flex items-center justify-between"><h2 className="ws-label">Menu</h2>
-          <button ref={first} type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} className="grid h-11 w-11 place-items-center rounded-full hover:bg-ink/5"><X size={18} aria-hidden /></button></div>
+        <div className="mb-1 flex items-center justify-between"><h2 className="ws-label">{t("rail.menu.title")}</h2>
+          <button ref={first} type="button" aria-label={t("rail.menu.close")} onClick={() => setMenuOpen(false)} className="grid h-11 w-11 place-items-center rounded-full hover:bg-ink/5"><X size={18} aria-hidden /></button></div>
         <ul>
           {NAV.map((n) => {
             const I = n.icon, on = n.tab === tab;

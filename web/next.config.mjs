@@ -1,3 +1,7 @@
+import { watchCopy } from "./scripts/build-copy.mjs";
+
+if (process.env.NODE_ENV !== "production") watchCopy(); // dev: edits to content/site-copy.md hot-reload
+
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",

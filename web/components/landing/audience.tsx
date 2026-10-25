@@ -1,22 +1,23 @@
 import { Building2, Eye, House, ShieldAlert, Sigma } from "lucide-react";
+import { t } from "@/content/copy";
 
 const people = [
   {
     icon: House,
-    title: "Residents",
-    body: "Check whether flooding could cut the roads between your address and the nearest hospital or fire station, and roughly when.",
+    title: t("audience.residents.title"),
+    body: t("audience.residents.body"),
   },
   {
     icon: Building2,
-    title: "Critical-facility teams",
-    body: "See which crossings could separate a hospital, clinic or station from the people and staff it depends on.",
+    title: t("audience.teams.title"),
+    body: t("audience.teams.body"),
   },
 ];
 
 const principles = [
-  { icon: Sigma, title: "Probabilities, not promises", body: "Every outlook is a likelihood with a time range, never a yes or no." },
-  { icon: ShieldAlert, title: "No warning is not an all-clear", body: "We never show a road as safe. Missing data is labelled as missing." },
-  { icon: Eye, title: "Uncertainty stays visible", body: "Patterns, labels and timestamps carry meaning, not color alone." },
+  { icon: Sigma, title: t("audience.risk1.title"), body: t("audience.risk1.body") },
+  { icon: ShieldAlert, title: t("audience.risk2.title"), body: t("audience.risk2.body") },
+  { icon: Eye, title: t("audience.risk3.title"), body: t("audience.risk3.body") },
 ];
 
 export function Audience() {
@@ -25,10 +26,10 @@ export function Audience() {
       <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="reveal">
           <h2 className="font-display text-4xl font-bold leading-tight tracking-[-0.03em] sm:text-6xl">
-            Built for the drive that matters
+            {t("audience.title")}
           </h2>
           <p className="mt-5 max-w-md font-body text-lg leading-relaxed text-ink/70">
-            For the people who need to reach help, and the people who provide it.
+            {t("audience.sub")}
           </p>
         </div>
 
@@ -44,7 +45,7 @@ export function Audience() {
       </div>
 
       <div className="reveal mt-16 rounded-3xl bg-white p-8 sm:p-12 lg:mt-24">
-        <h3 className="font-display text-2xl font-bold sm:text-3xl">How we talk about risk</h3>
+        <h3 className="font-display text-2xl font-bold sm:text-3xl">{t("audience.risk.title")}</h3>
         <ul className="mt-10 grid gap-10 md:grid-cols-3 md:gap-12">
           {principles.map(({ icon: Icon, title, body }) => (
             <li key={title} className="flex gap-4 md:block">

@@ -4,6 +4,7 @@ import "./globals.css";
 import { IntroGate } from "@/components/layout/intro-gate";
 import { introScript } from "@/components/layout/intro-script";
 import "@/components/layout/intro.css";
+import { t } from "@/content/copy";
 
 const display = Playfair_Display({ subsets: ["latin"], weight: ["700", "900"], variable: "--font-display" });
 const body = Lora({ subsets: ["latin"], variable: "--font-body" });
@@ -11,14 +12,15 @@ const ui = Inter({ subsets: ["latin"], variable: "--font-ui" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lifelines-nc.vercel.app";
-const DESC = "If the roads flood, can your neighborhood still reach a hospital or fire station? Flood scenarios for Cape Fear, NC. Not a forecast, not for emergency use.";
+const DESC = t("site.description");
+const TITLE = t("site.share.title");
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
-  title: { default: "FloodLens Lifelines", template: "%s · FloodLens Lifelines" },
+  title: { default: t("site.name"), template: t("site.title.template") },
   description: DESC,
-  openGraph: { type: "website", siteName: "FloodLens Lifelines", title: "FloodLens Lifelines: can you still get to help?", description: DESC, locale: "en_US" },
-  twitter: { card: "summary_large_image", title: "FloodLens Lifelines: can you still get to help?", description: DESC },
+  openGraph: { type: "website", siteName: t("site.name"), title: TITLE, description: DESC, locale: "en_US" },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESC },
 };
 
 export const viewport: Viewport = { themeColor: "#2D5DA1", width: "device-width", initialScale: 1 };
@@ -35,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="#content"
           className="sr-only z-50 rounded-xl bg-blue px-4 py-3 font-ui text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         >
-          Skip to content
+          {t("site.skip")}
         </a>
         {children}
       </body>
