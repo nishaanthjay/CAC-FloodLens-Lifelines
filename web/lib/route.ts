@@ -198,8 +198,8 @@ export function routeFlags(o: RouteOption, kind: string, fastestS: number | unde
   if (min > limit) out.push({ code: "slow", level: min > limit * 1.5 ? "alert" : "warn", text: `Takes about ${min} min in normal traffic, over the ${limit} min guide for this kind of service. Call 911 in an emergency.` });
   if (fastestS !== undefined && o.timeS - fastestS >= DETOUR_EXTRA_S && o.timeS - fastestS >= DETOUR_EXTRA_RATIO * fastestS)
     out.push({ code: "detour", level: "warn", text: `Adds about ${Math.round((o.timeS - fastestS) / 60)} min over the fastest normal route.` });
-  if (st.unknown.length) out.push({ code: "unknown", level: "warn", text: `${st.unknown.length} crossing${st.unknown.length > 1 ? "s" : ""} on this route ha${st.unknown.length > 1 ? "ve" : "s"} no flow value for this step: not assumed open.` });
+  if (st.unknown.length) out.push({ code: "unknown", level: "warn", text: `${st.unknown.length} crossing${st.unknown.length > 1 ? "s" : ""} on this route ha${st.unknown.length > 1 ? "ve" : "s"} no water reading for this step: not assumed open.` });
   const un = o.on.filter((c) => !c.x).length;
-  if (un) out.push({ code: "unassessed", level: "warn", text: `${un} crossing${un > 1 ? "s" : ""} on this route could not be assessed (no matched stream reach or flow threshold). Unassessed is not the same as open.` });
+  if (un) out.push({ code: "unassessed", level: "warn", text: `${un} crossing${un > 1 ? "s" : ""} on this route could not be assessed (the model has no flow data for that stream). Not assessed is not the same as open.` });
   return out;
 }

@@ -321,7 +321,7 @@ Slowed 1 to 10 min
 Not flagged in this scenario
 
 ## access.state.na
-Not assessed
+Not assessed (no road data)
 
 # Workspace: first-visit welcome card
 
@@ -457,7 +457,7 @@ Next 18 hours (preview, unvalidated)
 
 <!-- keep meaning: the forecast preview is unvalidated -->
 ## topbar.mode.forecast.sub
-NWM short-range, unvalidated
+NOAA short-range forecast, unvalidated
 
 <!-- placeholders: age; meaning: how long ago a live data file was last updated, for example "25 h ago" -->
 ## topbar.stale
@@ -780,7 +780,7 @@ No crossing to list for this layer.
 
 <!-- keep meaning: a crossing with no model value is not assumed open -->
 ## leftpanel.table.empty.live
-No crossing has a model value for this step, so none can be ranked. They are not assumed open.
+The model has no water value for this step, so no crossings can be ranked. They are not assumed open.
 
 <!-- keep meaning: what "flagged" and "people" mean in the consequence ranking -->
 ## leftpanel.table.note.people
@@ -805,7 +805,7 @@ More about this number
 <!-- placeholders: n; meaning: how many crossings the model could not assess -->
 <!-- keep meaning: crossings the model could not assess are not assumed open -->
 ## howto.unassessed
-{n} crossings could not be assessed (no matching stream or flow threshold). They are not assumed open.
+{n} crossings could not be assessed (the model has no flow data for those streams). They are not assumed open.
 
 ## leftpanel.section.about
 About the crossings counted
@@ -1242,7 +1242,7 @@ Long detour.
 No data.
 
 ## route.flag.unassessed
-Unassessed.
+Not assessed.
 
 ## route.fact.drive
 Drive time (normal roads)
@@ -1308,12 +1308,12 @@ None of the {n} assessed crossings lie on this route.
 <!-- placeholders: n; meaning: how many crossings on the route the model could not assess -->
 <!-- keep meaning: unassessed is not the same as open -->
 ## route.unassessed.one
-Plus {n} stream crossing the model could not assess (no matched stream reach or flow threshold). Unassessed is not the same as open.
+Plus {n} stream crossing the model could not assess (it has no flow data for that stream). Not assessed is not the same as open.
 
 <!-- placeholders: n; meaning: how many crossings on the route the model could not assess -->
 <!-- keep meaning: unassessed is not the same as open -->
 ## route.unassessed.other
-Plus {n} stream crossings the model could not assess (no matched stream reach or flow threshold). Unassessed is not the same as open.
+Plus {n} stream crossings the model could not assess (it has no flow data for those streams). Not assessed is not the same as open.
 
 <!-- placeholders: n; meaning: how many route options there are -->
 ## route.options.title
@@ -1321,7 +1321,7 @@ All route options ({n})
 
 <!-- placeholders: n; meaning: how many crossings on the route the model could not assess -->
 ## route.option.unassessed
-{n} unassessed
+{n} not assessed
 
 ## route.option.slow
 long trip
@@ -1394,7 +1394,7 @@ Gauge file unavailable
 
 <!-- placeholders: n; meaning: number of Census blocks -->
 ## rp.count.blocks
-{n} blocks
+{n} neighborhoods
 
 <!-- placeholders: n; meaning: number of crossings -->
 ## rp.count.crossings
@@ -1405,31 +1405,31 @@ Gauge file unavailable
 {n} gauges
 
 ## rp.cat.major
-Major flood stage
+Major flood
 
 ## rp.cat.moderate
-Moderate flood stage
+Moderate flood
 
 ## rp.cat.minor
-Minor flood stage
+Minor flood
 
 ## rp.cat.action
-Action stage
+On alert (action stage)
 
 ## rp.cat.no_flooding
-Below action stage
+Below alert level
 
 ## rp.cat.no_observation
-No current NWS reading
+No current reading
 
 ## rp.cat.obs_not_current
-NWS reading not current
+Reading not current
 
 ## rp.cat.not_defined
-Flood stage not defined
+No flood level defined
 
 ## rp.gauges.section
-River gauges by NWS category
+River gauges by alert level
 
 ## rp.gauges.unit
 gauges
@@ -1439,7 +1439,7 @@ Gauges
 
 <!-- placeholders: ft; meaning: river height in feet -->
 ## rp.gauge.stage
-stage {ft} ft
+river height {ft} ft
 
 ## rp.gauge.notime
 no time
@@ -1472,7 +1472,7 @@ Observed is {m} m below the tide prediction
 (older reading)
 
 ## rp.coastal.river
-Up the Cape Fear River: the residual includes river flow, not only surge.
+Up the Cape Fear River: this difference includes river flow, not only storm tide.
 
 <!-- keep meaning: coastal layer is shown on its own; surge and tide flooding at road level are not modeled -->
 ## rp.coastal.note
@@ -1482,7 +1482,7 @@ Shown on its own. It changes no crossing or route result, and road-level surge a
 people
 
 ## rp.unit.blocks
-blocks
+neighborhoods
 
 ## rp.unit.crossings
 crossings
@@ -1491,23 +1491,23 @@ crossings
 People
 
 ## rp.opt.blocks
-Blocks
+Neighborhoods
 
 ## rp.opt.crossings
 Crossings
 
 ## rp.area.title.replay.people
-People by access state over time
+People by ER access over time
 
 ## rp.area.title.replay.blocks
-Blocks by access state over time
+Neighborhoods by ER access over time
 
 <!-- keep meaning: modeled road network with default speeds, not observed closures -->
 ## rp.area.note.replay
-The chart stacks the people (or blocks) cut off or slowed; the other states are listed with their numbers. From the model's road network with default speeds, not observed closures.
+The chart stacks the people (or neighborhoods, which are Census blocks) cut off or slowed; the other states are listed with their numbers. From the model's road network with default speeds, not observed closures.
 
 ## rp.area.title.live.people
-People behind flagged crossings, by tier
+People behind likely-closed crossings, by risk level
 
 ## rp.area.title.live.crossings
 Crossings by tier over time
@@ -1533,13 +1533,13 @@ Normal (not flagged in this scenario)
 
 <!-- keep meaning: crossings with no model value are not assumed open -->
 ## rp.legend.novalue
-No model value (not assumed open)
+No water value (not assumed open)
 
 ## rp.distributed
 Distributed by
 
 ## rp.tiers.title
-Crossings by risk tier
+Crossings by risk level
 
 <!-- placeholders: n; meaning: crossings with no model value this step -->
 <!-- keep meaning: crossings with no model value are not assumed open -->
@@ -1575,7 +1575,7 @@ not loaded
 
 <!-- placeholders: time, age; meaning: time = when the file was generated, age = how long ago -->
 ## data.generated.cycle
-{time} · cycle {age}
+{time} · forecast run {age}
 
 <!-- placeholders: time, age; meaning: time = when the file was generated, age = how long ago -->
 ## data.generated.age
@@ -1587,11 +1587,11 @@ Replay of a past storm (Hurricane Florence), not a forecast. Not for emergency u
 
 <!-- keep meaning: observations; river flow only; not for emergency use -->
 ## data.note.nowcast
-Gauge and tide readings are observations; crossing status uses the modeled hour covering now. River flow only. Not for emergency use: call 911.
+Readings from river gauges and tide stations are real observations; crossing status uses the model for the hour covering now. River flow only. Not for emergency use: call 911.
 
 <!-- keep meaning: unvalidated; river flow only; not a closure probability; not for emergency use -->
 ## data.note.forecast
-Unvalidated NWM short-range run: river flow only, not a closure probability. Not for emergency use: call 911.
+Unvalidated forecast from NOAA's National Water Model: river flow only, not a closure probability. Not for emergency use: call 911.
 
 ## data.note.stale
 Stale: the model run is old.

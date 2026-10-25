@@ -103,8 +103,8 @@ export function RightContent() {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="font-display text-[22px] font-bold leading-tight tracking-[-0.02em]">{t("rp.title")}</h2>
+      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+        <h2 className="whitespace-nowrap font-display text-[22px] font-bold leading-tight tracking-[-0.02em]">{t("rp.title")}</h2>
         <span className="rounded-full bg-ink/[0.07] px-2.5 py-1 tabular-nums text-[13px] font-semibold text-ink" aria-live="polite">{count}</span>
       </div>
       {d.error ? <ErrorCard title={t("rp.error.nodata")} text={d.error} /> : !ready ? <div className="mt-3 space-y-3" role="status" aria-busy="true" aria-label={t("rp.loading")}><Skeleton className="h-40" /><Skeleton className="h-24" /></div> : mode === "nowcast" ? (
