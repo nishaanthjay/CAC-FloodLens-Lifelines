@@ -4,13 +4,14 @@ import { ArrowRight, Search } from "lucide-react";
 import { t } from "@/content/copy";
 import { useRouting } from "@/components/workspace/routing";
 import { useWS } from "@/components/workspace/store";
+import { TOUR_KEY } from "@/components/workspace/tour";
 
 export const WELCOME_KEY = "lifelines.welcome";
 const DEEP = ["tab", "mode", "lat", "lon", "svc", "hour"]; // a shared or in-site link already says what to show: no card
 
 /** First-load card over the dimmed map: one question, one address box. Remembers its dismissal; skipped for deep links. */
 export function Welcome() {
-  const r = useRouting(), { setTab } = useWS();
+  const r = useRouting(), { setTab, setTour } = useWS();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const box = useRef<HTMLInputElement>(null);
@@ -24,7 +25,13 @@ export function Welcome() {
   }, []);
   useEffect(() => { if (open) box.current?.focus(); }, [open]);
 
-  const close = () => { try { localStorage.setItem(WELCOME_KEY, "1"); } catch { /* ignore */ } setOpen(false); };
+  const close = () => {
+    try { localStorage.setItem(WELCOME_KEY, "1"); } catch { /* ignore */ }
+    setOpen(false);
+    let toured = false;
+    try { toured = localStorage.getItem(TOUR_KEY) === "done"; } catch { /* ignore */ }
+    if (!toured) window.setTimeout(() => setTour(0), 700); // the quick tour, once, right after the card
+  };
   const explore = () => { close(); setTab("water"); };
   const check = (text: string) => { const a = text.trim(); if (!a) return; close(); setTab("access"); r.setQuery(a); r.search(a); };
   useEffect(() => {

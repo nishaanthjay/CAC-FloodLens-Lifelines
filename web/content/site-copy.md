@@ -345,6 +345,42 @@ Just explore the map
 ## welcome.notice
 Uses Hurricane Florence (2018) as a replay. Not for emergencies: call 911.
 
+# Workspace: quick tour
+
+## rail.tour
+Take the quick tour
+
+## tour.aria
+Quick tour
+
+<!-- placeholders: n, total; meaning: which step of the tour this is -->
+## tour.step
+Step {n} of {total}
+
+## tour.addr
+Start here: type an address to see how you would reach an ER.
+
+## tour.addr.tab
+Start here: the “Can I get to help?” tab checks an address.
+
+## tour.tabs
+Three questions. Switch between them to see where the water is high, how you would get to help, and what breaks first.
+
+## tour.time
+Drag the time bar, or press play, to watch the storm hour by hour.
+
+## tour.how
+Every caveat, source and definition is under “How to read this”.
+
+## tour.next
+Next
+
+## tour.skip
+Skip
+
+## tour.done
+Done
+
 # Workspace: top bar (tabs, Mode and Layer menus)
 
 ## tabs.label

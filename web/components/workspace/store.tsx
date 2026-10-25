@@ -32,6 +32,7 @@ type Ctx = {
   menuOpen: boolean; setMenuOpen: (o: boolean) => void;
   unit: "people" | "blocks"; setUnit: (u: "people" | "blocks") => void;
   how: { left: boolean; right: boolean }; setHow: (panel: "left" | "right", open: boolean) => void;
+  tour: number | null; setTour: (n: number | null) => void; // position in the guided tour; null = not running
 };
 
 const WS = createContext<Ctx | null>(null);
@@ -55,6 +56,7 @@ export function WorkspaceState({ children }: { children: ReactNode }) {
   const [unit, setUnit] = useState<"people" | "blocks">("people");
   const [facilities, setFacilities] = useState(true);
   const [how, setHowState] = useState({ left: false, right: false });
+  const [tour, setTour] = useState<number | null>(null);
   const setHow = (panel: "left" | "right", open: boolean) => setHowState((h) => (h[panel] === open ? h : { ...h, [panel]: open }));
   const [sheetPx, setSheetPx] = useState(0);
   const api = useRef<MapApi | null>(null);
@@ -88,8 +90,8 @@ export function WorkspaceState({ children }: { children: ReactNode }) {
     return () => document.removeEventListener("visibilitychange", on);
   }, []);
 
-  const v = useMemo<Ctx>(() => ({ api, facilities, setFacilities, sheetPx, setSheetPx, tab, setTab, mode, setMode, layer, setLayer, hour, setHour, hours, setHours, playing, setPlaying, rightOpen, setRightOpen, snap, setSnap, menuOpen, setMenuOpen, unit, setUnit, how, setHow }),
+  const v = useMemo<Ctx>(() => ({ api, facilities, setFacilities, sheetPx, setSheetPx, tab, setTab, mode, setMode, layer, setLayer, hour, setHour, hours, setHours, playing, setPlaying, rightOpen, setRightOpen, snap, setSnap, menuOpen, setMenuOpen, unit, setUnit, how, setHow, tour, setTour }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tab, mode, layer, hour, hours, playing, rightOpen, snap, menuOpen, unit, facilities, sheetPx, how]);
+    [tab, mode, layer, hour, hours, playing, rightOpen, snap, menuOpen, unit, facilities, sheetPx, how, tour]);
   return <WS.Provider value={v}>{children}</WS.Provider>;
 }

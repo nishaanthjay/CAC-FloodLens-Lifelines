@@ -14,6 +14,7 @@ import { WorkspaceData, useData } from "@/components/workspace/data";
 import { WorkspaceState, useWS } from "@/components/workspace/store";
 import { TimePill } from "@/components/workspace/time-pill";
 import { TopBar } from "@/components/workspace/top-bar";
+import { Tour } from "@/components/workspace/tour";
 import { Welcome } from "@/components/workspace/welcome";
 import { t } from "@/content/copy";
 
@@ -62,6 +63,7 @@ function Shell() {
       <MapLegend />
       <MenuSheet />
       <Welcome />
+      <Tour />
       {/* Last in the DOM so keyboard users reach the controls before the map; z-0 keeps it underneath. */}
       <MapView />
     </main>

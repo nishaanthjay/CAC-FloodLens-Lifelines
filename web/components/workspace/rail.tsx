@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { Activity, Droplets, Info, ListOrdered, Map as MapIcon, MapPinned, X } from "lucide-react";
+import { Activity, CircleHelp, Droplets, Info, ListOrdered, Map as MapIcon, MapPinned, X } from "lucide-react";
 import { useWS, type Tab } from "@/components/workspace/store";
 import type { Icon } from "@/lib/workspace/tiers";
 import { t } from "@/content/copy";
@@ -16,7 +16,7 @@ export const NAV: Item[] = [
 
 /** Slim icon rail (desktop). The three workspace items switch tabs; Status and About are pages. */
 export function Rail() {
-  const { tab, setTab } = useWS();
+  const { tab, setTab, setTour } = useWS();
   return (
     <nav aria-label={t("rail.nav")} className="ws-glass absolute inset-y-0 left-0 z-30 hidden w-14 flex-col items-center gap-1 rounded-none border-y-0 border-l-0 bg-white/90 py-3 lg:flex">
       <a href="/about" aria-label={t("rail.logo")} className="mb-3 grid h-9 w-9 place-items-center rounded-[10px] bg-blue text-white">
@@ -31,13 +31,17 @@ export function Rail() {
           ? <a key={n.id} href={n.href} aria-label={n.label} className={cls}>{mark}<I size={19} strokeWidth={1.8} />{tip}</a>
           : <button key={n.id} type="button" aria-label={n.label} aria-current={on ? "page" : undefined} onClick={() => setTab(n.tab!)} className={cls}>{mark}<I size={19} strokeWidth={1.8} />{tip}</button>;
       })}
+      <button type="button" onClick={() => setTour(0)} aria-label={t("rail.tour")} className="group relative mt-auto grid h-10 w-10 place-items-center rounded-xl text-ink/70 transition-colors hover:bg-ink/5 hover:text-ink">
+        <CircleHelp size={19} strokeWidth={1.8} aria-hidden />
+        <span role="presentation" aria-hidden className="pointer-events-none absolute left-full top-1/2 z-40 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-[#1F2329] px-2 py-1 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">{t("rail.tour")}</span>
+      </button>
     </nav>
   );
 }
 
 /** Mobile: the same destinations as a bottom-sheet menu. */
 export function MenuSheet() {
-  const { menuOpen, setMenuOpen, tab, setTab } = useWS();
+  const { menuOpen, setMenuOpen, tab, setTab, setTour } = useWS();
   const first = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (!menuOpen) return;
@@ -62,6 +66,7 @@ export function MenuSheet() {
               ? <a href={n.href} className={cls}><I size={19} strokeWidth={1.8} aria-hidden />{n.label}</a>
               : <button type="button" className={cls} onClick={() => { setTab(n.tab!); setMenuOpen(false); }}><I size={19} strokeWidth={1.8} aria-hidden />{n.label}</button>}</li>;
           })}
+          <li><button type="button" className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-[15px] font-medium text-ink hover:bg-ink/5" onClick={() => { setMenuOpen(false); setTour(0); }}><CircleHelp size={19} strokeWidth={1.8} aria-hidden />{t("rail.tour")}</button></li>
         </ul>
       </div>
     </div>
