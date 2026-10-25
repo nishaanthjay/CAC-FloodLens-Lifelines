@@ -221,6 +221,34 @@ Not for emergency use · call 911
 ## sheet.menu
 Open menu
 
+# Workspace: first-visit welcome card
+
+## welcome.title
+Can you still reach help when the roads flood?
+
+## welcome.label
+Your address
+
+## welcome.placeholder
+Enter an address in Cape Fear
+
+## welcome.submit
+Check
+
+## welcome.example
+Try: Leland, NC
+
+<!-- the address the "Try: Leland, NC" link checks -->
+## welcome.example.address
+113 Village Rd NE, Leland NC
+
+## welcome.explore
+Just explore the map
+
+<!-- keep meaning: this uses a past storm as a replay; not for emergencies; call 911 -->
+## welcome.notice
+Uses Hurricane Florence (2018) as a replay. Not for emergencies: call 911.
+
 # Workspace: top bar (tabs, Mode and Layer menus)
 
 ## tabs.label
