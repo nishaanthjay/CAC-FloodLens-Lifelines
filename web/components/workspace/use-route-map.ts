@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
 import { esc, type ML } from "@/lib/maplibre";
-import { tidyName } from "@/lib/format";
+import { crossingRoad, tidyName } from "@/lib/format";
 import { CLOSED, type LngLat, type OnRoute } from "@/lib/route";
 import { mapPadding, reducedMotion } from "@/lib/workspace/camera";
 import { detourRuns, length, midpoint } from "@/lib/workspace/geo";
@@ -16,7 +16,7 @@ import { t } from "@/content/copy";
 type Feat = { type: "Feature"; properties: Record<string, unknown>; geometry: { type: "LineString" | "Point"; coordinates: unknown } };
 const fc = (features: Feat[]) => ({ type: "FeatureCollection", features });
 const STATE_TEXT = [t("routemap.state.none"), t("routemap.state.risk"), t("routemap.state.flagged")];
-const ROUTE_LINES = ["route-alt", "route-base-casing", "route-base", "route-scen-casing", "route-scen", "route-detour-casing", "route-detour", "route-flow"];
+const ROUTE_LINES = ["route-alt-casing", "route-alt", "route-base-casing", "route-base", "route-scen-casing", "route-scen", "route-detour-casing", "route-detour", "route-flow"];
 
 /** Everything the Access tab draws, derived from the routing state and the selected hour. */
 function useModel() {
@@ -25,7 +25,8 @@ function useModel() {
   return useMemo(() => {
     const routes: Feat[] = [], detours: Feat[] = [], rx = new Map<string, Feat>();
     const closed = new Map<string, { lon: number; lat: number; id: string; name: string; km: number }>();
-    const chips: { at: LngLat; text: string }[] = [];
+    const chips: { at: LngLat; text: string; focusId?: string }[] = [];
+    const avoids = new Map<string, Feat>();
     const shapes: LngLat[][] = [];
     const crossingPoint = (c: OnRoute) => {
       const lv = c.x ? parseInt(c.x.level[hh] ?? "-", 10) : NaN;
@@ -40,9 +41,14 @@ function useModel() {
       const scen = opts.find((x) => x.o.id === r.focus) ?? opts[0], base = r.baseline[id];
       for (const { o, s } of opts) {
         const role = o.id === scen.o.id ? "scen" : base && o.id === base.id ? "base" : "alt";
-        routes.push({ type: "Feature", properties: { id: o.id, role, state: s.state, label: o.label, status: STATE_TEXT[s.state] }, geometry: { type: "LineString", coordinates: o.shape } });
+        routes.push({ type: "Feature", properties: { id: o.id, role, state: s.state, kind: o.kind, label: o.label, status: STATE_TEXT[s.state] }, geometry: { type: "LineString", coordinates: o.shape } });
         shapes.push(o.shape);
         if (role !== "alt") for (const c of o.on) crossingPoint(c);
+        const av = o.avoids ? (base ?? scen.o).on.find((c) => c.id === o.avoids) : undefined; // the crossing a backup route stays clear of
+        if (av) avoids.set(av.id, { type: "Feature", properties: {}, geometry: { type: "Point", coordinates: [av.lon, av.lat] } });
+        if (role === "alt") chips.push({ at: midpoint(o.shape), focusId: o.id, text: o.kind === "backup"
+          ? t("routemap.chip.backup", { name: av?.x ? crossingRoad(av.x.name) : o.avoids ?? "" })
+          : t("routemap.chip.alt", { m: Math.max(0, Math.round((o.timeS - (r.fastest[id] ?? o.timeS)) / 60)), via: tidyName(o.via) }) });
       }
       const ref = base ?? scen.o; // closed crossings on the normal (baseline) path
       for (const c of ref.on) {
@@ -56,8 +62,8 @@ function useModel() {
         if (longest) { const m = Math.round((scen.o.timeS - base.timeS) / 60); chips.push({ at: midpoint(longest), text: m >= 1 ? t("routemap.chip.detour", { m }) : t("routemap.chip.rerouted") }); }
       }
     }
-    return { routes, detours, rx: [...rx.values()], closed: [...closed.values()].sort((a, b) => a.km - b.km), chips, shapes };
-  }, [r.selected, r.ranked, r.focus, r.baseline, hh]);
+    return { routes, detours, avoids: [...avoids.values()], rx: [...rx.values()], closed: [...closed.values()].sort((a, b) => a.km - b.km), chips, shapes };
+  }, [r.selected, r.ranked, r.focus, r.baseline, r.fastest, hh]);
 }
 
 const initial = (label: string) => (label.match(/[A-Za-z0-9]/)?.[0] ?? "•").toUpperCase();
@@ -80,9 +86,16 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
     const leave = () => { m.getCanvas().style.cursor = ""; tip.hide(); };
     m.on("mousemove", "route-x", (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "default"; tip.show(p.name, [[t("tip.route.status"), p.status, false]], e.point.x, e.point.y); });
     m.on("mouseleave", "route-x", leave);
-    for (const id of ["route-scen", "route-base", "route-alt"]) {
-      m.on("mousemove", id, (e: ML) => { const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "pointer"; tip.show(p.label, [[t("tip.route.name"), id === "route-base" ? t("tip.route.base") : id === "route-alt" ? t("tip.route.alt") : t("tip.route.scen"), false], [t("tip.route.status"), p.status, false]], e.point.x, e.point.y); });
-      m.on("mouseleave", id, leave);
+    let hov: string | null = null; // the alternative under the pointer (it grows 1.3x)
+    const unhover = () => { if (hov !== null) m.setFeatureState({ source: "routes", id: hov }, { hover: false }); hov = null; };
+    for (const id of ["route-scen", "route-base", "route-alt-casing"]) {
+      m.on("mousemove", id, (e: ML) => {
+        const p = e.features?.[0]?.properties; if (!p) return; m.getCanvas().style.cursor = "pointer";
+        if (id === "route-alt-casing" && hov !== p.id) { unhover(); hov = p.id; m.setFeatureState({ source: "routes", id: p.id }, { hover: true }); }
+        const kind = id === "route-base" ? t("tip.route.base") : id === "route-alt-casing" ? (p.kind === "backup" ? t("tip.route.backup") : p.kind === "detour" ? t("tip.route.detour") : t("tip.route.alt")) : t("tip.route.scen");
+        tip.show(p.label, [[t("tip.route.name"), kind, false], [t("tip.route.status"), p.status, false]], e.point.x, e.point.y);
+      });
+      m.on("mouseleave", id, () => { unhover(); leave(); });
       m.on("click", id, (e: ML) => { const p = e.features?.[0]?.properties; if (p) live.current.setFocus(p.id); });
     }
     return () => tip.destroy();
@@ -92,7 +105,8 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
   useEffect(() => {
     if (!ready) return;
     const m = map.current, o = active ? 1 : 0;
-    for (const id of ROUTE_LINES) m.setPaintProperty(id, "line-opacity", id.endsWith("casing") ? o * 0.95 : id === "route-flow" ? o * 0.8 : o);
+    for (const id of ROUTE_LINES) m.setPaintProperty(id, "line-opacity", id.endsWith("casing") ? o * 0.95 : id === "route-flow" ? o * 0.8 : id === "route-alt" ? o * 0.75 : o);
+    m.setPaintProperty("route-avoid", "circle-stroke-opacity", o);
     m.setPaintProperty("route-x", "circle-opacity", o); m.setPaintProperty("route-x", "circle-stroke-opacity", o);
     m.setPaintProperty("svc-sel-ring", "circle-opacity", o); m.setPaintProperty("svc-sel-ring", "circle-stroke-opacity", o);
     for (const id of ["svc-sel-disc", "svc-sel-glyph"]) m.setPaintProperty(id, "icon-opacity", o);
@@ -105,6 +119,7 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
     m.getSource("routes").setData(fc(active ? model.routes : []));
     m.getSource("detours").setData(fc(active ? model.detours : []));
     m.getSource("rx").setData(fc(active ? model.rx : []));
+    m.getSource("avoids").setData(fc(active ? model.avoids : []));
     setDestinations(m, active ? r.selected : []);
     setListed(m, active ? r.services.map((s) => s.id) : []);
   }, [ready, active, model, r.selected, r.services, map]);
@@ -142,14 +157,19 @@ export function useRouteMap(map: MutableRefObject<ML>, ready: boolean) {
     });
     for (const c of model.chips) {
       const el = document.createElement("div");
-      el.className = "ws-chip"; el.textContent = c.text;
+      el.className = c.focusId ? "ws-chip ws-chip-alt" : "ws-chip"; el.textContent = c.text;
+      if (c.focusId) { // an alternative's chip is a button: it makes that route the focused one
+        const id = c.focusId, go = () => live.current.setFocus(id);
+        el.setAttribute("role", "button"); el.tabIndex = 0; el.setAttribute("aria-label", c.text);
+        el.addEventListener("click", go); el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+      }
       markers.current.extra.push(new ml.Marker({ element: el, anchor: "center" }).setLngLat(c.at).addTo(m));
     }
   }, [ready, active, model.closed, model.chips, map]);
 
   // Camera: frame the address, the chosen services and their routes inside the gap between the open panels. Refits when the origin or the chosen services change, not on every hour.
   const resolved = r.selected.filter((id) => Array.isArray(r.trips[id])).length;
-  const fitKey = r.origin ? `${r.origin.lat},${r.origin.lon}|${r.selected.join(",")}|${resolved}` : "";
+  const fitKey = r.origin ? `${r.origin.lat},${r.origin.lon}|${r.selected.join(",")}|${resolved}|${r.ranked.filter((x) => x.o.kind !== "detour").length}` : ""; // backups arriving widen the frame; an hour-dependent detour does not
   useEffect(() => {
     if (!ready || !active || !fitKey || !r.origin) return;
     const pts: LngLat[] = [[r.origin.lon, r.origin.lat], ...r.services.filter((s) => r.selected.includes(s.id)).map((s) => [s.lon, s.lat] as LngLat), ...model.shapes.flat()];

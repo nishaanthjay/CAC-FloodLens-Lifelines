@@ -4,16 +4,19 @@ import type { ML } from "@/lib/maplibre";
 import { TIERS } from "./tiers";
 import { NO_VALUE, type Expr } from "./expr";
 
-export const INK = "#111111", BLUE = "#2D5DA1", AMBER = "#F2A93B", AMBER_DARK = "#9C5F12", BLOCKED = "#7A0000";
+export const INK = "#111111", BLUE = "#2D5DA1", AMBER = "#F2A93B", AMBER_DARK = "#9C5F12", BLOCKED = "#7A0000", SLATE = "#5B6B82", RED = "#CC0000";
+const hover = (w: number): Expr => ["case", ["boolean", ["feature-state", "hover"], false], w * 1.3, w]; // feature-state "hover" is set by use-route-map
 const EMPTY = { type: "FeatureCollection", features: [] };
 const cap = { "line-cap": "round", "line-join": "round" } as const;
 const role = (r: string): Expr => ["==", ["get", "role"], r];
 
 export function addRouteLayers(map: ML) {
-  for (const s of ["routes", "detours", "rx"]) map.addSource(s, { type: "geojson", data: EMPTY });
+  for (const s of ["detours", "rx", "avoids"]) map.addSource(s, { type: "geojson", data: EMPTY });
+  map.addSource("routes", { type: "geojson", data: EMPTY, promoteId: "id" }); // promoteId: hover state is per route
   const before = "svc-disc"; // routes sit above the bubbles and below the facility icons
-  // Alternatives: thin, quiet.
-  map.addLayer({ id: "route-alt", type: "line", source: "routes", filter: role("alt"), layout: cap, paint: { "line-color": "rgba(17,17,17,0.32)", "line-width": 2.5 } }, before);
+  // Other options (alternatives, backups, detours): white casing 5 px under a 3 px slate line; they grow 1.3x on hover and a click makes one the focused route.
+  map.addLayer({ id: "route-alt-casing", type: "line", source: "routes", filter: role("alt"), layout: cap, paint: { "line-color": "#FFFFFF", "line-width": hover(5), "line-opacity": 0.95 } }, before);
+  map.addLayer({ id: "route-alt", type: "line", source: "routes", filter: role("alt"), layout: cap, paint: { "line-color": SLATE, "line-width": hover(3), "line-opacity": 0.75 } }, before);
   // Baseline: white casing 6 px under a 3.5 px dashed ink line at 55%.
   map.addLayer({ id: "route-base-casing", type: "line", source: "routes", filter: role("base"), layout: cap, paint: { "line-color": "#FFFFFF", "line-width": 6, "line-opacity": 0.95 } }, before);
   map.addLayer({ id: "route-base", type: "line", source: "routes", filter: role("base"), layout: { "line-cap": "butt", "line-join": "round" }, paint: { "line-color": "rgba(17,17,17,0.55)", "line-width": 3.5, "line-dasharray": [2, 1.6] } }, before);
@@ -23,6 +26,8 @@ export function addRouteLayers(map: ML) {
   map.addLayer({ id: "route-detour-casing", type: "line", source: "detours", layout: cap, paint: { "line-color": AMBER_DARK, "line-width": 8, "line-opacity": 0.9 } }, before);
   map.addLayer({ id: "route-detour", type: "line", source: "detours", layout: cap, paint: { "line-color": AMBER, "line-width": 5 } }, before);
   map.addLayer({ id: "route-flow", type: "line", source: "routes", filter: role("scen"), layout: { "line-cap": "butt", "line-join": "round" }, paint: { "line-color": "#FFFFFF", "line-width": 2, "line-opacity": 0.8, "line-dasharray": [0, 4, 3] } }, before);
+  // The crossing a backup route avoids: a hollow red ring.
+  map.addLayer({ id: "route-avoid", type: "circle", source: "avoids", paint: { "circle-radius": 10, "circle-color": RED, "circle-opacity": 0, "circle-stroke-color": RED, "circle-stroke-width": 2.5 } }, before);
   // Crossings on the drawn routes, in the tier palette. cls: 0..4 tier, -1 no model value, -2 not assessed.
   map.addLayer({ id: "route-x", type: "circle", source: "rx", paint: {
     "circle-radius": ["match", ["get", "cls"], 4, 8, 3, 7.5, 2, 6.5, 1, 6, 5.5], "circle-stroke-width": 2,

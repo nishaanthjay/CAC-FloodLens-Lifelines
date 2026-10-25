@@ -73,6 +73,18 @@ export async function route(from: LngLat, to: LngLat, avoid: LngLat[] = [], alte
   });
 }
 
+/** A route that stays clear of one crossing: first with the road edge there excluded, and if that route still passes the crossing (`passes`), once more
+ * with a box around it. `pause` runs before each request so callers can space them out. null = no route that avoids it. */
+export async function avoidingRoute(from: LngLat, to: LngLat, at: LngLat, passes: (t: Trip) => boolean, pause: () => Promise<void>): Promise<Trip | null> {
+  await pause();
+  const [t] = await route(from, to, [at], 0);
+  if (!t) return null;
+  if (!passes(t)) return t;
+  await pause();
+  const [h] = await route(from, to, [], 0, [at]);
+  return h && !passes(h) ? h : null;
+}
+
 /** Route that avoids every crossing closed in step h. The first request already excludes all closed crossings near the straight line from origin to
  * destination (closedNear); each later request adds the closed crossings the last route still passed: first as a point (blocks the nearest road edge),
  * then as a box if the route still passes it (e.g. the other carriageway). Stops after `maxTries` requests or `budgetMs`, and says which. */

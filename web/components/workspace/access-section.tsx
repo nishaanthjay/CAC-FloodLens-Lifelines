@@ -104,7 +104,7 @@ export function AccessSection() {
       {r.ranked.length > 0 && X && (
         <div className="mt-4 border-t border-ink/8 pt-4">
           <RouteAnalysis groups={r.groups} focusId={r.focus} onFocus={r.setFocusId} hour={r.hh} hours={X.hours} timeText={d.timeText} live={live}
-            names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} nAssessed={X.assessed.length} replayStart={d.start} />
+            names={r.names} fastest={r.fastest} block={r.block} noRoute={r.noRoute} nAssessed={X.assessed.length} replayStart={d.start} noBackup={r.noBackup} />
         </div>
       )}
       {!r.origin && !r.busy && (

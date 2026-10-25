@@ -109,9 +109,68 @@ export function routeAtHour(on: OnRoute[], h: number): HourStatus {
 
 export type RouteOption = {
   id: string; serviceId: string; label: string; via: string;
-  kind: "fastest" | "alternate" | "detour";
+  kind: "fastest" | "alternate" | "backup" | "detour";
+  avoids?: string; // backup only: id of the crossing this route was asked to stay clear of
   timeS: number; km: number; shape: LngLat[]; on: OnRoute[];
 };
+
+const KY = 110570;
+const kxAt = (lat: number) => 111320 * Math.cos((lat * Math.PI) / 180);
+
+/** Crossings worth a backup route: assessed, with people behind them, most people first. Each id and each place (within `minSepM`) is used once. */
+export function backupCandidates(on: OnRoute[], max = 2, minSepM = 50): OnRoute[] {
+  const out: OnRoute[] = [];
+  for (const o of on.filter((c) => c.x && c.x.people_affected > 0).sort((a, b) => b.x!.people_affected - a.x!.people_affected)) {
+    const kx = kxAt(o.lat);
+    if (out.some((p) => p.id === o.id || Math.hypot((p.lon - o.lon) * kx, (p.lat - o.lat) * KY) < minSepM)) continue;
+    out.push(o);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+const OVERLAPS = new WeakMap<LngLat[], WeakMap<LngLat[], number>>();
+/** Share (0..1) of line `a` that runs within `tolM` of line `b`, judged at points every `stepM` metres along `a`. */
+export function overlapShare(a: LngLat[], b: LngLat[], stepM = 50, tolM = 25): number {
+  if (a.length < 2 || b.length < 2) return 0;
+  const hit = OVERLAPS.get(a)?.get(b);
+  if (hit !== undefined) return hit;
+  const kx = kxAt(a[0][1]);
+  const bx = b.map((p) => p[0] * kx), by = b.map((p) => p[1] * KY);
+  const near = (px: number, py: number) => {
+    for (let i = 1; i < b.length; i++) {
+      const ax = bx[i - 1], ay = by[i - 1], dx = bx[i] - ax, dy = by[i] - ay;
+      if (px < Math.min(ax, bx[i]) - tolM || px > Math.max(ax, bx[i]) + tolM || py < Math.min(ay, by[i]) - tolM || py > Math.max(ay, by[i]) + tolM) continue;
+      const L2 = dx * dx + dy * dy, t = L2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)) : 0;
+      if (Math.hypot(px - (ax + t * dx), py - (ay + t * dy)) <= tolM) return true;
+    }
+    return false;
+  };
+  let n = 0, near_ = 0, carry = 0, px = a[0][0] * kx, py = a[0][1] * KY;
+  n++; if (near(px, py)) near_++;
+  for (let i = 1; i < a.length; i++) {
+    const qx = a[i][0] * kx, qy = a[i][1] * KY, seg = Math.hypot(qx - px, qy - py);
+    let at = stepM - carry;
+    for (; at <= seg; at += stepM) { n++; if (near(px + ((qx - px) * at) / seg, py + ((qy - py) * at) / seg)) near_++; }
+    carry = seg - (at - stepM);
+    px = qx; py = qy;
+  }
+  const share = near_ / n;
+  let m = OVERLAPS.get(a); if (!m) OVERLAPS.set(a, (m = new WeakMap()));
+  m.set(b, share);
+  return share;
+}
+
+/** Keeps the options in the order given, dropping any that runs along an already-kept one for more than `maxShare` of its length. At most `max` survive. */
+export function dedupeOptions(opts: RouteOption[], max = 4, maxShare = 0.85): RouteOption[] {
+  const kept: RouteOption[] = [];
+  for (const o of opts) {
+    if (kept.length >= max) break;
+    if (kept.some((k) => k.id === o.id || overlapShare(o.shape, k.shape) > maxShare)) continue;
+    kept.push(o);
+  }
+  return kept;
+}
 
 /** Best first: fewest closed crossings (open routes first), then faster. */
 export function rankRoutes(opts: RouteOption[], h: number) {

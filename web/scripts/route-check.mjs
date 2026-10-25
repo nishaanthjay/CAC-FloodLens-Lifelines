@@ -1,7 +1,7 @@
 // Self-check for lib/route.ts (Node 22.6+ strips the TypeScript types). Run: npm run check:route
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { LIMIT_MIN, blockedHours, closedNear, crossingsOnRoute, decodePolyline6, rankRoutes, routeAtHour, routeFlags } from "../lib/route.ts";
+import { LIMIT_MIN, backupCandidates, blockedHours, closedNear, dedupeOptions, overlapShare, crossingsOnRoute, decodePolyline6, rankRoutes, routeAtHour, routeFlags } from "../lib/route.ts";
 import { liveWindow, stepLabel } from "../lib/live-route.ts";
 
 // Polyline6 round trip on a known value (Valhalla precision 6).
@@ -90,6 +90,27 @@ w = liveWindow(base, { valid_times: [], crossings: [] }, at(15, 0));
 assert.equal(w.expired, true);
 assert.equal(w.X.assessed[0].level, "-");
 assert.equal(stepLabel(0), "Now"); assert.equal(stepLabel(3), "+3 h");
+
+// Backup candidates: assessed with people behind them, most people first, one per id and per place (<50 m), at most 2.
+const px = (id, lon, people, assessed = true) => ({ id, km: 0, lat: 34.2, lon, x: assessed ? { people_affected: people } : null });
+const cand = [px("a", -78.0, 10), px("a", -78.0, 10), px("b", -78.0002, 500) /* ~18 m from a */, px("c", -77.99, 0), px("d", -77.98, 40), px("e", -77.97, 30), px("f", -77.96, 99, false)];
+assert.deepEqual(backupCandidates(cand).map((c) => c.id), ["b", "d"], "most people first; a is dropped as a near-duplicate of b; zero-people and unassessed are skipped");
+assert.deepEqual(backupCandidates(cand, 5).map((c) => c.id), ["b", "d", "e"]);
+
+// Overlap: a line along itself is 1; a parallel line 100 m away is 0; one that shares only its first half is about 0.5.
+const ew = (lat, lon0, lon1) => [[lon0, lat], [lon1, lat]]; // 0.01 degrees of longitude is about 920 m at this latitude
+assert.equal(overlapShare(ew(34.2, -78, -77.99), ew(34.2, -78, -77.99)), 1);
+assert.equal(overlapShare(ew(34.2, -78, -77.99), ew(34.2009, -78, -77.99)), 0, "100 m apart is a different road");
+const half = overlapShare(ew(34.2, -78, -77.99), ew(34.2, -78, -77.995));
+assert.ok(half > 0.4 && half < 0.6, `half shared, got ${half}`);
+
+// Dedupe: kept in the order given, near-copies dropped, at most four survive, and the new "backup" kind ranks like any other.
+const o = (id, kind, shape, timeS = 600) => ({ id, serviceId: "S", label: id, via: "", kind, timeS, km: 1, shape, on: [] });
+const row = ew(34.2, -78, -77.99), row2 = ew(34.2002, -78, -77.9905) /* 22 m off, nearly the same road */;
+const d1 = dedupeOptions([o("fast", "fastest", row), o("alt", "alternate", row2), o("bk", "backup", ew(34.21, -78, -77.99)), o("bk2", "backup", ew(34.22, -78, -77.99)), o("bk3", "backup", ew(34.23, -78, -77.99)), o("bk4", "backup", ew(34.24, -78, -77.99))]);
+assert.deepEqual(d1.map((x) => x.id), ["fast", "bk", "bk2", "bk3"], "alt copies the fastest and is dropped; four kept");
+assert.deepEqual(dedupeOptions([o("only", "fastest", row), o("same", "backup", row)]).map((x) => x.id), ["only"], "one distinct route: no separate backup");
+assert.equal(rankRoutes([o("bk", "backup", row, 900), o("fast", "fastest", row, 300)], 0)[0].o.id, "fast");
 
 // Real data: all assessed crossings are indexed; matching a long route is fast and agrees with a brute-force scan.
 const R = JSON.parse(readFileSync(new URL("../public/data/sample/route_crossings.json", import.meta.url), "utf8"));

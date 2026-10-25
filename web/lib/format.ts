@@ -21,6 +21,9 @@ export function et(iso: string): string {
 const ACRONYM = new Set(["US", "NC", "SR", "NE", "NW", "SE", "SW", "I", "N", "S", "E", "W", "II", "III"]);
 const DIR: Record<string, string> = { N: "North", S: "South", E: "East", W: "West" };
 
+/** The road part of a crossing name ("Cape Fear Memorial Bridge over Cape Fear River" -> "Cape Fear Memorial Bridge"), for short labels. */
+export const crossingRoad = (raw: string) => tidyName(raw).split(/ over /i)[0];
+
 /** Raw NCDOT strings to readable names: "US17,US76 over Bradley Creek" -> "US 17/76 over Bradley Creek", "HOLLY TREE RD." -> "Holly Tree Rd". */
 export function tidyName(raw: string): string {
   let s = raw.replace(/\s+/g, " ").trim();

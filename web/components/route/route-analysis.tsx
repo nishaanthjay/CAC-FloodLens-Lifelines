@@ -20,15 +20,16 @@ const LIVE: Copy[] = [
   { label: t("route.badge.live.blocked"), cls: CLS[2], note: t("route.note.live.blocked") },
 ];
 const mins = (s: number) => (s < 30 ? t("route.time.under") : s < 5400 ? t("route.time.min", { n: Math.round(s / 60) }) : t("route.time.hours", { h: Math.floor(s / 3600), m: Math.round((s % 3600) / 60) }));
-const KIND = { fastest: t("route.kind.fastest"), alternate: t("route.kind.alternate"), detour: t("route.kind.detour") };
+const KIND = { fastest: t("route.kind.fastest"), alternate: t("route.kind.alternate"), backup: t("route.kind.backup"), detour: t("route.kind.detour") };
+const BADGE = { fastest: t("route.badge.kind.fastest"), alternate: t("route.badge.kind.alternate"), backup: t("route.badge.kind.backup"), detour: t("route.badge.kind.detour") };
 
 export function StatusBadge({ state, live }: { state: 0 | 1 | 2; live?: boolean }) {
   return <span className={`inline-flex whitespace-nowrap rounded-full border px-2.5 py-1 font-ui text-xs font-semibold ${(live ? LIVE : REPLAY)[state].cls}`}>{(live ? LIVE : REPLAY)[state].label}</span>;
 }
 
-export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText, live, names, fastest, block, noRoute, nAssessed, replayStart }: {
+export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText, live, names, fastest, block, noRoute, nAssessed, replayStart, noBackup = {} }: {
   groups: Group[]; focusId: string | null; onFocus: (id: string) => void; hour: number; hours: number; timeText: (h: number) => string; live: boolean;
-  names: Record<string, string>; fastest: Record<string, number>; block: LocationView | null; noRoute: { name: string; reason: string }[]; nAssessed: number; replayStart?: string;
+  names: Record<string, string>; fastest: Record<string, number>; block: LocationView | null; noRoute: { name: string; reason: string }[]; nAssessed: number; replayStart?: string; noBackup?: Record<string, boolean>;
 }) {
   const live_ = groups.filter((g) => g.ranked.length);
   if (!live_.length) return null;
@@ -169,12 +170,15 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
                       <span className="font-mono text-xs text-muted">{i + 1}</span>
                       <span className="min-w-0">
                         <span className="line-clamp-2 font-ui text-sm font-medium">{names[r.serviceId]}</span>
-                        <span className="block truncate font-ui text-xs text-muted">
-                          {[KIND[r.kind], mins(r.timeS),
+                        <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-ui text-xs text-muted">
+                          <span className="rounded border border-ink/20 bg-white px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-ink/75">{BADGE[r.kind]}</span>
+                          <span>{[mins(r.timeS),
+                            ...(r.timeS - (fastest[r.serviceId] ?? r.timeS) >= 30 ? [t("route.option.plus", { n: Math.round((r.timeS - fastest[r.serviceId]) / 60) })] : []),
                             ...(r.on.some((c) => !c.x) ? [t("route.option.unassessed", { n: r.on.filter((c) => !c.x).length })] : []),
                             ...(fl.some((f) => f.code === "slow") ? [t("route.option.slow")] : []),
-                            ...(fl.some((f) => f.code === "detour") ? [t("route.option.detour")] : [])].join(" · ")}
+                            ...(fl.some((f) => f.code === "detour") ? [t("route.option.detour")] : [])].join(" · ")}</span>
                         </span>
+                        <span className="block font-ui text-xs text-muted">{[...(r.kind === "backup" ? [r.label] : []), t("route.option.via", { via: tidyName(r.via) })].join(" · ")}</span>
                       </span>
                       <StatusBadge state={st.state} live={live} />
                     </button>
@@ -182,6 +186,9 @@ export function RouteAnalysis({ groups, focusId, onFocus, hour, hours, timeText,
                 );
               })}
             </ol>
+            {g.ranked.map((x) => x.o.serviceId).filter((id, i, a) => a.indexOf(id) === i && noBackup[id]).map((id) => (
+              <p key={id} className="mt-1.5 flex gap-2 font-ui text-xs leading-relaxed text-ink/80"><AlertTriangle size={13} className="mt-0.5 shrink-0" aria-hidden />{t("route.nobackup", { name: names[id] })}</p>
+            ))}
           </div>
         ))}
         {noRoute.map((n) => (

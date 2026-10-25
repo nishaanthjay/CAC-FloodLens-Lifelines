@@ -428,6 +428,12 @@ Alternative
 ## tip.route.scen
 Scenario route
 
+## tip.route.backup
+Backup route
+
+## tip.route.detour
+Detour
+
 # Workspace: route drawn on the map
 
 ## routemap.state.none
@@ -475,6 +481,14 @@ Closed in scenario
 
 ## routemap.chip.rerouted
 Rerouted
+
+<!-- placeholders: m, via; meaning: m = extra minutes compared with the fastest route, via = the main roads of that route -->
+## routemap.chip.alt
++{m} min · via {via}
+
+<!-- placeholders: name; meaning: the crossing this backup route stays clear of -->
+## routemap.chip.backup
+Backup if {name} closes
 
 # Workspace: left panel (Water / Access / Consequence summary)
 
@@ -706,6 +720,10 @@ no detour found ({reason})
 ## routing.label.detour
 {name} (detour)
 
+<!-- placeholders: name; meaning: the crossing a backup route avoids -->
+## routing.label.backup
+If {name} closes
+
 # Workspace: selected-crossing card
 
 ## crossing.aria
@@ -817,6 +835,34 @@ Alternative route
 
 ## route.kind.detour
 Detour around closed crossings
+
+## route.kind.backup
+Backup route
+
+## route.badge.kind.fastest
+Fastest
+
+## route.badge.kind.alternate
+Alternative
+
+## route.badge.kind.backup
+Backup
+
+## route.badge.kind.detour
+Detour
+
+<!-- placeholders: n; meaning: extra minutes this route takes compared with the fastest one -->
+## route.option.plus
++{n} min
+
+<!-- placeholders: via; meaning: the main roads the route follows, for example "NC 133 and US 17" -->
+## route.option.via
+via {via}
+
+<!-- placeholders: name; meaning: the service, for example a hospital -->
+<!-- keep meaning: when no separate backup exists, every way there uses the same crossings; this is a finding about redundancy -->
+## route.nobackup
+{name}: No separate backup route found: every way there uses the same crossings.
 
 <!-- placeholders: n; meaning: minutes of driving -->
 ## route.time.min
