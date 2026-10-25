@@ -73,7 +73,7 @@ export function WorkspaceData({ children }: { children: ReactNode }) {
 
   const start = base?.meta.event.replay_start_utc ?? "";
   const timeText = (k: number) => (mode === "replay" ? (start ? hourTime(start, k) : "") : win?.times[k] ? `${stepLabel(k)} · ${utc(win.times[k])}` : stepLabel(k));
-  const caption = (k: number) => (mode === "replay" ? (start ? hourTime(start, k) : "") : mode === "nowcast" ? t("data.caption.nowcast") : win?.times[k] ? `${stepLabel(k)} · ${utc(win.times[k])}` : stepLabel(k));
+  const caption = (k: number) => (mode === "replay" ? (start ? t("timepill.caption.replay", { when: hourTime(start, k) }) : "") : mode === "nowcast" ? t("data.caption.nowcast") : t("timepill.caption.forecast", { when: win?.times[k] ? `${stepLabel(k)} · ${utc(win.times[k])}` : stepLabel(k) }));
 
   const prov = useMemo<Prov | null>(() => {
     const note = (m: Mode, s: boolean): string => m === "replay" ? t("data.note.replay")

@@ -38,7 +38,7 @@ export const haloRadiusExpr = (tab: "water" | "access" | "consequence", h: numbe
 
 export const selRadiusExpr = (tab: "water" | "access" | "consequence", h: number, maxPeople: number): Expr => zoomed(["+", 6, baseRadius(tab, h, maxPeople)]);
 
-// Clusters (zoom < 10): neutral fill, so a count is never read as a risk level; the outline carries the worst tier in the group at the current hour.
+// Clusters (zoom < 7, i.e. only when zoomed out beyond the default view): tinted and outlined by the worst tier in the group at the current hour; the tooltip says "N crossings, worst: <tier>".
 export const MAX_STEPS = 18;
 export const clusterProps = (): Record<string, Expr> => {
   const o: Record<string, Expr> = { pp: ["+", ["get", "ppl"]] };

@@ -195,7 +195,7 @@ export function LeftContent() {
 export function LeftPanel() {
   return (
     <m.aside initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.35, ease: "easeOut" }} aria-label={t("leftpanel.aria")}
-      className="ws-glass ws-scroll absolute bottom-[104px] left-[68px] top-[60px] z-20 hidden w-[380px] overflow-y-auto rounded-2xl p-4 lg:block">
+      className="ws-glass ws-scroll absolute bottom-[132px] left-[68px] top-[60px] z-20 hidden w-[380px] overflow-y-auto rounded-2xl p-4 lg:block">
       <LeftContent />
     </m.aside>
   );

@@ -49,7 +49,7 @@ const zoomIcon: Expr = ["interpolate", ["linear"], ["zoom"], 8, ["case", fire, 0
 
 export function addLayers(map: ML) {
   const before = BEFORE_LABELS(map);
-  map.addSource("xs", { type: "geojson", data: EMPTY, cluster: true, clusterMaxZoom: 9, clusterRadius: 42, clusterProperties: clusterProps() });
+  map.addSource("xs", { type: "geojson", data: EMPTY, cluster: true, clusterMaxZoom: 6, clusterRadius: 42, clusterProperties: clusterProps() });
   map.addSource("xu", { type: "geojson", data: EMPTY });
   map.addSource("svc", { type: "geojson", data: EMPTY });
 

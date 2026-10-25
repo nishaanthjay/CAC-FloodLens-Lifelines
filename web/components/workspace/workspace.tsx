@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { LazyMotion, MotionConfig, domAnimation } from "framer-motion";
 import { MapControls } from "@/components/workspace/map-controls";
+import { MapLegend } from "@/components/workspace/map-legend";
 import { MapView } from "@/components/workspace/map-view";
 import { LeftPanel } from "@/components/workspace/left-panel";
 import { MenuSheet, Rail } from "@/components/workspace/rail";
@@ -58,6 +59,7 @@ function Shell() {
       {desktop === false && <Sheet />}
       <TimePill caption={d.base ? d.caption(hour) : undefined} disabled={mode === "nowcast"} />
       <MapControls />
+      <MapLegend />
       <MenuSheet />
       <Welcome />
       {/* Last in the DOM so keyboard users reach the controls before the map; z-0 keeps it underneath. */}

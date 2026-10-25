@@ -466,6 +466,37 @@ Hour of the scenario
 ## timepill.valuetext.caption
 H+{hour}, {caption}
 
+<!-- placeholders: when; meaning: the date and time of the replay hour, for example "Sat Sep 15, 2018, 8:00 AM ET" -->
+## timepill.caption.replay
+Florence replay: {when}
+
+<!-- placeholders: when; meaning: the forecast step and its time, for example "+3 h · Sun 2 PM" -->
+## timepill.caption.forecast
+Forecast preview: {when}
+
+## timepill.hint
+Drag to watch the storm hour by hour
+
+# Workspace: legend and map buttons
+
+## legend.aria
+Map key
+
+## legend.hospital
+Hospital
+
+## legend.fire
+Fire station
+
+## legend.route
+Your route
+
+## legend.size.people
+Bubble size = people affected
+
+## legend.size.water
+Bubble size = how high the water is
+
 # Workspace: map buttons and map region
 
 ## mapcontrols.group
@@ -1480,7 +1511,7 @@ Crossings by risk tier
 # Workspace: where the numbers come from (data note under the title)
 
 ## data.caption.nowcast
-Observed now
+Live now: observed readings
 
 ## data.source.fallback
 NWM v3.0 retrospective
