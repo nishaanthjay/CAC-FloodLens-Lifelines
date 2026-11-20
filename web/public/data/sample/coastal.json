@@ -3,7 +3,7 @@
  "mode": "NOWCAST",
  "stale": false,
  "stale_after_hours": 3,
- "generated_at": "2026-11-19T22:24Z",
+ "generated_at": "2026-11-20T03:41Z",
  "datum": "NAVD88, metres",
  "source": "NOAA CO-OPS (api.tidesandcurrents.noaa.gov)",
  "caveats": [
@@ -21,61 +21,16 @@
    "name": "Wilmington",
    "has_observations": true,
    "riverine_influence": true,
-   "latest_observed_time": "2026-11-19T22:00Z",
+   "latest_observed_time": "2026-11-20T03:00Z",
    "stale": false,
-   "latest_residual_m": -0.036,
-   "latest_residual_time": "2026-11-19T22:00Z",
+   "latest_residual_m": -0.034,
+   "latest_residual_time": "2026-11-20T03:00Z",
    "hourly": [
-    {
-     "t": "2026-11-17T22:00Z",
-     "tide_pred_m_navd88": 0.309,
-     "observed_m_navd88": 0.068,
-     "residual_m": -0.24,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-17T23:00Z",
-     "tide_pred_m_navd88": 0.03,
-     "observed_m_navd88": -0.121,
-     "residual_m": -0.151,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-18T00:00Z",
-     "tide_pred_m_navd88": -0.241,
-     "observed_m_navd88": -0.311,
-     "residual_m": -0.07,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-18T01:00Z",
-     "tide_pred_m_navd88": -0.428,
-     "observed_m_navd88": -0.497,
-     "residual_m": -0.069,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-18T02:00Z",
-     "tide_pred_m_navd88": -0.525,
-     "observed_m_navd88": -0.597,
-     "residual_m": -0.072,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
     {
      "t": "2026-11-18T03:00Z",
      "tide_pred_m_navd88": -0.529,
-     "observed_m_navd88": -0.545,
-     "residual_m": -0.016,
+     "observed_m_navd88": -0.486,
+     "residual_m": 0.043,
      "mode": "NOWCAST",
      "synthetic": false,
      "stale": true
@@ -447,7 +402,7 @@
      "residual_m": -0.026,
      "mode": "NOWCAST",
      "synthetic": false,
-     "stale": false
+     "stale": true
     },
     {
      "t": "2026-11-19T21:00Z",
@@ -456,518 +411,563 @@
      "residual_m": -0.023,
      "mode": "NOWCAST",
      "synthetic": false,
-     "stale": false
+     "stale": true
     },
     {
      "t": "2026-11-19T22:00Z",
      "tide_pred_m_navd88": 0.532,
-     "observed_m_navd88": 0.496,
-     "residual_m": -0.036,
+     "observed_m_navd88": 0.459,
+     "residual_m": -0.073,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": true
+    },
+    {
+     "t": "2026-11-19T23:00Z",
+     "tide_pred_m_navd88": 0.429,
+     "observed_m_navd88": 0.276,
+     "residual_m": -0.153,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": true
+    },
+    {
+     "t": "2026-11-20T00:00Z",
+     "tide_pred_m_navd88": 0.195,
+     "observed_m_navd88": 0.024,
+     "residual_m": -0.171,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": true
+    },
+    {
+     "t": "2026-11-20T01:00Z",
+     "tide_pred_m_navd88": -0.103,
+     "observed_m_navd88": -0.215,
+     "residual_m": -0.112,
      "mode": "NOWCAST",
      "synthetic": false,
      "stale": false
     },
     {
-     "t": "2026-11-19T23:00Z",
-     "tide_pred_m_navd88": 0.429,
-     "outlook_total_m_navd88": 0.393,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
-    },
-    {
-     "t": "2026-11-20T00:00Z",
-     "tide_pred_m_navd88": 0.195,
-     "outlook_total_m_navd88": 0.159,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
-    },
-    {
-     "t": "2026-11-20T01:00Z",
-     "tide_pred_m_navd88": -0.103,
-     "outlook_total_m_navd88": -0.139,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
-    },
-    {
      "t": "2026-11-20T02:00Z",
      "tide_pred_m_navd88": -0.371,
-     "outlook_total_m_navd88": -0.407,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
+     "observed_m_navd88": -0.427,
+     "residual_m": -0.056,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": false
     },
     {
      "t": "2026-11-20T03:00Z",
      "tide_pred_m_navd88": -0.554,
-     "outlook_total_m_navd88": -0.59,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
+     "observed_m_navd88": -0.588,
+     "residual_m": -0.034,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": false
     },
     {
      "t": "2026-11-20T04:00Z",
      "tide_pred_m_navd88": -0.647,
-     "outlook_total_m_navd88": -0.683,
+     "outlook_total_m_navd88": -0.681,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T05:00Z",
      "tide_pred_m_navd88": -0.61,
-     "outlook_total_m_navd88": -0.646,
+     "outlook_total_m_navd88": -0.644,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T06:00Z",
      "tide_pred_m_navd88": -0.363,
-     "outlook_total_m_navd88": -0.399,
+     "outlook_total_m_navd88": -0.397,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T07:00Z",
      "tide_pred_m_navd88": 0.031,
-     "outlook_total_m_navd88": -0.005,
+     "outlook_total_m_navd88": -0.003,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T08:00Z",
      "tide_pred_m_navd88": 0.36,
-     "outlook_total_m_navd88": 0.324,
+     "outlook_total_m_navd88": 0.326,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T09:00Z",
      "tide_pred_m_navd88": 0.519,
-     "outlook_total_m_navd88": 0.483,
+     "outlook_total_m_navd88": 0.485,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T10:00Z",
      "tide_pred_m_navd88": 0.57,
-     "outlook_total_m_navd88": 0.534,
+     "outlook_total_m_navd88": 0.536,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T11:00Z",
      "tide_pred_m_navd88": 0.532,
-     "outlook_total_m_navd88": 0.496,
+     "outlook_total_m_navd88": 0.498,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T12:00Z",
      "tide_pred_m_navd88": 0.367,
-     "outlook_total_m_navd88": 0.331,
+     "outlook_total_m_navd88": 0.333,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T13:00Z",
      "tide_pred_m_navd88": 0.105,
-     "outlook_total_m_navd88": 0.069,
+     "outlook_total_m_navd88": 0.071,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T14:00Z",
      "tide_pred_m_navd88": -0.169,
-     "outlook_total_m_navd88": -0.205,
+     "outlook_total_m_navd88": -0.203,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T15:00Z",
      "tide_pred_m_navd88": -0.387,
-     "outlook_total_m_navd88": -0.423,
+     "outlook_total_m_navd88": -0.421,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T16:00Z",
      "tide_pred_m_navd88": -0.534,
-     "outlook_total_m_navd88": -0.57,
+     "outlook_total_m_navd88": -0.568,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T17:00Z",
      "tide_pred_m_navd88": -0.591,
-     "outlook_total_m_navd88": -0.627,
+     "outlook_total_m_navd88": -0.625,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T18:00Z",
      "tide_pred_m_navd88": -0.473,
-     "outlook_total_m_navd88": -0.509,
+     "outlook_total_m_navd88": -0.507,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T19:00Z",
      "tide_pred_m_navd88": -0.147,
-     "outlook_total_m_navd88": -0.183,
+     "outlook_total_m_navd88": -0.181,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T20:00Z",
      "tide_pred_m_navd88": 0.22,
-     "outlook_total_m_navd88": 0.184,
+     "outlook_total_m_navd88": 0.186,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T21:00Z",
      "tide_pred_m_navd88": 0.442,
-     "outlook_total_m_navd88": 0.406,
+     "outlook_total_m_navd88": 0.408,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T22:00Z",
      "tide_pred_m_navd88": 0.527,
-     "outlook_total_m_navd88": 0.491,
+     "outlook_total_m_navd88": 0.493,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T23:00Z",
      "tide_pred_m_navd88": 0.523,
-     "outlook_total_m_navd88": 0.487,
+     "outlook_total_m_navd88": 0.489,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T00:00Z",
      "tide_pred_m_navd88": 0.398,
-     "outlook_total_m_navd88": 0.362,
+     "outlook_total_m_navd88": 0.364,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T01:00Z",
      "tide_pred_m_navd88": 0.143,
-     "outlook_total_m_navd88": 0.107,
+     "outlook_total_m_navd88": 0.109,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T02:00Z",
      "tide_pred_m_navd88": -0.167,
-     "outlook_total_m_navd88": -0.203,
+     "outlook_total_m_navd88": -0.201,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T03:00Z",
      "tide_pred_m_navd88": -0.439,
-     "outlook_total_m_navd88": -0.475,
+     "outlook_total_m_navd88": -0.473,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T04:00Z",
      "tide_pred_m_navd88": -0.625,
-     "outlook_total_m_navd88": -0.661,
+     "outlook_total_m_navd88": -0.659,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T05:00Z",
      "tide_pred_m_navd88": -0.714,
-     "outlook_total_m_navd88": -0.75,
+     "outlook_total_m_navd88": -0.748,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T06:00Z",
      "tide_pred_m_navd88": -0.646,
-     "outlook_total_m_navd88": -0.682,
+     "outlook_total_m_navd88": -0.68,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T07:00Z",
      "tide_pred_m_navd88": -0.343,
-     "outlook_total_m_navd88": -0.379,
+     "outlook_total_m_navd88": -0.377,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T08:00Z",
      "tide_pred_m_navd88": 0.094,
-     "outlook_total_m_navd88": 0.058,
+     "outlook_total_m_navd88": 0.06,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T09:00Z",
      "tide_pred_m_navd88": 0.432,
-     "outlook_total_m_navd88": 0.396,
+     "outlook_total_m_navd88": 0.398,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T10:00Z",
      "tide_pred_m_navd88": 0.592,
-     "outlook_total_m_navd88": 0.556,
+     "outlook_total_m_navd88": 0.558,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T11:00Z",
      "tide_pred_m_navd88": 0.641,
-     "outlook_total_m_navd88": 0.605,
+     "outlook_total_m_navd88": 0.607,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T12:00Z",
      "tide_pred_m_navd88": 0.59,
-     "outlook_total_m_navd88": 0.554,
+     "outlook_total_m_navd88": 0.556,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T13:00Z",
      "tide_pred_m_navd88": 0.408,
-     "outlook_total_m_navd88": 0.372,
+     "outlook_total_m_navd88": 0.374,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T14:00Z",
      "tide_pred_m_navd88": 0.133,
-     "outlook_total_m_navd88": 0.097,
+     "outlook_total_m_navd88": 0.099,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T15:00Z",
      "tide_pred_m_navd88": -0.152,
-     "outlook_total_m_navd88": -0.188,
+     "outlook_total_m_navd88": -0.186,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T16:00Z",
      "tide_pred_m_navd88": -0.39,
-     "outlook_total_m_navd88": -0.426,
+     "outlook_total_m_navd88": -0.424,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T17:00Z",
      "tide_pred_m_navd88": -0.568,
-     "outlook_total_m_navd88": -0.604,
+     "outlook_total_m_navd88": -0.602,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T18:00Z",
      "tide_pred_m_navd88": -0.646,
-     "outlook_total_m_navd88": -0.682,
+     "outlook_total_m_navd88": -0.68,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T19:00Z",
      "tide_pred_m_navd88": -0.513,
-     "outlook_total_m_navd88": -0.549,
+     "outlook_total_m_navd88": -0.547,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T20:00Z",
      "tide_pred_m_navd88": -0.158,
-     "outlook_total_m_navd88": -0.194,
+     "outlook_total_m_navd88": -0.192,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T21:00Z",
      "tide_pred_m_navd88": 0.218,
-     "outlook_total_m_navd88": 0.182,
+     "outlook_total_m_navd88": 0.184,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T22:00Z",
      "tide_pred_m_navd88": 0.439,
-     "outlook_total_m_navd88": 0.403,
+     "outlook_total_m_navd88": 0.405,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T23:00Z",
      "tide_pred_m_navd88": 0.525,
-     "outlook_total_m_navd88": 0.489,
+     "outlook_total_m_navd88": 0.491,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T00:00Z",
      "tide_pred_m_navd88": 0.513,
-     "outlook_total_m_navd88": 0.477,
+     "outlook_total_m_navd88": 0.479,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T01:00Z",
      "tide_pred_m_navd88": 0.366,
-     "outlook_total_m_navd88": 0.33,
+     "outlook_total_m_navd88": 0.332,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T02:00Z",
      "tide_pred_m_navd88": 0.088,
-     "outlook_total_m_navd88": 0.052,
+     "outlook_total_m_navd88": 0.054,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T03:00Z",
      "tide_pred_m_navd88": -0.232,
-     "outlook_total_m_navd88": -0.268,
+     "outlook_total_m_navd88": -0.266,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T04:00Z",
      "tide_pred_m_navd88": -0.505,
-     "outlook_total_m_navd88": -0.541,
+     "outlook_total_m_navd88": -0.539,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T05:00Z",
      "tide_pred_m_navd88": -0.693,
-     "outlook_total_m_navd88": -0.729,
+     "outlook_total_m_navd88": -0.727,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T06:00Z",
      "tide_pred_m_navd88": -0.776,
-     "outlook_total_m_navd88": -0.812,
+     "outlook_total_m_navd88": -0.81,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T07:00Z",
      "tide_pred_m_navd88": -0.668,
-     "outlook_total_m_navd88": -0.704,
+     "outlook_total_m_navd88": -0.702,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T08:00Z",
      "tide_pred_m_navd88": -0.306,
-     "outlook_total_m_navd88": -0.342,
+     "outlook_total_m_navd88": -0.34,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T09:00Z",
      "tide_pred_m_navd88": 0.166,
-     "outlook_total_m_navd88": 0.13,
+     "outlook_total_m_navd88": 0.132,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T10:00Z",
      "tide_pred_m_navd88": 0.507,
-     "outlook_total_m_navd88": 0.471,
+     "outlook_total_m_navd88": 0.473,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T11:00Z",
      "tide_pred_m_navd88": 0.665,
-     "outlook_total_m_navd88": 0.629,
+     "outlook_total_m_navd88": 0.631,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T12:00Z",
      "tide_pred_m_navd88": 0.711,
-     "outlook_total_m_navd88": 0.675,
+     "outlook_total_m_navd88": 0.677,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T13:00Z",
      "tide_pred_m_navd88": 0.643,
-     "outlook_total_m_navd88": 0.607,
+     "outlook_total_m_navd88": 0.609,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T14:00Z",
      "tide_pred_m_navd88": 0.44,
-     "outlook_total_m_navd88": 0.404,
+     "outlook_total_m_navd88": 0.406,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T15:00Z",
      "tide_pred_m_navd88": 0.152,
-     "outlook_total_m_navd88": 0.116,
+     "outlook_total_m_navd88": 0.118,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T16:00Z",
      "tide_pred_m_navd88": -0.143,
-     "outlook_total_m_navd88": -0.179,
+     "outlook_total_m_navd88": -0.177,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T17:00Z",
      "tide_pred_m_navd88": -0.404,
-     "outlook_total_m_navd88": -0.44,
+     "outlook_total_m_navd88": -0.438,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T18:00Z",
      "tide_pred_m_navd88": -0.615,
-     "outlook_total_m_navd88": -0.651,
+     "outlook_total_m_navd88": -0.649,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T19:00Z",
      "tide_pred_m_navd88": -0.705,
-     "outlook_total_m_navd88": -0.741,
+     "outlook_total_m_navd88": -0.739,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T20:00Z",
      "tide_pred_m_navd88": -0.546,
-     "outlook_total_m_navd88": -0.582,
+     "outlook_total_m_navd88": -0.58,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T21:00Z",
      "tide_pred_m_navd88": -0.161,
-     "outlook_total_m_navd88": -0.197,
+     "outlook_total_m_navd88": -0.195,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T22:00Z",
      "tide_pred_m_navd88": 0.219,
-     "outlook_total_m_navd88": 0.183,
+     "outlook_total_m_navd88": 0.185,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-22T23:00Z",
+     "tide_pred_m_navd88": 0.439,
+     "outlook_total_m_navd88": 0.405,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T00:00Z",
+     "tide_pred_m_navd88": 0.527,
+     "outlook_total_m_navd88": 0.493,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T01:00Z",
+     "tide_pred_m_navd88": 0.502,
+     "outlook_total_m_navd88": 0.468,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T02:00Z",
+     "tide_pred_m_navd88": 0.327,
+     "outlook_total_m_navd88": 0.293,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T03:00Z",
+     "tide_pred_m_navd88": 0.031,
+     "outlook_total_m_navd88": -0.003,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     }
@@ -978,61 +978,16 @@
    "name": "Wrightsville Beach",
    "has_observations": true,
    "riverine_influence": false,
-   "latest_observed_time": "2026-11-19T22:00Z",
+   "latest_observed_time": "2026-11-20T03:00Z",
    "stale": false,
-   "latest_residual_m": 0.104,
-   "latest_residual_time": "2026-11-19T22:00Z",
+   "latest_residual_m": 0.157,
+   "latest_residual_time": "2026-11-20T03:00Z",
    "hourly": [
-    {
-     "t": "2026-11-17T22:00Z",
-     "tide_pred_m_navd88": -0.331,
-     "observed_m_navd88": -0.286,
-     "residual_m": 0.045,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-17T23:00Z",
-     "tide_pred_m_navd88": -0.471,
-     "observed_m_navd88": -0.379,
-     "residual_m": 0.092,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-18T00:00Z",
-     "tide_pred_m_navd88": -0.546,
-     "observed_m_navd88": -0.43,
-     "residual_m": 0.116,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-18T01:00Z",
-     "tide_pred_m_navd88": -0.527,
-     "observed_m_navd88": -0.352,
-     "residual_m": 0.175,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
-    {
-     "t": "2026-11-18T02:00Z",
-     "tide_pred_m_navd88": -0.4,
-     "observed_m_navd88": -0.194,
-     "residual_m": 0.206,
-     "mode": "NOWCAST",
-     "synthetic": false,
-     "stale": true
-    },
     {
      "t": "2026-11-18T03:00Z",
      "tide_pred_m_navd88": -0.2,
-     "observed_m_navd88": 0.016,
-     "residual_m": 0.216,
+     "observed_m_navd88": 0.09,
+     "residual_m": 0.29,
      "mode": "NOWCAST",
      "synthetic": false,
      "stale": true
@@ -1404,7 +1359,7 @@
      "residual_m": 0.013,
      "mode": "NOWCAST",
      "synthetic": false,
-     "stale": false
+     "stale": true
     },
     {
      "t": "2026-11-19T21:00Z",
@@ -1413,518 +1368,563 @@
      "residual_m": 0.009,
      "mode": "NOWCAST",
      "synthetic": false,
-     "stale": false
+     "stale": true
     },
     {
      "t": "2026-11-19T22:00Z",
      "tide_pred_m_navd88": -0.009,
-     "observed_m_navd88": 0.095,
-     "residual_m": 0.104,
+     "observed_m_navd88": 0.015,
+     "residual_m": 0.024,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": true
+    },
+    {
+     "t": "2026-11-19T23:00Z",
+     "tide_pred_m_navd88": -0.252,
+     "observed_m_navd88": -0.199,
+     "residual_m": 0.053,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": true
+    },
+    {
+     "t": "2026-11-20T00:00Z",
+     "tide_pred_m_navd88": -0.478,
+     "observed_m_navd88": -0.438,
+     "residual_m": 0.04,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": true
+    },
+    {
+     "t": "2026-11-20T01:00Z",
+     "tide_pred_m_navd88": -0.647,
+     "observed_m_navd88": -0.569,
+     "residual_m": 0.078,
      "mode": "NOWCAST",
      "synthetic": false,
      "stale": false
     },
     {
-     "t": "2026-11-19T23:00Z",
-     "tide_pred_m_navd88": -0.252,
-     "outlook_total_m_navd88": -0.148,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
-    },
-    {
-     "t": "2026-11-20T00:00Z",
-     "tide_pred_m_navd88": -0.478,
-     "outlook_total_m_navd88": -0.374,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
-    },
-    {
-     "t": "2026-11-20T01:00Z",
-     "tide_pred_m_navd88": -0.647,
-     "outlook_total_m_navd88": -0.543,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
-    },
-    {
      "t": "2026-11-20T02:00Z",
      "tide_pred_m_navd88": -0.705,
-     "outlook_total_m_navd88": -0.601,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
+     "observed_m_navd88": -0.558,
+     "residual_m": 0.147,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": false
     },
     {
      "t": "2026-11-20T03:00Z",
      "tide_pred_m_navd88": -0.609,
-     "outlook_total_m_navd88": -0.505,
-     "mode": "OUTLOOK-PERSISTENCE",
-     "synthetic": true
+     "observed_m_navd88": -0.452,
+     "residual_m": 0.157,
+     "mode": "NOWCAST",
+     "synthetic": false,
+     "stale": false
     },
     {
      "t": "2026-11-20T04:00Z",
      "tide_pred_m_navd88": -0.374,
-     "outlook_total_m_navd88": -0.27,
+     "outlook_total_m_navd88": -0.217,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T05:00Z",
      "tide_pred_m_navd88": -0.078,
-     "outlook_total_m_navd88": 0.026,
+     "outlook_total_m_navd88": 0.079,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T06:00Z",
      "tide_pred_m_navd88": 0.186,
-     "outlook_total_m_navd88": 0.29,
+     "outlook_total_m_navd88": 0.343,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T07:00Z",
      "tide_pred_m_navd88": 0.36,
-     "outlook_total_m_navd88": 0.464,
+     "outlook_total_m_navd88": 0.517,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T08:00Z",
      "tide_pred_m_navd88": 0.417,
-     "outlook_total_m_navd88": 0.521,
+     "outlook_total_m_navd88": 0.574,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T09:00Z",
      "tide_pred_m_navd88": 0.351,
-     "outlook_total_m_navd88": 0.455,
+     "outlook_total_m_navd88": 0.508,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T10:00Z",
      "tide_pred_m_navd88": 0.181,
-     "outlook_total_m_navd88": 0.285,
+     "outlook_total_m_navd88": 0.338,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T11:00Z",
      "tide_pred_m_navd88": -0.048,
-     "outlook_total_m_navd88": 0.056,
+     "outlook_total_m_navd88": 0.109,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T12:00Z",
      "tide_pred_m_navd88": -0.288,
-     "outlook_total_m_navd88": -0.184,
+     "outlook_total_m_navd88": -0.131,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T13:00Z",
      "tide_pred_m_navd88": -0.499,
-     "outlook_total_m_navd88": -0.395,
+     "outlook_total_m_navd88": -0.342,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T14:00Z",
      "tide_pred_m_navd88": -0.632,
-     "outlook_total_m_navd88": -0.528,
+     "outlook_total_m_navd88": -0.475,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T15:00Z",
      "tide_pred_m_navd88": -0.631,
-     "outlook_total_m_navd88": -0.527,
+     "outlook_total_m_navd88": -0.474,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T16:00Z",
      "tide_pred_m_navd88": -0.477,
-     "outlook_total_m_navd88": -0.373,
+     "outlook_total_m_navd88": -0.32,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T17:00Z",
      "tide_pred_m_navd88": -0.219,
-     "outlook_total_m_navd88": -0.115,
+     "outlook_total_m_navd88": -0.062,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T18:00Z",
      "tide_pred_m_navd88": 0.052,
-     "outlook_total_m_navd88": 0.156,
+     "outlook_total_m_navd88": 0.209,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T19:00Z",
      "tide_pred_m_navd88": 0.261,
-     "outlook_total_m_navd88": 0.365,
+     "outlook_total_m_navd88": 0.418,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T20:00Z",
      "tide_pred_m_navd88": 0.366,
-     "outlook_total_m_navd88": 0.47,
+     "outlook_total_m_navd88": 0.523,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T21:00Z",
      "tide_pred_m_navd88": 0.342,
-     "outlook_total_m_navd88": 0.446,
+     "outlook_total_m_navd88": 0.499,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T22:00Z",
      "tide_pred_m_navd88": 0.188,
-     "outlook_total_m_navd88": 0.292,
+     "outlook_total_m_navd88": 0.345,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-20T23:00Z",
      "tide_pred_m_navd88": -0.059,
-     "outlook_total_m_navd88": 0.045,
+     "outlook_total_m_navd88": 0.098,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T00:00Z",
      "tide_pred_m_navd88": -0.338,
-     "outlook_total_m_navd88": -0.234,
+     "outlook_total_m_navd88": -0.181,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T01:00Z",
      "tide_pred_m_navd88": -0.589,
-     "outlook_total_m_navd88": -0.485,
+     "outlook_total_m_navd88": -0.432,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T02:00Z",
      "tide_pred_m_navd88": -0.757,
-     "outlook_total_m_navd88": -0.653,
+     "outlook_total_m_navd88": -0.6,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T03:00Z",
      "tide_pred_m_navd88": -0.781,
-     "outlook_total_m_navd88": -0.677,
+     "outlook_total_m_navd88": -0.624,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T04:00Z",
      "tide_pred_m_navd88": -0.63,
-     "outlook_total_m_navd88": -0.526,
+     "outlook_total_m_navd88": -0.473,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T05:00Z",
      "tide_pred_m_navd88": -0.338,
-     "outlook_total_m_navd88": -0.234,
+     "outlook_total_m_navd88": -0.181,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T06:00Z",
      "tide_pred_m_navd88": 0.0,
-     "outlook_total_m_navd88": 0.104,
+     "outlook_total_m_navd88": 0.157,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T07:00Z",
      "tide_pred_m_navd88": 0.293,
-     "outlook_total_m_navd88": 0.397,
+     "outlook_total_m_navd88": 0.45,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T08:00Z",
      "tide_pred_m_navd88": 0.484,
-     "outlook_total_m_navd88": 0.588,
+     "outlook_total_m_navd88": 0.641,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T09:00Z",
      "tide_pred_m_navd88": 0.541,
-     "outlook_total_m_navd88": 0.645,
+     "outlook_total_m_navd88": 0.698,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T10:00Z",
      "tide_pred_m_navd88": 0.452,
-     "outlook_total_m_navd88": 0.556,
+     "outlook_total_m_navd88": 0.609,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T11:00Z",
      "tide_pred_m_navd88": 0.238,
-     "outlook_total_m_navd88": 0.342,
+     "outlook_total_m_navd88": 0.395,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T12:00Z",
      "tide_pred_m_navd88": -0.045,
-     "outlook_total_m_navd88": 0.059,
+     "outlook_total_m_navd88": 0.112,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T13:00Z",
      "tide_pred_m_navd88": -0.336,
-     "outlook_total_m_navd88": -0.232,
+     "outlook_total_m_navd88": -0.179,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T14:00Z",
      "tide_pred_m_navd88": -0.579,
-     "outlook_total_m_navd88": -0.475,
+     "outlook_total_m_navd88": -0.422,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T15:00Z",
      "tide_pred_m_navd88": -0.716,
-     "outlook_total_m_navd88": -0.612,
+     "outlook_total_m_navd88": -0.559,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T16:00Z",
      "tide_pred_m_navd88": -0.693,
-     "outlook_total_m_navd88": -0.589,
+     "outlook_total_m_navd88": -0.536,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T17:00Z",
      "tide_pred_m_navd88": -0.508,
-     "outlook_total_m_navd88": -0.404,
+     "outlook_total_m_navd88": -0.351,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T18:00Z",
      "tide_pred_m_navd88": -0.224,
-     "outlook_total_m_navd88": -0.12,
+     "outlook_total_m_navd88": -0.067,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T19:00Z",
      "tide_pred_m_navd88": 0.065,
-     "outlook_total_m_navd88": 0.169,
+     "outlook_total_m_navd88": 0.222,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T20:00Z",
      "tide_pred_m_navd88": 0.287,
-     "outlook_total_m_navd88": 0.391,
+     "outlook_total_m_navd88": 0.444,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T21:00Z",
      "tide_pred_m_navd88": 0.393,
-     "outlook_total_m_navd88": 0.497,
+     "outlook_total_m_navd88": 0.55,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T22:00Z",
      "tide_pred_m_navd88": 0.35,
-     "outlook_total_m_navd88": 0.454,
+     "outlook_total_m_navd88": 0.507,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-21T23:00Z",
      "tide_pred_m_navd88": 0.159,
-     "outlook_total_m_navd88": 0.263,
+     "outlook_total_m_navd88": 0.316,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T00:00Z",
      "tide_pred_m_navd88": -0.131,
-     "outlook_total_m_navd88": -0.027,
+     "outlook_total_m_navd88": 0.026,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T01:00Z",
      "tide_pred_m_navd88": -0.443,
-     "outlook_total_m_navd88": -0.339,
+     "outlook_total_m_navd88": -0.286,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T02:00Z",
      "tide_pred_m_navd88": -0.705,
-     "outlook_total_m_navd88": -0.601,
+     "outlook_total_m_navd88": -0.548,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T03:00Z",
      "tide_pred_m_navd88": -0.855,
-     "outlook_total_m_navd88": -0.751,
+     "outlook_total_m_navd88": -0.698,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T04:00Z",
      "tide_pred_m_navd88": -0.838,
-     "outlook_total_m_navd88": -0.734,
+     "outlook_total_m_navd88": -0.681,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T05:00Z",
      "tide_pred_m_navd88": -0.633,
-     "outlook_total_m_navd88": -0.529,
+     "outlook_total_m_navd88": -0.476,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T06:00Z",
      "tide_pred_m_navd88": -0.292,
-     "outlook_total_m_navd88": -0.188,
+     "outlook_total_m_navd88": -0.135,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T07:00Z",
      "tide_pred_m_navd88": 0.088,
-     "outlook_total_m_navd88": 0.192,
+     "outlook_total_m_navd88": 0.245,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T08:00Z",
      "tide_pred_m_navd88": 0.411,
-     "outlook_total_m_navd88": 0.515,
+     "outlook_total_m_navd88": 0.568,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T09:00Z",
      "tide_pred_m_navd88": 0.616,
-     "outlook_total_m_navd88": 0.72,
+     "outlook_total_m_navd88": 0.773,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T10:00Z",
      "tide_pred_m_navd88": 0.661,
-     "outlook_total_m_navd88": 0.765,
+     "outlook_total_m_navd88": 0.818,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T11:00Z",
      "tide_pred_m_navd88": 0.533,
-     "outlook_total_m_navd88": 0.637,
+     "outlook_total_m_navd88": 0.69,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T12:00Z",
      "tide_pred_m_navd88": 0.265,
-     "outlook_total_m_navd88": 0.369,
+     "outlook_total_m_navd88": 0.422,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T13:00Z",
      "tide_pred_m_navd88": -0.07,
-     "outlook_total_m_navd88": 0.034,
+     "outlook_total_m_navd88": 0.087,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T14:00Z",
      "tide_pred_m_navd88": -0.398,
-     "outlook_total_m_navd88": -0.294,
+     "outlook_total_m_navd88": -0.241,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T15:00Z",
      "tide_pred_m_navd88": -0.656,
-     "outlook_total_m_navd88": -0.552,
+     "outlook_total_m_navd88": -0.499,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T16:00Z",
      "tide_pred_m_navd88": -0.787,
-     "outlook_total_m_navd88": -0.683,
+     "outlook_total_m_navd88": -0.63,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T17:00Z",
      "tide_pred_m_navd88": -0.743,
-     "outlook_total_m_navd88": -0.639,
+     "outlook_total_m_navd88": -0.586,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T18:00Z",
      "tide_pred_m_navd88": -0.53,
-     "outlook_total_m_navd88": -0.426,
+     "outlook_total_m_navd88": -0.373,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T19:00Z",
      "tide_pred_m_navd88": -0.221,
-     "outlook_total_m_navd88": -0.117,
+     "outlook_total_m_navd88": -0.064,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T20:00Z",
      "tide_pred_m_navd88": 0.091,
-     "outlook_total_m_navd88": 0.195,
+     "outlook_total_m_navd88": 0.248,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T21:00Z",
      "tide_pred_m_navd88": 0.324,
-     "outlook_total_m_navd88": 0.428,
+     "outlook_total_m_navd88": 0.481,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     },
     {
      "t": "2026-11-22T22:00Z",
      "tide_pred_m_navd88": 0.419,
-     "outlook_total_m_navd88": 0.523,
+     "outlook_total_m_navd88": 0.576,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-22T23:00Z",
+     "tide_pred_m_navd88": 0.343,
+     "outlook_total_m_navd88": 0.5,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T00:00Z",
+     "tide_pred_m_navd88": 0.107,
+     "outlook_total_m_navd88": 0.264,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T01:00Z",
+     "tide_pred_m_navd88": -0.22,
+     "outlook_total_m_navd88": -0.063,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T02:00Z",
+     "tide_pred_m_navd88": -0.549,
+     "outlook_total_m_navd88": -0.392,
+     "mode": "OUTLOOK-PERSISTENCE",
+     "synthetic": true
+    },
+    {
+     "t": "2026-11-23T03:00Z",
+     "tide_pred_m_navd88": -0.807,
+     "outlook_total_m_navd88": -0.65,
      "mode": "OUTLOOK-PERSISTENCE",
      "synthetic": true
     }
@@ -1940,26 +1940,6 @@
    "latest_residual_m": null,
    "latest_residual_time": null,
    "hourly": [
-    {
-     "t": "2026-11-17T22:00Z",
-     "tide_pred_m_navd88": -0.252
-    },
-    {
-     "t": "2026-11-17T23:00Z",
-     "tide_pred_m_navd88": -0.461
-    },
-    {
-     "t": "2026-11-18T00:00Z",
-     "tide_pred_m_navd88": -0.611
-    },
-    {
-     "t": "2026-11-18T01:00Z",
-     "tide_pred_m_navd88": -0.67
-    },
-    {
-     "t": "2026-11-18T02:00Z",
-     "tide_pred_m_navd88": -0.601
-    },
     {
      "t": "2026-11-18T03:00Z",
      "tide_pred_m_navd88": -0.412
@@ -2423,6 +2403,26 @@
     {
      "t": "2026-11-22T22:00Z",
      "tide_pred_m_navd88": 0.333
+    },
+    {
+     "t": "2026-11-22T23:00Z",
+     "tide_pred_m_navd88": 0.371
+    },
+    {
+     "t": "2026-11-23T00:00Z",
+     "tide_pred_m_navd88": 0.244
+    },
+    {
+     "t": "2026-11-23T01:00Z",
+     "tide_pred_m_navd88": -0.046
+    },
+    {
+     "t": "2026-11-23T02:00Z",
+     "tide_pred_m_navd88": -0.387
+    },
+    {
+     "t": "2026-11-23T03:00Z",
+     "tide_pred_m_navd88": -0.671
     }
    ]
   }
