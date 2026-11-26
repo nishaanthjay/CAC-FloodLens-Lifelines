@@ -2,7 +2,7 @@
  "sample": false,
  "mode": "NOWCAST",
  "stale": false,
- "generated_at": "2026-11-26T01:08Z",
+ "generated_at": "2026-11-26T09:59Z",
  "stale_after_hours": 3,
  "sources": [
   "USGS Water Data API (latest-continuous, 00060/00065)",
@@ -26,17 +26,17 @@
    "synthetic": false,
    "name": "Black River near Tomahawk",
    "usgs": {
-    "discharge_cfs": 361.0,
-    "discharge_time": "2026-11-26T00:00Z",
+    "discharge_cfs": 468.0,
+    "discharge_time": "2026-11-26T09:00Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 4.31,
-    "gage_height_time": "2026-11-26T01:00Z",
+    "gage_height_ft_usgs_datum": 4.94,
+    "gage_height_time": "2026-11-26T09:00Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.3,
-    "stage_time": "2026-11-26T00:00Z",
+    "stage_ft_nws_datum": 4.94,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -56,17 +56,17 @@
    "synthetic": false,
    "name": "Cape Fear River at Lock 1",
    "usgs": {
-    "discharge_cfs": 2550.0,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 2860.0,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 16.05,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 16.19,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 16.05,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 16.17,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -86,17 +86,17 @@
    "synthetic": false,
    "name": "Waccamaw River at Freeland",
    "usgs": {
-    "discharge_cfs": 20.5,
-    "discharge_time": "2026-11-26T00:15Z",
+    "discharge_cfs": 58.3,
+    "discharge_time": "2026-11-26T09:15Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.47,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 3.38,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.47,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 3.2,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -116,17 +116,17 @@
    "synthetic": false,
    "name": "N.E. Cape Fear River near Chinquapin",
    "usgs": {
-    "discharge_cfs": 77.8,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 246.0,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.29,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 3.51,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.29,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 3.51,
+    "stage_time": "2026-11-26T09:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -149,14 +149,14 @@
     "discharge_cfs": 998.0,
     "discharge_time": "2005-12-13T04:45Z",
     "discharge_stale": true,
-    "gage_height_ft_usgs_datum": 2.7,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 3.51,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Approved"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.72,
-    "stage_time": "2026-11-25T23:30Z",
+    "stage_ft_nws_datum": 3.32,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -178,17 +178,17 @@
    "synthetic": false,
    "name": "Cape Fear River at W.O. Huske Lock",
    "usgs": {
-    "discharge_cfs": 2090.0,
-    "discharge_time": "2026-11-26T00:00Z",
+    "discharge_cfs": 2810.0,
+    "discharge_time": "2026-11-26T09:00Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.12,
-    "gage_height_time": "2026-11-26T00:00Z",
+    "gage_height_ft_usgs_datum": 2.52,
+    "gage_height_time": "2026-11-26T09:00Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 34.21,
-    "stage_time": "2026-11-26T00:00Z",
+    "stage_ft_nws_datum": 34.61,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -208,17 +208,17 @@
    "synthetic": false,
    "name": "Buckhorn Creek (NC) near Corinth",
    "usgs": {
-    "discharge_cfs": 33.8,
-    "discharge_time": "2026-11-26T00:15Z",
+    "discharge_cfs": 63.6,
+    "discharge_time": "2026-11-26T09:15Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.07,
-    "gage_height_time": "2026-11-26T00:15Z",
+    "gage_height_ft_usgs_datum": 2.38,
+    "gage_height_time": "2026-11-26T09:15Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.07,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 2.34,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -237,17 +237,17 @@
    "synthetic": false,
    "name": "Little River at Manchester",
    "usgs": {
-    "discharge_cfs": 387.0,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 928.0,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 8.36,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 11.05,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 8.28,
-    "stage_time": "2026-11-25T23:30Z",
+    "stage_ft_nws_datum": 10.87,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -267,17 +267,17 @@
    "synthetic": false,
    "name": "Cross Creek NC at Blue Street at Fayetteville",
    "usgs": {
-    "discharge_cfs": 62.8,
-    "discharge_time": "2026-11-26T00:55Z",
+    "discharge_cfs": 252.0,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 4.85,
-    "gage_height_time": "2026-11-26T00:55Z",
+    "gage_height_ft_usgs_datum": 6.83,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.79,
-    "stage_time": "2026-11-26T00:45Z",
+    "stage_ft_nws_datum": 6.82,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -297,17 +297,17 @@
    "synthetic": false,
    "name": "Cape Fear River at Lillington",
    "usgs": {
-    "discharge_cfs": 286.0,
-    "discharge_time": "2026-11-26T00:15Z",
+    "discharge_cfs": 596.0,
+    "discharge_time": "2026-11-26T09:15Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.48,
-    "gage_height_time": "2026-11-26T00:15Z",
+    "gage_height_ft_usgs_datum": 2.05,
+    "gage_height_time": "2026-11-26T09:15Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.44,
-    "stage_time": "2026-11-25T23:15Z",
+    "stage_ft_nws_datum": 1.94,
+    "stage_time": "2026-11-26T08:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -327,17 +327,17 @@
    "synthetic": false,
    "name": "Cape Fear River at Fayetteville",
    "usgs": {
-    "discharge_cfs": 1360.0,
-    "discharge_time": "2026-11-26T00:00Z",
+    "discharge_cfs": 2110.0,
+    "discharge_time": "2026-11-26T09:00Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 10.79,
-    "gage_height_time": "2026-11-26T00:00Z",
+    "gage_height_ft_usgs_datum": 11.63,
+    "gage_height_time": "2026-11-26T09:00Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 10.79,
-    "stage_time": "2026-11-26T00:00Z",
+    "stage_ft_nws_datum": 11.63,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -357,17 +357,17 @@
    "synthetic": false,
    "name": "Flat Creek near Iverness",
    "usgs": {
-    "discharge_cfs": 14.7,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 42.3,
+    "discharge_time": "2026-11-26T08:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.0,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 1.64,
+    "gage_height_time": "2026-11-26T08:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 0.95,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 1.64,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -387,17 +387,17 @@
    "synthetic": false,
    "name": "Rockfish Creek near Raeford",
    "usgs": {
-    "discharge_cfs": 233.0,
-    "discharge_time": "2026-11-26T00:15Z",
+    "discharge_cfs": 270.0,
+    "discharge_time": "2026-11-26T09:15Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 6.05,
-    "gage_height_time": "2026-11-26T00:15Z",
+    "gage_height_ft_usgs_datum": 6.3,
+    "gage_height_time": "2026-11-26T09:15Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 6.05,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 6.3,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -417,17 +417,17 @@
    "synthetic": false,
    "name": "East Fork of Deep River near High Point",
    "usgs": {
-    "discharge_cfs": 25.1,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 377.0,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.39,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 5.31,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.39,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 5.45,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -450,14 +450,14 @@
     "discharge_cfs": null,
     "discharge_time": null,
     "discharge_stale": true,
-    "gage_height_ft_usgs_datum": 3.62,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 4.24,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 3.62,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 4.19,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -476,17 +476,17 @@
    "synthetic": false,
    "name": "Rocky River  at Siler City",
    "usgs": {
-    "discharge_cfs": 2.93,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 35.7,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.07,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 2.64,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.07,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 2.73,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -506,17 +506,17 @@
    "synthetic": false,
    "name": "Deep River at Ramseur",
    "usgs": {
-    "discharge_cfs": 19.7,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 172.0,
+    "discharge_time": "2026-11-26T08:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 0.49,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 1.27,
+    "gage_height_time": "2026-11-26T08:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 0.47,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 1.27,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -536,17 +536,17 @@
    "synthetic": false,
    "name": "Tick Creek Nr Mount Vernon Springs",
    "usgs": {
-    "discharge_cfs": 0.0,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 5.49,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.55,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 2.45,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.54,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 2.49,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -564,17 +564,17 @@
    "synthetic": false,
    "name": "Deep River near Moncure",
    "usgs": {
-    "discharge_cfs": 140.0,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 261.0,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.29,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 1.56,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.27,
-    "stage_time": "2026-11-26T00:00Z",
+    "stage_ft_nws_datum": 1.53,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -594,17 +594,17 @@
    "synthetic": false,
    "name": "Reedy Creek near Gibsonville",
    "usgs": {
-    "discharge_cfs": 13.2,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 69.3,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 0.64,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 1.36,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 0.64,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 0.81,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -623,17 +623,17 @@
    "synthetic": false,
    "name": "Reedy Creek at NC2128 Nr Oak Ridge",
    "usgs": {
-    "discharge_cfs": 3.28,
-    "discharge_time": "2026-11-26T01:00Z",
+    "discharge_cfs": 60.6,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 3.77,
-    "gage_height_time": "2026-11-26T01:00Z",
+    "gage_height_ft_usgs_datum": 4.91,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 3.76,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 4.82,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -653,17 +653,17 @@
    "synthetic": false,
    "name": "North Buffalo Creek at SR2819 near McCleansville",
    "usgs": {
-    "discharge_cfs": 74.1,
-    "discharge_time": "2026-11-26T00:15Z",
+    "discharge_cfs": 1530.0,
+    "discharge_time": "2026-11-26T09:15Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.12,
-    "gage_height_time": "2026-11-26T00:15Z",
+    "gage_height_ft_usgs_datum": 8.14,
+    "gage_height_time": "2026-11-26T09:15Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.12,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 7.29,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -683,17 +683,17 @@
    "synthetic": false,
    "name": "Brush Creek at Muirfield Rd in Greensboro",
    "usgs": {
-    "discharge_cfs": 7.42,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 183.0,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.12,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 5.61,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.12,
-    "stage_time": "2026-11-26T00:30Z",
+    "stage_ft_nws_datum": 5.56,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -713,17 +713,17 @@
    "synthetic": false,
    "name": "North Buffalo Creek at Church St in Greensboro",
    "usgs": {
-    "discharge_cfs": 126.0,
-    "discharge_time": "2026-11-26T00:55Z",
+    "discharge_cfs": 447.0,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 4.64,
-    "gage_height_time": "2026-11-26T00:55Z",
+    "gage_height_ft_usgs_datum": 7.39,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.21,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 7.49,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -743,17 +743,17 @@
    "synthetic": false,
    "name": "North Buffalo Creek at Westover Terrace",
    "usgs": {
-    "discharge_cfs": 105.0,
-    "discharge_time": "2026-11-26T00:55Z",
+    "discharge_cfs": 234.0,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.41,
-    "gage_height_time": "2026-11-26T00:55Z",
+    "gage_height_ft_usgs_datum": 3.67,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.93,
-    "stage_time": "2026-11-25T23:50Z",
+    "stage_ft_nws_datum": 3.53,
+    "stage_time": "2026-11-26T09:05Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -773,17 +773,17 @@
    "synthetic": false,
    "name": "South Buffalo Creek near Pomona",
    "usgs": {
-    "discharge_cfs": 107.0,
-    "discharge_time": "2026-11-26T00:55Z",
+    "discharge_cfs": 277.0,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.64,
-    "gage_height_time": "2026-11-26T00:55Z",
+    "gage_height_ft_usgs_datum": 4.2,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.42,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 3.86,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -803,17 +803,17 @@
    "synthetic": false,
    "name": "South Buffalo Creek at US220 Nr Greensboro",
    "usgs": {
-    "discharge_cfs": 75.1,
-    "discharge_time": "2026-11-26T00:55Z",
+    "discharge_cfs": 455.0,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.98,
-    "gage_height_time": "2026-11-26T01:00Z",
+    "gage_height_ft_usgs_datum": 6.42,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.62,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 6.5,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -833,17 +833,17 @@
    "synthetic": false,
    "name": "Ryan Creek below US220 at Greensboro",
    "usgs": {
-    "discharge_cfs": 5.33,
-    "discharge_time": "2026-11-26T00:55Z",
+    "discharge_cfs": 21.2,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.29,
-    "gage_height_time": "2026-11-26T00:55Z",
+    "gage_height_ft_usgs_datum": 1.63,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.2,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 1.62,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -863,17 +863,17 @@
    "synthetic": false,
    "name": "Horsepen Creek at US-220 Near Greensboro",
    "usgs": {
-    "discharge_cfs": 19.5,
-    "discharge_time": "2026-11-26T01:00Z",
+    "discharge_cfs": 286.0,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.68,
-    "gage_height_time": "2026-11-26T01:00Z",
+    "gage_height_ft_usgs_datum": 5.53,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.63,
-    "stage_time": "2026-11-26T00:45Z",
+    "stage_ft_nws_datum": 5.37,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -893,17 +893,17 @@
    "synthetic": false,
    "name": "North Buffalo Creek at Greensboro",
    "usgs": {
-    "discharge_cfs": 5.59,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 874.0,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 0.96,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 5.32,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 0.94,
-    "stage_time": "2026-11-25T23:30Z",
+    "stage_ft_nws_datum": 5.29,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -923,17 +923,17 @@
    "synthetic": false,
    "name": "Haw River at Haw River",
    "usgs": {
-    "discharge_cfs": 123.0,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 418.0,
+    "discharge_time": "2026-11-26T08:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.86,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 2.92,
+    "gage_height_time": "2026-11-26T08:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.85,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 2.92,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -953,17 +953,17 @@
    "synthetic": false,
    "name": "South Buffalo Creek at McConnell Rd Nr Greensboro",
    "usgs": {
-    "discharge_cfs": 6.13,
-    "discharge_time": "2026-11-26T00:25Z",
+    "discharge_cfs": 796.0,
+    "discharge_time": "2026-11-26T09:25Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.44,
-    "gage_height_time": "2026-11-26T00:25Z",
+    "gage_height_ft_usgs_datum": 8.92,
+    "gage_height_time": "2026-11-26T09:25Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.36,
-    "stage_time": "2026-11-25T23:30Z",
+    "stage_ft_nws_datum": 2.54,
+    "stage_time": "2026-11-26T08:30Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -983,17 +983,17 @@
    "synthetic": false,
    "name": "Sandy Creek at Cornwallis Rd",
    "usgs": {
-    "discharge_cfs": 0.89,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 349.0,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.1,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 5.72,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.08,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 5.2,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1013,17 +1013,17 @@
    "synthetic": false,
    "name": "Third Fork Creek at ML King Pkwy in Durham",
    "usgs": {
-    "discharge_cfs": 0.57,
-    "discharge_time": "2026-11-26T00:50Z",
+    "discharge_cfs": 507.0,
+    "discharge_time": "2026-11-26T09:50Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 0.31,
-    "gage_height_time": "2026-11-26T00:50Z",
+    "gage_height_ft_usgs_datum": 5.81,
+    "gage_height_time": "2026-11-26T09:50Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 0.27,
-    "stage_time": "2026-11-26T00:20Z",
+    "stage_ft_nws_datum": 5.56,
+    "stage_time": "2026-11-26T09:20Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1045,14 +1045,14 @@
     "discharge_cfs": null,
     "discharge_time": null,
     "discharge_stale": true,
-    "gage_height_ft_usgs_datum": 1.99,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 4.87,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.96,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 4.79,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1072,17 +1072,17 @@
    "synthetic": false,
    "name": "New Hope Creek near Blands",
    "usgs": {
-    "discharge_cfs": 22.3,
-    "discharge_time": "2026-11-26T00:30Z",
+    "discharge_cfs": 53.1,
+    "discharge_time": "2026-11-26T09:30Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 4.67,
-    "gage_height_time": "2026-11-26T00:30Z",
+    "gage_height_ft_usgs_datum": 5.46,
+    "gage_height_time": "2026-11-26T09:30Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.65,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 5.3,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1101,17 +1101,17 @@
    "synthetic": false,
    "name": "Northeast Creek (NC) near Genlee",
    "usgs": {
-    "discharge_cfs": 17.4,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 170.0,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 4.51,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 7.66,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.49,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 7.51,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1131,17 +1131,17 @@
    "synthetic": false,
    "name": "Third Fork Creek at Woodcroft Park",
    "usgs": {
-    "discharge_cfs": 1.72,
-    "discharge_time": "2026-11-26T00:00Z",
+    "discharge_cfs": 266.0,
+    "discharge_time": "2026-11-26T09:00Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.31,
-    "gage_height_time": "2026-11-26T00:00Z",
+    "gage_height_ft_usgs_datum": 5.05,
+    "gage_height_time": "2026-11-26T09:00Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.31,
-    "stage_time": "2026-11-26T00:00Z",
+    "stage_ft_nws_datum": 5.05,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1161,17 +1161,17 @@
    "synthetic": false,
    "name": "White Oak Creek at Green Level",
    "usgs": {
-    "discharge_cfs": 6.8,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 271.0,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.68,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 7.1,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.65,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 6.83,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1190,17 +1190,17 @@
    "synthetic": false,
    "name": "Cane Creek near Carrboro",
    "usgs": {
-    "discharge_cfs": 0.49,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 18.2,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 0.96,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 1.83,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 0.95,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 1.67,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1223,14 +1223,14 @@
     "discharge_cfs": null,
     "discharge_time": null,
     "discharge_stale": true,
-    "gage_height_ft_usgs_datum": 4.29,
-    "gage_height_time": "2026-11-26T00:00Z",
+    "gage_height_ft_usgs_datum": 5.57,
+    "gage_height_time": "2026-11-26T09:00Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.29,
-    "stage_time": "2026-11-26T00:00Z",
+    "stage_ft_nws_datum": 5.57,
+    "stage_time": "2026-11-26T09:00Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1250,17 +1250,17 @@
    "synthetic": false,
    "name": "Bolin Creek at Village Drive",
    "usgs": {
-    "discharge_cfs": 2.07,
-    "discharge_time": "2026-11-26T00:15Z",
+    "discharge_cfs": 57.3,
+    "discharge_time": "2026-11-26T09:15Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.39,
-    "gage_height_time": "2026-11-26T00:15Z",
+    "gage_height_ft_usgs_datum": 2.68,
+    "gage_height_time": "2026-11-26T09:15Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.39,
-    "stage_time": "2026-11-26T00:15Z",
+    "stage_ft_nws_datum": 2.68,
+    "stage_time": "2026-11-26T09:15Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1280,17 +1280,17 @@
    "synthetic": false,
    "name": "Morgan Creek near White Cross",
    "usgs": {
-    "discharge_cfs": 2.38,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 17.4,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 1.98,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 2.87,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 1.96,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 2.28,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1309,17 +1309,17 @@
    "synthetic": false,
    "name": "Morgan Creek near Chapel Hill",
    "usgs": {
-    "discharge_cfs": 17.3,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 216.0,
+    "discharge_time": "2026-11-26T09:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 4.44,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 6.36,
+    "gage_height_time": "2026-11-26T09:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 4.36,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 6.44,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1338,17 +1338,17 @@
    "synthetic": false,
    "name": "Haw River near Bynum",
    "usgs": {
-    "discharge_cfs": 155.0,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 293.0,
+    "discharge_time": "2026-11-26T08:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.93,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 3.34,
+    "gage_height_time": "2026-11-26T08:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.92,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 3.34,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
@@ -1368,17 +1368,17 @@
    "synthetic": false,
    "name": "Haw River near Moncure",
    "usgs": {
-    "discharge_cfs": 234.0,
-    "discharge_time": "2026-11-26T00:45Z",
+    "discharge_cfs": 253.0,
+    "discharge_time": "2026-11-26T08:45Z",
     "discharge_stale": false,
-    "gage_height_ft_usgs_datum": 2.08,
-    "gage_height_time": "2026-11-26T00:45Z",
+    "gage_height_ft_usgs_datum": 2.2,
+    "gage_height_time": "2026-11-26T08:45Z",
     "gage_height_stale": false,
     "approval": "Provisional"
    },
    "nws": {
-    "stage_ft_nws_datum": 2.08,
-    "stage_time": "2026-11-25T23:45Z",
+    "stage_ft_nws_datum": 2.2,
+    "stage_time": "2026-11-26T08:45Z",
     "stage_stale": false,
     "flood_category": "no_flooding",
     "thresholds_ft": {
